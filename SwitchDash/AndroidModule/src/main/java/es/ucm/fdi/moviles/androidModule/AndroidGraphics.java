@@ -4,6 +4,7 @@ import es.ucm.fdi.moviles.interfacemodule.Graphics;
 import es.ucm.fdi.moviles.interfacemodule.Image;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import java.io.IOException;
@@ -25,11 +26,12 @@ public class AndroidGraphics implements Graphics
     public Image newImage(String path)
     {
         InputStream inputStream = null;
-        AndroidImage image = new AndroidImage();
+        AndroidImage image = null;
         try {
             AssetManager assetManager = activity.getAssets();
             inputStream = assetManager.open(path);
-            image.sprite = BitmapFactory.decodeStream(inputStream);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            image = new AndroidImage(bitmap);
         }
         catch (IOException io) {
             Log.e("MainActivity", "Error lectura");
@@ -42,5 +44,40 @@ public class AndroidGraphics implements Graphics
             }
         }
         return image;
+    }
+
+    @Override
+    public void clear(int color) {
+
+    }
+
+    @Override
+    public void drawImage(Image image) {
+
+    }
+
+    @Override
+    public void drawImage(Image image, float alpha) {
+
+    }
+
+    @Override
+    public void drawImage(Image image, float alpha, float scaleX, float scaleY) {
+
+    }
+
+    @Override
+    public void drawImage(Image image, float alpha, float scaleX, float scaleY, float rectMin, float rectMax) {
+
+    }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
     }
 }

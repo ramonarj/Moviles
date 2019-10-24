@@ -10,18 +10,19 @@ public class AndroidImage implements Image
     //Bitmap
     Bitmap sprite;
 
-    public AndroidImage()
+    public AndroidImage( Bitmap sprite)
     {
+        this.sprite = sprite;
     }
 
     //Get sprite width
-    public float getWidth()
+    public int getWidth()
     {
         return sprite.getWidth();
     }
 
     //Get sprite heigth
-    public float getHeigth()
+    public int getHeigth()
     {
         return sprite.getHeight();
     }

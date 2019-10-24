@@ -8,18 +8,27 @@ public class PCImage implements Image
     //Imagen bruta de Java (para que no colisione el namespace)
     java.awt.Image img;
 
-    public PCImage()
+    public PCImage(java.awt.Image img)
     {
+        this.img = img;
     }
 
-    //Get image width
-    public float getWidth()
+    /**
+     * Gets the width of the image
+     * @return image width
+     */
+    @Override
+    public int getWidth()
     {
         return img.getWidth(null);
     }
 
-    //Get image heigth
-    public float getHeigth()
+    /**
+     * Gets the heigth of the image
+     * @return image heigth
+     */
+    @Override
+    public int getHeigth()
     {
         return img.getHeight(null);
     }
