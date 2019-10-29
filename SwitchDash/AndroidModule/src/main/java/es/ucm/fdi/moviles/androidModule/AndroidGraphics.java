@@ -86,6 +86,7 @@ public class AndroidGraphics implements Graphics
             paint.setAlpha((int)alpha*10);
             canvas.drawBitmap(im.sprite,posX,posY,paint);
         }
+        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
     }
 
     @Override
@@ -102,11 +103,18 @@ public class AndroidGraphics implements Graphics
 
     @Override
     public int getWidth() {
-        return 0;
+        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        int width=canvas.getWidth();
+        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        return width;
+
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        int height=canvas.getHeight();
+        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        return height;
     }
 }
