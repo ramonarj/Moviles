@@ -9,9 +9,11 @@ import es.ucm.fdi.moviles.interfacemodule.Input;
 
 public class AndroidGame implements Runnable , Game {
 
-    public  AndroidGame(AppCompatActivity app)
+    public  AndroidGame(AppCompatActivity Activity , AndroidGraphics Graphics, AndroidInput Input)
     {
-
+        this.activity_=Activity;
+        this.graphic_=Graphics;
+        this.input_=Input;
     }
 
     @Override
@@ -19,20 +21,24 @@ public class AndroidGame implements Runnable , Game {
 
     }
 
+
     @Override
     public Graphics getGraphics() {
-        return null;
+        return graphic_;
     }
 
     @Override
     public Input getInput() {
-        return null;
+        return input_;
     }
 
     @Override
     public void setGameState(GameState state) {
         state_=state;
     }
-
     GameState state_;
+    AndroidGraphics graphic_;
+    AndroidInput input_;
+    AppCompatActivity activity_;
+    boolean running_=false;
 }
