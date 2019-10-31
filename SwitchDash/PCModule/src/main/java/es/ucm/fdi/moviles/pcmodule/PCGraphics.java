@@ -1,16 +1,12 @@
 package es.ucm.fdi.moviles.pcmodule;
 
 import java.awt.AlphaComposite;
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 
-import javax.swing.JFrame;
-
-import es.ucm.fdi.moviles.interfacemodule.Graphics;
-import es.ucm.fdi.moviles.interfacemodule.Image;
+import es.ucm.fdi.moviles.engine.Graphics;
+import es.ucm.fdi.moviles.engine.Image;
 
 public class PCGraphics  implements Graphics {
 

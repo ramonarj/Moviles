@@ -1,7 +1,6 @@
 package es.ucm.fdi.moviles.pcmodule;
-import java.awt.*;
 
-import es.ucm.fdi.moviles.interfacemodule.Image;
+import es.ucm.fdi.moviles.engine.Image;
 
 public class PCImage implements Image
 {

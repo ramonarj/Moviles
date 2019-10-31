@@ -1,3 +1,4 @@
+
 package es.ucm.fdi.moviles.androidModule;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +25,12 @@ public class AndroidGame implements Runnable , Game {
 
     @Override
     public Graphics getGraphics() {
-        return graphic_;
+        return (Graphics) graphic_;
     }
 
     @Override
     public Input getInput() {
-        return input_;
+        return (Input) input_;
     }
 
     @Override
