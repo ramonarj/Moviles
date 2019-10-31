@@ -1,1 +1,1 @@
-include ':AndroidBoot', ':PCModule', ':AndroidModule', ':InterfaceModule', ':PCBoot'
+include ':AndroidBoot', ':PCModule', ':AndroidModule', ':Engine', ':PCBoot'

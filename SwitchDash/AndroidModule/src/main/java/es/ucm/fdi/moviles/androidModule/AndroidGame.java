@@ -1,5 +1,7 @@
 package es.ucm.fdi.moviles.androidModule;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import es.ucm.fdi.moviles.interfacemodule.Game;
 import es.ucm.fdi.moviles.interfacemodule.GameState;
 import es.ucm.fdi.moviles.interfacemodule.Graphics;
@@ -7,7 +9,7 @@ import es.ucm.fdi.moviles.interfacemodule.Input;
 
 public class AndroidGame implements Runnable , Game {
 
-    public  AndroidGame()
+    public  AndroidGame(AppCompatActivity app)
     {
 
     }
@@ -29,6 +31,8 @@ public class AndroidGame implements Runnable , Game {
 
     @Override
     public void setGameState(GameState state) {
-
+        state_=state;
     }
+
+    GameState state_;
 }
