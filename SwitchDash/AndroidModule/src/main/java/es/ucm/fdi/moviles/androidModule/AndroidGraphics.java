@@ -1,7 +1,7 @@
 package es.ucm.fdi.moviles.androidModule;
 
-import es.ucm.fdi.moviles.interfacemodule.Graphics;
-import es.ucm.fdi.moviles.interfacemodule.Image;
+import es.ucm.fdi.moviles.engine.Graphics;
+import es.ucm.fdi.moviles.engine.Image;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;

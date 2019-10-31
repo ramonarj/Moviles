@@ -2,10 +2,10 @@ package es.ucm.fdi.moviles.androidModule;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import es.ucm.fdi.moviles.interfacemodule.Game;
-import es.ucm.fdi.moviles.interfacemodule.GameState;
-import es.ucm.fdi.moviles.interfacemodule.Graphics;
-import es.ucm.fdi.moviles.interfacemodule.Input;
+import es.ucm.fdi.moviles.engine.Game;
+import es.ucm.fdi.moviles.engine.GameState;
+import es.ucm.fdi.moviles.engine.Graphics;
+import es.ucm.fdi.moviles.engine.Input;
 
 public class AndroidGame implements Runnable , Game {
 

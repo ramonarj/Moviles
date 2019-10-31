@@ -2,7 +2,7 @@ package es.ucm.fdi.moviles.androidModule;
 import android.graphics.Bitmap;
 
 
-import es.ucm.fdi.moviles.interfacemodule.Image;
+import es.ucm.fdi.moviles.engine.Image;
 
 
 public class AndroidImage implements Image
