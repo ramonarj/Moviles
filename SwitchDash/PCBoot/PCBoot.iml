@@ -29,5 +29,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Engine" exported="" />
+    <orderEntry type="module" module-name="Logic" exported="" />
+    <orderEntry type="module" module-name="PCModule" exported="" />
   </component>
 </module>

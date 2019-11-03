@@ -1,5 +1,7 @@
 package com.example.logic;
 
+import es.ucm.fdi.moviles.engine.GameState;
+
 public class SwitchDashLogic implements GameState
 {
     @Override
