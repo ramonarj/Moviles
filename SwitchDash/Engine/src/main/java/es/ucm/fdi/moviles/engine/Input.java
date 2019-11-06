@@ -16,14 +16,14 @@ public interface Input
         public enum EventType {PRESSED, RELEASED, MOVED}
 
         //Tipo (pulsacion, liberacion, desplazamiento)
-        EventType type;
+        public EventType type;
 
         //Posicion
-        int x;
-        int y;
+        public int x;
+        public int y;
 
         //Identificador del dedo/boton
-        int id;
+        public int id;
     }
 
     //Lista de eventos
