@@ -11,13 +11,20 @@ import es.ucm.fdi.moviles.engine.Image;
 public class PCGraphics  implements Graphics {
 
     //Ventana de la aplicación
-    java.awt.Canvas canvas;
+    java.awt.Window window;
     java.awt.Graphics graphics;
 
 
-    public PCGraphics(java.awt.Canvas canvas)
+    public PCGraphics()
     {
-        this.canvas = canvas;
+        this.window = null;
+        this.graphics = null;
+    }
+
+    public PCGraphics(java.awt.Window window)
+    {
+        this.window = window;
+        this.graphics = window.getBufferStrategy().getDrawGraphics();
     }
 
     /**
@@ -107,17 +114,17 @@ public class PCGraphics  implements Graphics {
                           int rectMin, int rectMax)
     {
         //graphics.drawImage(image, leftX, upY, rightX, downY, //Los del rectángulo destino
-         //                         leftX, upY, rightX, downY, //Los del rectángulo fuente
-         //       null);
+        //                         leftX, upY, rightX, downY, //Los del rectángulo fuente
+        //       null);
     }
 
     @Override
     public int getWidth() {
-        return canvas.getWidth();
+        return window.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return canvas.getHeight();
+        return window.getHeight();
     }
 }
