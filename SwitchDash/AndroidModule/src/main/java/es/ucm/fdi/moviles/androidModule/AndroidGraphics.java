@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.SurfaceView;
 
@@ -57,7 +58,10 @@ public class AndroidGraphics implements Graphics
     public void clear(int color) {
         //Bloqueamos el canavas para limpiar la pantalla e inmediatamente
         //despues lo liberamos
-        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        Canvas canvas=null;
+        while(!surfaceview_.getHolder().getSurface().isValid()) {
+            canvas = surfaceview_.getHolder().lockCanvas();
+        }
         canvas.drawColor(color);
         surfaceview_.getHolder().unlockCanvasAndPost(canvas);
     }

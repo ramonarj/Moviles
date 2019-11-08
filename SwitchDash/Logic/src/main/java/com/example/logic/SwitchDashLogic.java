@@ -16,7 +16,6 @@ public class SwitchDashLogic implements GameState
     @Override
     public void update(float deltaTime)
     {
-
         Input input = game.getInput();
     }
 
@@ -25,7 +24,7 @@ public class SwitchDashLogic implements GameState
     {
         //TODO: hay que gestionar errores con el strategy.contentsLost()
         Graphics g = game.getGraphics();
-        g.clear(0x00);
+        g.clear(0x0000FF00);
 
     }
 }
