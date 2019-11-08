@@ -4,6 +4,10 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.Window;
+
+import javax.swing.ImageIcon;
 
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
@@ -38,6 +42,8 @@ public class PCGraphics  implements Graphics {
         //TODO: gestionar errores cargando la imagen con un bucle
         try
         {
+           //java.awt.Image img = Toolkit.getDefaultToolkit().getImage(window.getClass().getResource(name));
+            //java.awt.Image img = new ImageIcon(window.getClass().getResource(name)).getImage();
             java.awt.Image img = javax.imageio.ImageIO.read(new java.io.File(name));
             image = new PCImage(img);
         }
@@ -127,4 +133,7 @@ public class PCGraphics  implements Graphics {
     public int getHeight() {
         return window.getHeight();
     }
+
+    //Not sure if esto está bien
+    public Window getWindow(){return window;}
 }

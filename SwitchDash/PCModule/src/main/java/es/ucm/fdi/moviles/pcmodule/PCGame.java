@@ -1,5 +1,8 @@
 package es.ucm.fdi.moviles.pcmodule;
 
+import java.awt.Window;
+import java.awt.image.BufferStrategy;
+
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
@@ -13,6 +16,44 @@ public class PCGame implements Game {
     PCGraphics graphics;
     //Estado actual
     GameState state;
+
+
+
+
+    @Override
+    public void run()
+    {
+        BufferStrategy strategy = graphics.getWindow().getBufferStrategy();
+        long lastFrameTime = System.nanoTime();
+        while(true)
+        {
+            //Calcular el deltaTime
+            long currentTime = System.nanoTime();
+            long nanoElapsedTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+
+            //Update
+            state.update((float)elapsedTime);
+
+            // Pintamos el frame con el BufferStrategy
+            Window window = graphics.getWindow();
+            do {
+                do {
+                    java.awt.Graphics g = window.getBufferStrategy().getDrawGraphics();
+                    try {
+                        state.render();
+                    }
+                    finally {
+                        g.dispose();
+                    }
+                } while(strategy.contentsRestored());
+                strategy.show();
+            } while(strategy.contentsLost());
+        }
+    }
+
+
 
     /**
      * Creaa la instancia recibiendo como parámetro la lógica del juego

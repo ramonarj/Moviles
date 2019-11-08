@@ -2,9 +2,12 @@ package es.ucm.fdi.moviles.pcboot;
 
 import com.example.logic.SwitchDashLogic;
 
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
 import es.ucm.fdi.moviles.pcmodule.PCGraphics;
+import es.ucm.fdi.moviles.pcmodule.PCImage;
 import es.ucm.fdi.moviles.pcmodule.PCInput;
 
 /**
@@ -82,6 +85,9 @@ public class SwitchDash extends JFrame
 
         //2. CREAMOS LOS SUBSISTEMAS Y SE LOS PASAMOS AL JUEGO
         PCInput input = new PCInput();
+        ventana.addMouseListener(input);
+        ventana.addMouseMotionListener(input);
+
         //El graphics lo creamos referenciando la ventana
         PCGraphics graphics = new PCGraphics(ventana);
         //Al juego le pasamos los sistemas de input y gráficos además de la lógica
@@ -89,25 +95,10 @@ public class SwitchDash extends JFrame
 
         //3. EL JUEGO Y LA LÓGICA TIENEN REFERENCIAS MUTUAS
         SwitchDashLogic logica = new SwitchDashLogic(game);
+        logica.init();
         game.setGameState(logica);
 
-
-
-        //3. BUCLE PRINCIPAL
-        long lastFrameTime = System.nanoTime();
-        while(true)
-        {
-            //Calcular el deltaTime
-            long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-
-            //Update
-            logica.update((float)elapsedTime);
-            //Render
-
-            logica.render();
-        }
+        //4. EJECUTAR EL JUEGO
+        game.run();
     }
 }

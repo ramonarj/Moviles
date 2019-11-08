@@ -16,18 +16,23 @@ public class AbstractInput implements Input {
 
     /**
      * Devuelve la lista de eventos producidos dede la última llamada a la función
-     * @return lista de eventos
+     * @return lista de eventos, de tamaño 0 si no ha habido
      */
     @Override
     public List<TouchEvent> getTouchEvents()
     {
-        //Creamos una nueva lista que sea copia de "events"
-        List<TouchEvent> aux = new ArrayList<TouchEvent>();
-        Collections.copy(aux, events);
+        if(events.size() > 0)
+        {
+            //Creamos una nueva lista que sea copia de "events"
 
-        //Vaciamos "events" para la próxima invocación
-        events.clear();
+            ArrayList<TouchEvent> aux =  (ArrayList<TouchEvent>) events.clone();
+            //List<TouchEvent> aux = new ArrayList<TouchEvent>(events.size());
+            //Collections.copy(aux, events);
 
-        return aux;
+            //Vaciamos "events" para la próxsima invocación
+            events.clear();
+            return aux;
+        }
+        return events;
     }
 }

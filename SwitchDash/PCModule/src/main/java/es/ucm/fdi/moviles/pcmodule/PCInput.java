@@ -15,7 +15,9 @@ import es.ucm.fdi.moviles.engine.AbstractInput;
 public class PCInput extends AbstractInput implements MouseListener, MouseMotionListener
 {
 
-    public PCInput() {
+    public PCInput()
+    {
+
     }
 
 
@@ -27,12 +29,12 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     //MOUSE LISTENER
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent)
     {
+        System.out.println("Pressed");
         TouchEvent evt = new TouchEvent();
         evt.x = mouseEvent.getX();
         evt.y = mouseEvent.getY();
@@ -44,6 +46,7 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     @Override
     public void mouseReleased(MouseEvent mouseEvent)
     {
+        System.out.println("Released");
         TouchEvent evt = new TouchEvent();
         evt.x = mouseEvent.getX();
         evt.y = mouseEvent.getY();
@@ -72,6 +75,7 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     @Override
     public void mouseMoved(MouseEvent mouseEvent)
     {
+        System.out.println("Moved");
         TouchEvent evt = new TouchEvent();
         evt.x = mouseEvent.getX();
         evt.y = mouseEvent.getY();
