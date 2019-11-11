@@ -1,29 +1,63 @@
 
 package es.ucm.fdi.moviles.androidModule;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.view.SurfaceView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Input;
+import android.content.Context;
 
-public class AndroidGame implements Runnable , Game {
+import java.io.IOException;
+import java.io.InputStream;
 
-    public  AndroidGame(AppCompatActivity Activity , AndroidGraphics Graphics, AndroidInput Input)
+public class AndroidGame extends SurfaceView implements Runnable , Game {
+
+
+    public  AndroidGame(AppCompatActivity Activity)
     {
+        super(Activity);
         this.activity_=Activity;
-        this.graphic_=Graphics;
-        this.input_=Input;
+        this.graphic_=new AndroidGraphics(activity_,this);
+        this.input_=new AndroidInput();
+    }
+
+    private void init()
+    {
+        chargeImage();
     }
 
     @Override
     public void run() {
-        while (true) {
-        state_.render();
+        init(); //Prueba para cargar una unica imagen
+        while (running_) {
+            //render
+            state_.render();
         }
     }
+    public void pause() {
 
+        if (running_) {
+            running_ = false;
+            while (true) {
+                try {
+                    gameThread.join();
+                    gameThread = null;
+                    break;
+                } catch (InterruptedException ie) {
+                    // Esto no debería ocurrir nunca...
+                }
+            } // while(true)
+        } // if (_running)
+
+    } // pause
 
     @Override
     public Graphics getGraphics() {
@@ -40,22 +74,6 @@ public class AndroidGame implements Runnable , Game {
         state_=state;
     }
 
-    public void pause() {
-
-        if (running_) {
-            running_= false;
-            while (true) {
-                try {
-                    gameThread.join();
-                    gameThread = null;
-                    break;
-                } catch (InterruptedException ie) {
-                    // Esto no debería ocurrir nunca...
-                }
-            }
-         }
-    }
-
     public void onResume()
     {
         if (!running_) {
@@ -63,6 +81,21 @@ public class AndroidGame implements Runnable , Game {
             gameThread = new Thread(this);
             gameThread.start();
         }
+    }
+
+    private void chargeImage()
+    {
+        InputStream inputStream = null;
+        AssetManager assetManager = activity_.getAssets();
+        AndroidImage image=null;
+        try {
+            inputStream = assetManager.open("Chestplate.jpg");
+            image = new AndroidImage(BitmapFactory.decodeStream(inputStream));
+        }
+        catch (IOException e) {
+            android.util.Log.e("MainActivity", "Error leyendo el sprite");
+        }
+        state_.setImage(image);
     }
 
     private GameState state_;

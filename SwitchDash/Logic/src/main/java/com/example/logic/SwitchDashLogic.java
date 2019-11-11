@@ -41,8 +41,20 @@ public class SwitchDashLogic implements GameState
     @Override
     public void render()
     {
+
         Graphics g = game.getGraphics();
-        g.drawImage(prueba, 0, 0);
-        //g.clear(0x0000FF00);
+       // g.clear(0xFF0000FF);
+        g.drawImage(test, 0, 0,255,(float)g.getWidth()/test.getWidth(),(float)  g.getHeight()/test.getHeigth());
+
     }
+
+    @Override
+    public  void setImage(Image im){test=im;}
+    public void setWidth(int width){width_=width;}
+    public void setHeight(int height){height_=height;}
+
+
+    public Image test=null;
+    private int width_;
+    private int height_;
 }

@@ -3,12 +3,14 @@ package es.ucm.fdi.moviles.androidModule;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 
+import android.content.ReceiverCallNotAllowedException;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import android.graphics.Rect;
 import android.provider.Telephony;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -23,11 +25,13 @@ public class AndroidGraphics implements Graphics
     //Actividad de Android
     AppCompatActivity activity;
     SurfaceView surfaceview_;
+    Canvas canvas;
 
-    public AndroidGraphics(AppCompatActivity activity, SurfaceView surfaceview_)
+    public AndroidGraphics(AppCompatActivity activity, SurfaceView surfaceview)
     {
         this.activity = activity;
-        this.surfaceview_=surfaceview_;
+        this.surfaceview_=surfaceview;
+        canvas=null;
     }
 
     //Laod image from file
@@ -58,24 +62,21 @@ public class AndroidGraphics implements Graphics
     public void clear(int color) {
         //Bloqueamos el canavas para limpiar la pantalla e inmediatamente
         //despues lo liberamos
-        Canvas canvas=null;
-        while(!surfaceview_.getHolder().getSurface().isValid()) {
-            canvas = surfaceview_.getHolder().lockCanvas();
-        }
+        lockCanvas();
         canvas.drawColor(color);
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        unLockCanvas();
     }
 
     @Override
     public void drawImage(Image image,int posX, int posY) {
         //Bloqueamos el canavas para pintar la imagen e inmediatamente
         //despues lo liberamos
-        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        lockCanvas();
         if(image!=null) {
             AndroidImage im=(AndroidImage)image;
-            canvas.drawBitmap(im.sprite,posX,posY,null);
+            canvas.drawBitmap(((AndroidImage) image).sprite,posX,posY,null);
         }
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        unLockCanvas();
     }
 
     @Override
@@ -83,18 +84,32 @@ public class AndroidGraphics implements Graphics
         //Bloqueamos el canavas para pintar la imagen e inmediatamente
         //despues lo liberamos,creamos un Paint local el cual usaremos
         //para modificar el alpha de la imagen
-        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+      lockCanvas();
         if(image!=null) {
             AndroidImage im=(AndroidImage)image;
             Paint paint=new Paint();
-            paint.setAlpha((int)alpha*10);
+            paint.setAlpha((int)alpha);
             canvas.drawBitmap(im.sprite,posX,posY,paint);
         }
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+      unLockCanvas();
     }
 
     @Override
     public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
+        //Tamaño del rectángulo que se va a pintar (en píxeles)
+        int tamX = (int)((float)image.getWidth() * scaleX);
+        int tamY = (int)((float)image.getHeigth() * scaleY);
+
+        Paint paint=new Paint();
+        paint.setAlpha((int)alpha);
+
+        Rect src=new Rect(0,0,image.getWidth()-1,image.getHeigth()-1);
+        Rect dest=new Rect(0,0,tamX-1,tamY-1);
+
+        //Pintamos
+        lockCanvas();
+        canvas.drawBitmap(((AndroidImage) image).sprite,src,dest,paint);
+        unLockCanvas();
 
     }
 
@@ -103,22 +118,31 @@ public class AndroidGraphics implements Graphics
 
     }
 
-
-
     @Override
     public int getWidth() {
-        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        lockCanvas();
         int width=canvas.getWidth();
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        unLockCanvas();
         return width;
 
     }
 
     @Override
     public int getHeight() {
-        Canvas canvas=surfaceview_.getHolder().lockCanvas();
+        lockCanvas();
         int height=canvas.getHeight();
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        unLockCanvas();
         return height;
+    }
+
+    private void lockCanvas()
+    {
+        while(!surfaceview_.getHolder().getSurface().isValid())
+            ;
+        canvas = surfaceview_.getHolder().lockCanvas();
+    }
+    private void unLockCanvas()
+    {
+        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
     }
 }
