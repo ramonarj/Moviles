@@ -22,7 +22,7 @@ public class AndroidImage implements Image
     }
 
     //Get sprite heigth
-    public int getHeigth()
+    public int getHeight()
     {
         return sprite.getHeight();
     }

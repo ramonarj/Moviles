@@ -6,5 +6,5 @@ public interface Image
     public int getWidth();
 
     //Get image heigth
-    public int getHeigth();
+    public int getHeight();
 }

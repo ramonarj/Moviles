@@ -36,7 +36,7 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
         evt.type = type;
 
         //Debug
-        System.out.println("Evento de tipo " + evt.type.toString() + " en {" +  evt.x + ", " + evt.y + "}");
+        //System.out.println("Evento de tipo " + evt.type.toString() + " en {" +  evt.x + ", " + evt.y + "}");
         addEvent(evt);
     }
 

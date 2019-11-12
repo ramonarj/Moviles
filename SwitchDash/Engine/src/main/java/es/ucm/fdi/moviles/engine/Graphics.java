@@ -2,13 +2,19 @@ package es.ucm.fdi.moviles.engine;
 
 public interface Graphics
 {
-    //Create new image
-    public Image newImage(String name);
+    /**
+     * Creates a new image using the given path
+     * @param path relative path to the image from the root folder
+     * @return
+     */
+    Image newImage(String path);
 
-    //Clears
+    /**
+     * Clears the screen using the given color as the filler one
+     * @param color Color used to fill the screen
+     */
     void clear(int color);
 
-    //Para pintar imágenes:
 
     /**
      * Pinta una imagen en una posición dada
@@ -56,7 +62,21 @@ public interface Graphics
     void drawImage(Image image, Rect srcRect, Rect destRect, float alpha);
 
 
-    //Tamaño de la ventana
+    /**
+     * Getter
+     * @return window width
+     */
     int getWidth();
+
+    /**
+     * Getter
+     * @return window height
+     */
     int getHeight();
+
+
+    /**
+     * Sets canvas size manually
+     */
+    void setCanvasSize(int width,int height);
 }

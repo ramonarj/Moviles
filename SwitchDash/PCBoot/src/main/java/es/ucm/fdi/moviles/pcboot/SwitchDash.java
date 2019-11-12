@@ -1,13 +1,9 @@
 package es.ucm.fdi.moviles.pcboot;
 
-import com.example.logic.SwitchDashLogic;
+import com.example.logic.PlayState;
 
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
 import es.ucm.fdi.moviles.pcmodule.PCGraphics;
-import es.ucm.fdi.moviles.pcmodule.PCImage;
 import es.ucm.fdi.moviles.pcmodule.PCInput;
 import es.ucm.fdi.moviles.pcmodule.Window;
 
@@ -35,7 +31,7 @@ public class SwitchDash
         PCGame game = new PCGame(graphics, input, ventana);
 
         //3. EL JUEGO Y LA LÓGICA TIENEN REFERENCIAS MUTUAS
-        SwitchDashLogic logica = new SwitchDashLogic(game);
+        PlayState logica = new PlayState(game);
         logica.init();
         game.setGameState(logica);
 

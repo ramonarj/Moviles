@@ -2,12 +2,11 @@ package es.ucm.fdi.moviles.SwitchDash;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.logic.SwitchDashLogic;
+import com.example.logic.PlayState;
 
 import es.ucm.fdi.moviles.androidModule.AndroidGraphics;
 import es.ucm.fdi.moviles.androidModule.AndroidInput;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         game=new AndroidGame(this);
-        logic=new SwitchDashLogic(game);
+        logic=new PlayState(game);
         game.setGameState(logic);
         setContentView(game);
     }
@@ -65,6 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private AndroidGame game;
     private AndroidInput input;
     private AndroidGraphics graphics;
-    private SwitchDashLogic logic;
+    private PlayState logic;
     private SurfaceView surf;
 }

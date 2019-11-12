@@ -27,7 +27,7 @@ public class PCImage implements Image
      * @return image heigth
      */
     @Override
-    public int getHeigth()
+    public int getHeight()
     {
         return img.getHeight(null);
     }

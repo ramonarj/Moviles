@@ -5,17 +5,13 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.awt.Window;
-
-import javax.swing.ImageIcon;
 
 import es.ucm.fdi.moviles.engine.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.Image;
 import es.ucm.fdi.moviles.engine.Rect;
 
-public class PCGraphics extends AbstractGraphics {
-
+public class PCGraphics extends AbstractGraphics
+{
     //Ventana de la aplicación
     java.awt.Window window;
     //Gráficos de Java
@@ -129,7 +125,7 @@ public class PCGraphics extends AbstractGraphics {
         Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
         g2d.setComposite(alphaComp);
 
-        Rect source = new Rect(0,0, image.getWidth(), image.getHeigth());
+        Rect source = new Rect(0,0, image.getWidth(), image.getHeight());
         drawImagePrivate(pcImage, g2d, source, destRect);
 
         //Dejamos como estaba
@@ -171,6 +167,9 @@ public class PCGraphics extends AbstractGraphics {
     public int getHeight() {
         return window.getHeight();
     }
+
+    @Override
+    public void setCanvasSize(int width, int height){window.setSize(width,height);}
 
     @Override
     public void drawRealImage(Image image, int posX, int posY) {

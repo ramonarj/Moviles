@@ -1,10 +1,8 @@
 package es.ucm.fdi.moviles.androidModule;
 
 import es.ucm.fdi.moviles.engine.AbstractGraphics;
-import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 
-import android.content.ReceiverCallNotAllowedException;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import android.graphics.Rect;
-import android.provider.Telephony;
 import android.util.Log;
 import android.view.SurfaceView;
 
@@ -69,28 +66,33 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
+    public void setCanvasSize(int x, int y) {
+
+    }
+
+    @Override
     public void drawImage(Image image, int posX, int posY) {
         super.drawImage(image, posX, posY);
     }
 
     @Override
-    public void drawImage(Image image, int posX, int posY, float alpha) {
-        super.drawImage(image, posX, posY, alpha);
+    public void drawImage(Image image, int posX, int posY, es.ucm.fdi.moviles.engine.Rect srcRect) {
+
     }
 
     @Override
-    public void drawImage(Image image, int posX, int posY, es.ucm.fdi.moviles.engine.Rect srcRect) {
-        super.drawImage(image, posX, posY, srcRect);
+    public void drawImage(Image image, int posX, int posY, float alpha) {
+
     }
 
     @Override
     public void drawImage(Image image, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
-        super.drawImage(image, destRect, alpha);
+
     }
 
     @Override
     public void drawImage(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
-        super.drawImage(image, srcRect, destRect, alpha);
+
     }
 
 
@@ -125,12 +127,12 @@ public class AndroidGraphics extends AbstractGraphics
     public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
         //Tamaño del rectángulo que se va a pintar (en píxeles)
         int tamX = (int)((float)image.getWidth() * scaleX);
-        int tamY = (int)((float)image.getHeigth() * scaleY);
+        int tamY = (int)((float)image.getHeight() * scaleY);
 
         Paint paint=new Paint();
         paint.setAlpha((int)alpha);
 
-        Rect src=new Rect(0,0,image.getWidth()-1,image.getHeigth()-1);
+        Rect src=new Rect(0,0,image.getWidth()-1,image.getHeight()-1);
         Rect dest=new Rect(0,0,tamX-1,tamY-1);
 
         //Pintamos

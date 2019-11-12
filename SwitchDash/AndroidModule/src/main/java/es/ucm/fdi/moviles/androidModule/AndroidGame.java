@@ -96,7 +96,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         catch (IOException e) {
             android.util.Log.e("MainActivity", "Error leyendo el sprite");
         }
-        state_.setImage(image);
+        //state_.setImage(image);
     }
 
     private GameState state_;

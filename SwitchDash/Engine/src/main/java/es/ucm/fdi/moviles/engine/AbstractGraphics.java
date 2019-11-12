@@ -1,25 +1,18 @@
 package es.ucm.fdi.moviles.engine;
 
-public abstract class AbstractGraphics implements  Graphics{
+public abstract class AbstractGraphics implements  Graphics
+{
+    int canvasWidth, canvasHeight;
+
+    @Override
+    public abstract void setCanvasSize(int x, int y);
 
     //NOTA: ahora mismo esto no sirve para nada
     @Override
-    public void drawImage(Image image, int posX, int posY) {
+    public void drawImage(Image image, int posX, int posY)
+    {
         drawRealImage(image,posX,posY);
     }
-
-    @Override
-    public void drawImage(Image image, int posX, int posY, float alpha){}
-
-    @Override
-    public void drawImage(Image image, int posX, int posY, Rect srcRect){}
-
-    @Override
-    public void drawImage(Image image, Rect destRect, float alpha){}
-
-
-    @Override
-    public void drawImage(Image image, Rect srcRect, Rect destRect, float alpha){}
 
 
 

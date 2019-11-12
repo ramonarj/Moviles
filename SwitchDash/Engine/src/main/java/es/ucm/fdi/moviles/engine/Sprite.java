@@ -51,4 +51,5 @@ public class Sprite {
         graphics_.drawImage(img_,
                 posX - rect_.getWidth() / 2, posY - rect_.getHeight() / 2, rect_);
     }
+
 }
