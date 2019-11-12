@@ -3,6 +3,7 @@ package es.ucm.fdi.moviles.pcmodule;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -10,26 +11,26 @@ import java.awt.Window;
 import javax.swing.ImageIcon;
 
 import es.ucm.fdi.moviles.engine.AbstractGraphics;
-import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 
 public class PCGraphics extends AbstractGraphics {
 
     //Ventana de la aplicación
     java.awt.Window window;
-    java.awt.Graphics graphics;
+    //Gráficos de Java
+    java.awt.image.BufferStrategy strategy;
 
 
     public PCGraphics()
     {
         this.window = null;
-        this.graphics = null;
+        this.strategy = null;
     }
 
     public PCGraphics(java.awt.Window window)
     {
         this.window = window;
-        this.graphics = window.getBufferStrategy().getDrawGraphics();
+        this.strategy = window.getBufferStrategy();
     }
 
     /**
@@ -63,30 +64,33 @@ public class PCGraphics extends AbstractGraphics {
     @Override
     public void clear(int color)
     {
-        graphics.setColor(new Color(color));
-        graphics.fillRect(0,0, getWidth(), getHeight());
+        java.awt.Graphics g = strategy.getDrawGraphics();
+        g.setColor(new Color(color));
+        g.fillRect(0,0, getWidth(), getHeight());
     }
 
     @Override
     public void drawImage(Image image, int posX, int posY)
     {
         PCImage pcImage = (PCImage)image;
-        graphics.drawImage(pcImage.img, posX, posY, null);
+        java.awt.Graphics g = strategy.getDrawGraphics();
+        g.drawImage(pcImage.img, posX, posY, null);
     }
 
     @Override
     public void drawImage(Image image, int posX, int posY, float alpha)
     {
         //Castings
+        java.awt.Graphics g = strategy.getDrawGraphics();
         PCImage pcImage = (PCImage)image;
-        Graphics2D g2d = (Graphics2D)graphics;
+        Graphics2D g2d = (Graphics2D)g;
 
         //Creamos el composite de alpha y lo aplicamos
         Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
         g2d.setComposite(alphaComp);
 
         //Pintamos
-        graphics.drawImage(pcImage.img, posX, posY, null);
+        g.drawImage(pcImage.img, posX, posY, null);
 
         //Dejamos como estaba
         Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
@@ -96,20 +100,21 @@ public class PCGraphics extends AbstractGraphics {
     @Override
     public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY)
     {
+        java.awt.Graphics g = strategy.getDrawGraphics();
         //Tamaño del rectángulo que se va a pintar (en píxeles)
         int tamX = (int)((float)image.getWidth() * scaleX);
         int tamY = (int)((float)image.getHeigth() * scaleY);
 
         //Castings
         PCImage pcImage = (PCImage)image;
-        Graphics2D g2d = (Graphics2D)graphics;
+        Graphics2D g2d = (Graphics2D)g;
 
         //Creamos el composite de alpha y lo aplicamos
         Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
         g2d.setComposite(alphaComp);
 
         //Pintamos
-        graphics.drawImage(pcImage.img, posX, posY, tamX, tamY, null);
+        g.drawImage(pcImage.img, posX, posY, tamX, tamY, null);
 
         //Dejamos como estaba
         Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
@@ -154,7 +159,4 @@ public class PCGraphics extends AbstractGraphics {
     public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
 
     }
-
-    //Not sure if esto está bien
-    public Window getWindow(){return window;}
 }

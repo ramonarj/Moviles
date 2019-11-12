@@ -15,8 +15,6 @@ public class SwitchDashLogic implements GameState
     //Objeto del juego
     private Game game;
 
-    //Imágenes
-    Image prueba;
     public SwitchDashLogic(Game game)
     {
         this.game = game;
@@ -25,7 +23,7 @@ public class SwitchDashLogic implements GameState
     @Override
     public boolean init()
     {
-        prueba = game.getGraphics().newImage("assets/Chestplate.jpg");
+        test = game.getGraphics().newImage("Assets/Chestplate.jpg");
         return true;
     }
 
@@ -43,7 +41,8 @@ public class SwitchDashLogic implements GameState
     @Override
     public void render()
     {
-        Rect rect=new Rect(150,0,test.getWidth(),test.getHeigth());
+        game.getGraphics().clear(0x000000);
+        Rect rect=new Rect(0,0,test.getWidth(),test.getHeigth());
         Sprite sprite=new Sprite(test,rect,game .getGraphics());
         sprite.draw();
     }

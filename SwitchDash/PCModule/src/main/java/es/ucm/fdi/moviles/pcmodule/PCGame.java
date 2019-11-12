@@ -14,6 +14,10 @@ public class PCGame implements Game {
     PCInput input;
     //Sistema de gráficos
     PCGraphics graphics;
+    //Ventana
+    Window window;
+
+
     //Estado actual
     GameState state;
 
@@ -23,7 +27,7 @@ public class PCGame implements Game {
     @Override
     public void run()
     {
-        BufferStrategy strategy = graphics.getWindow().getBufferStrategy();
+        BufferStrategy strategy = window.getBufferStrategy();
         long lastFrameTime = System.nanoTime();
         while(true)
         {
@@ -37,7 +41,6 @@ public class PCGame implements Game {
             state.update((float)elapsedTime);
 
             // Pintamos el frame con el BufferStrategy
-            Window window = graphics.getWindow();
             do {
                 do {
                     java.awt.Graphics g = window.getBufferStrategy().getDrawGraphics();
@@ -60,10 +63,11 @@ public class PCGame implements Game {
      * @param graphics El sistema de gráficos que usará el juego
      * @param input El sistema de entrada que usará el juego
      */
-    public PCGame(PCGraphics graphics, PCInput input)
+    public PCGame(PCGraphics graphics, PCInput input, Window window)
     {
         this.graphics = graphics;
         this.input = input;
+        this.window = window;
     }
 
     /**

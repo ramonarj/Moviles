@@ -19,7 +19,7 @@ public abstract class AbstractInput implements Input {
      * @return lista de eventos, de tamaño 0 si no ha habido
      */
     @Override
-    public List<TouchEvent> getTouchEvents()
+    synchronized public List<TouchEvent> getTouchEvents()
     {
         if(events.size() > 0)
         {

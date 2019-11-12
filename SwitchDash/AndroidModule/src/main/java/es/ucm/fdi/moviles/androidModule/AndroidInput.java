@@ -41,7 +41,7 @@ public class AndroidInput extends AbstractInput implements View.OnTouchListener{
             evt.x = (int)event.getX();
             evt.y = (int)event.getY();
             evt.id = event.getPointerId(p);
-            System.out.println("Evento de tipo " + evt.type.toString() + "en {" + evt.x + ", " + evt.y + "}");
+            System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "}");
             addEvent(evt);
         }
         return true; //El evento se consume

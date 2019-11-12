@@ -20,8 +20,28 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
 
     }
 
+    /**
+     * Dados un evento recibido de Mouse(motion)Listener y un tipo propio
+     * de la clase input, crea el evento y lo añade a la lista
+     * @param mouseEvent
+     * @param type
+     */
+    private void registerEvent(MouseEvent mouseEvent, TouchEvent.EventType type)
+    {
+        //Rellenamos el evento
+        TouchEvent evt = new TouchEvent();
+        evt.x = mouseEvent.getX();
+        evt.y = mouseEvent.getY();
+        evt.id = mouseEvent.getID();
+        evt.type = type;
 
-    //MOUSE LISTENER
+        //Debug
+        System.out.println("Evento de tipo " + evt.type.toString() + " en {" +  evt.x + ", " + evt.y + "}");
+        addEvent(evt);
+    }
+
+
+    //MÉTODOS QUE IMPLEMENTAN LA INTERFAZ MOUSE LISTENER
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
     }
@@ -29,26 +49,13 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     @Override
     public void mousePressed(MouseEvent mouseEvent)
     {
-        System.out.println("Pressed");
-        TouchEvent evt = new TouchEvent();
-        evt.x = mouseEvent.getX();
-        evt.y = mouseEvent.getY();
-        evt.id = mouseEvent.getID();
-        evt.type = TouchEvent.EventType.PRESSED;
-        addEvent(evt);
+        registerEvent(mouseEvent, TouchEvent.EventType.PRESSED);
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent)
     {
-        System.out.println("Released");
-        TouchEvent evt = new TouchEvent();
-        evt.x = mouseEvent.getX();
-        evt.y = mouseEvent.getY();
-        evt.id = mouseEvent.getID();
-        evt.type = TouchEvent.EventType.RELEASED;
-        addEvent(evt);
-
+        registerEvent(mouseEvent, TouchEvent.EventType.RELEASED);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
 
     }
 
-    //MOUSE MOTION LISTENER
+    //MÉTODOS QUE IMPLEMENTAN LA INTERFAZ MOUSE MOTION LISTENER
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
 
@@ -70,12 +77,6 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     @Override
     public void mouseMoved(MouseEvent mouseEvent)
     {
-        System.out.println("Moved");
-        TouchEvent evt = new TouchEvent();
-        evt.x = mouseEvent.getX();
-        evt.y = mouseEvent.getY();
-        evt.id = mouseEvent.getID();
-        evt.type = TouchEvent.EventType.MOVED;
-        addEvent(evt);
+        registerEvent(mouseEvent, TouchEvent.EventType.MOVED);
     }
 }
