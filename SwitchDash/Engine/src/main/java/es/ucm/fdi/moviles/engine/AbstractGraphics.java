@@ -23,10 +23,6 @@ public abstract class AbstractGraphics implements  Graphics{
 
 
 
-
-    protected abstract void drawImagePrivate(Image image, Rect srcRect, Rect destRect);
-
-
     public abstract void drawRealImage(Image image, int posX, int posY);
 
     public abstract void drawRealImage(Image image, int posX, int posY, float alpha);

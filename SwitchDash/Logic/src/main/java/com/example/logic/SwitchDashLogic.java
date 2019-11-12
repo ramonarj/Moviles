@@ -23,7 +23,8 @@ public class SwitchDashLogic implements GameState
     @Override
     public boolean init()
     {
-        prueba =  game.getGraphics().newImage("Assets/balls.png");
+        fondo =  game.getGraphics().newImage("Assets/backgrounds.png");
+        bola =  game.getGraphics().newImage("Assets/balls.png");
         flechas =  game.getGraphics().newImage("Assets/arrowsBackground.png");
         return true;
     }
@@ -49,14 +50,22 @@ public class SwitchDashLogic implements GameState
         g.clear(0x000000);
 
 
-        //1. FLECHAS
-        Rect destRect = new Rect(0,0,g.getWidth(), g.getHeight());
-        g.drawImage(flechas, destRect, 1f); //El alpha no va bien
+        //1. FONDO
 
-        //2. PELOTA
-        Rect srcRect=new Rect(prueba.getWidth() / 10 * 7,0,prueba.getWidth() / 10,prueba.getHeigth() / 2);
-        Sprite sprite=new Sprite(prueba,srcRect,g);
-        sprite.draw(g.getWidth() / 2 - srcRect.getWidth() / 2,g.getHeight()/2 - srcRect.getHeight() / 2);
+        Rect fullRect = new Rect(0,0,g.getWidth(), g.getHeight());
+
+        Rect backgroundRect=new Rect(0,0,fondo.getWidth() / 9,fondo.getHeigth());
+        Sprite backSprite=new Sprite(fondo,backgroundRect,g);
+        backSprite.draw(fullRect);
+
+
+        //2. FLECHAS
+        g.drawImage(flechas, fullRect, 0.5f);
+
+        //3. PELOTA
+        Rect ballRect=new Rect(bola.getWidth() / 10 * 7,0,bola.getWidth() / 10,bola.getHeigth() / 2);
+        Sprite ballSprite=new Sprite(bola,ballRect,g);
+        ballSprite.drawCentered(g.getWidth() / 2,g.getHeight()/2);
     }
 
     //@Override
@@ -65,8 +74,10 @@ public class SwitchDashLogic implements GameState
     public void setHeight(int height){height_=height;}
 
 
-    public Image prueba;
+    public Image fondo;
+    public Image bola;
     public Image flechas;
+
     private int width_;
     private int height_;
 }

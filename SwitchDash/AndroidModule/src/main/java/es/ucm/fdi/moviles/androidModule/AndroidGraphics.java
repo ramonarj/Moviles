@@ -93,10 +93,6 @@ public class AndroidGraphics extends AbstractGraphics
         super.drawImage(image, srcRect, destRect, alpha);
     }
 
-    @Override
-    protected void drawImagePrivate(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect) {
-
-    }
 
     @Override
     public void drawRealImage(Image image,int posX, int posY) {

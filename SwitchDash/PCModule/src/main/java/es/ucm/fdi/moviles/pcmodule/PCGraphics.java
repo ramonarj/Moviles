@@ -45,8 +45,6 @@ public class PCGraphics extends AbstractGraphics {
         //TODO: gestionar errores cargando la imagen con un bucle
         try
         {
-           //java.awt.Image img = Toolkit.getDefaultToolkit().getImage(window.getClass().getResource(name));
-            //java.awt.Image img = new ImageIcon(window.getClass().getResource(name)).getImage();
             java.awt.Image img = javax.imageio.ImageIO.read(new java.io.File(name));
             image = new PCImage(img);
         }
@@ -70,13 +68,11 @@ public class PCGraphics extends AbstractGraphics {
         g.fillRect(0,0, getWidth(), getHeight());
     }
 
-    @Override
-    protected void drawImagePrivate(Image image, Rect srcRect, Rect destRect)
+
+    protected void drawImagePrivate(PCImage image, Graphics g, Rect srcRect, Rect destRect)
     {
-        PCImage pcImage = (PCImage)image;
-        java.awt.Graphics g = strategy.getDrawGraphics();
         //Pintamos
-        g.drawImage(pcImage.img,
+        g.drawImage(image.img,
                 destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
                 srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
                 null);
@@ -114,15 +110,18 @@ public class PCGraphics extends AbstractGraphics {
     @Override
     public void drawImage(Image image, int posX, int posY, Rect srcRect)
     {
+        //Castings
+        PCImage pcImage = (PCImage)image;
+        java.awt.Graphics g = strategy.getDrawGraphics();
         Rect destiny = new Rect(posX, posY, srcRect.getWidth(), srcRect.getHeight());
-        drawImagePrivate(image, srcRect, destiny);
+        drawImagePrivate(pcImage, g, srcRect, destiny);
     }
 
     @Override
     public void drawImage(Image image, Rect destRect, float alpha)
     {
         java.awt.Graphics g = strategy.getDrawGraphics();
-
+        PCImage pcImage = (PCImage)image;
         //Castings
         Graphics2D g2d = (Graphics2D)g;
 
@@ -131,7 +130,7 @@ public class PCGraphics extends AbstractGraphics {
         g2d.setComposite(alphaComp);
 
         Rect source = new Rect(0,0, image.getWidth(), image.getHeigth());
-        drawImagePrivate(image, source, destRect);
+        drawImagePrivate(pcImage, g2d, source, destRect);
 
         //Dejamos como estaba
         Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
