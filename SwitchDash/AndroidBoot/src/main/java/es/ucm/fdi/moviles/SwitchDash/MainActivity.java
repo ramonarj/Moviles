@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         logic=new SwitchDashLogic(game);
         game.setGameState(logic);
         setContentView(game);
-
     }
 
     @Override

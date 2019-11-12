@@ -27,6 +27,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.activity_=Activity;
         this.graphic_=new AndroidGraphics(activity_,this);
         this.input_=new AndroidInput();
+        setOnTouchListener(this.input_);
     }
 
     private void init()

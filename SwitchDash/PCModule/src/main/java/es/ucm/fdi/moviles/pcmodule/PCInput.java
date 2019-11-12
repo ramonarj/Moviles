@@ -21,11 +21,6 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     }
 
 
-    synchronized protected void addEvent(TouchEvent evt)
-    {
-        events.add(evt);
-    }
-
     //MOUSE LISTENER
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {

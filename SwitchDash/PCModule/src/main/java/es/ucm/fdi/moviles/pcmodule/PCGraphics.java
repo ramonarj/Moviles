@@ -9,10 +9,11 @@ import java.awt.Window;
 
 import javax.swing.ImageIcon;
 
+import es.ucm.fdi.moviles.engine.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 
-public class PCGraphics  implements Graphics {
+public class PCGraphics extends AbstractGraphics {
 
     //Ventana de la aplicación
     java.awt.Window window;
@@ -132,6 +133,26 @@ public class PCGraphics  implements Graphics {
     @Override
     public int getHeight() {
         return window.getHeight();
+    }
+
+    @Override
+    public void drawRealImage(Image image, int posX, int posY) {
+
+    }
+
+    @Override
+    public void drawRealImage(Image image, int posX, int posY, float alpha) {
+
+    }
+
+    @Override
+    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
+
+    }
+
+    @Override
+    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
+
     }
 
     //Not sure if esto está bien

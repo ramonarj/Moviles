@@ -22,20 +22,18 @@ public abstract class AbstractGraphics implements  Graphics{
     }
 
     @Override
-    public int getWidth() {
-        return 0;
-    }
+    public abstract int getWidth();
 
     @Override
-    public int getHeight() {
-        return 0;
-    }
+    public abstract int getHeight();
 
-    public void drawRealImage(Image image, int posX, int posY){};
 
-    public void drawRealImage(Image image, int posX, int posY, float alpha){};
+    //Métodos abstractos que no heredan de la interfaz directamente
+    public abstract void drawRealImage(Image image, int posX, int posY);
 
-    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY){};
+    public abstract void drawRealImage(Image image, int posX, int posY, float alpha);
 
-    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax){};
+    public abstract void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY);
+
+    public abstract void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax);
 }

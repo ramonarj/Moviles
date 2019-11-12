@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Implementa las funcionalidades comunes de la clase para cualquier plataforma
  */
-public class AbstractInput implements Input {
+public abstract class AbstractInput implements Input {
     protected ArrayList<TouchEvent> events;
 
     public AbstractInput()
@@ -34,5 +34,15 @@ public class AbstractInput implements Input {
             return aux;
         }
         return events;
+    }
+
+    /**
+     * Añade un evento a la lista, usa el synchronized porque es posible que tratemos de acceder
+     * a la vez que otro método (getTouchEvents), así que pedimos permiso al semáforo del objeto.
+     * @param evt El evento a añadir a la cola
+     */
+    synchronized protected void addEvent(TouchEvent evt)
+    {
+        events.add(evt);
     }
 }
