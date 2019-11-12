@@ -69,6 +69,36 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
+    public void drawImage(Image image, int posX, int posY) {
+        super.drawImage(image, posX, posY);
+    }
+
+    @Override
+    public void drawImage(Image image, int posX, int posY, float alpha) {
+        super.drawImage(image, posX, posY, alpha);
+    }
+
+    @Override
+    public void drawImage(Image image, int posX, int posY, es.ucm.fdi.moviles.engine.Rect srcRect) {
+        super.drawImage(image, posX, posY, srcRect);
+    }
+
+    @Override
+    public void drawImage(Image image, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
+        super.drawImage(image, destRect, alpha);
+    }
+
+    @Override
+    public void drawImage(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
+        super.drawImage(image, srcRect, destRect, alpha);
+    }
+
+    @Override
+    protected void drawImagePrivate(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect) {
+
+    }
+
+    @Override
     public void drawRealImage(Image image,int posX, int posY) {
         //Bloqueamos el canavas para pintar la imagen e inmediatamente
         //despues lo liberamos

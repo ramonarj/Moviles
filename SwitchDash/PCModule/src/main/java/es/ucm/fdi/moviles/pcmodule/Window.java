@@ -31,9 +31,9 @@ public class Window extends JFrame
      * @return Cierto si tod0 fue bien y falso en otro caso (se escribe una
      * descripción del problema en la salida de error).
      */
-    public boolean init()
+    public boolean init(int width, int height)
     {
-        setSize(400,400);
+        setSize(width,height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Añadido

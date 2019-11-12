@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 
 import es.ucm.fdi.moviles.engine.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.Image;
+import es.ucm.fdi.moviles.engine.Rect;
 
 public class PCGraphics extends AbstractGraphics {
 
@@ -70,6 +71,18 @@ public class PCGraphics extends AbstractGraphics {
     }
 
     @Override
+    protected void drawImagePrivate(Image image, Rect srcRect, Rect destRect)
+    {
+        PCImage pcImage = (PCImage)image;
+        java.awt.Graphics g = strategy.getDrawGraphics();
+        //Pintamos
+        g.drawImage(pcImage.img,
+                destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
+                srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
+                null);
+    }
+
+    @Override
     public void drawImage(Image image, int posX, int posY)
     {
         PCImage pcImage = (PCImage)image;
@@ -97,13 +110,38 @@ public class PCGraphics extends AbstractGraphics {
         g2d.setComposite(alphaComp);
     }
 
+
     @Override
-    public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY)
+    public void drawImage(Image image, int posX, int posY, Rect srcRect)
+    {
+        Rect destiny = new Rect(posX, posY, srcRect.getWidth(), srcRect.getHeight());
+        drawImagePrivate(image, srcRect, destiny);
+    }
+
+    @Override
+    public void drawImage(Image image, Rect destRect, float alpha)
     {
         java.awt.Graphics g = strategy.getDrawGraphics();
-        //Tamaño del rectángulo que se va a pintar (en píxeles)
-        int tamX = (int)((float)image.getWidth() * scaleX);
-        int tamY = (int)((float)image.getHeigth() * scaleY);
+
+        //Castings
+        Graphics2D g2d = (Graphics2D)g;
+
+        //Creamos el composite de alpha y lo aplicamos
+        Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+        g2d.setComposite(alphaComp);
+
+        Rect source = new Rect(0,0, image.getWidth(), image.getHeigth());
+        drawImagePrivate(image, source, destRect);
+
+        //Dejamos como estaba
+        Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
+        g2d.setComposite(alphaComp);
+    }
+
+    @Override
+    public void drawImage(Image image, Rect srcRect, Rect destRect, float alpha)
+    {
+        java.awt.Graphics g = strategy.getDrawGraphics();
 
         //Castings
         PCImage pcImage = (PCImage)image;
@@ -114,21 +152,16 @@ public class PCGraphics extends AbstractGraphics {
         g2d.setComposite(alphaComp);
 
         //Pintamos
-        g.drawImage(pcImage.img, posX, posY, tamX, tamY, null);
+        g.drawImage(pcImage.img,
+                destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
+                srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
+                null);
 
         //Dejamos como estaba
         Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
         g2d.setComposite(alphaComp);
     }
 
-    @Override
-    public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY,
-                          int rectMin, int rectMax)
-    {
-        //graphics.drawImage(image, leftX, upY, rightX, downY, //Los del rectángulo destino
-        //                         leftX, upY, rightX, downY, //Los del rectángulo fuente
-        //       null);
-    }
 
     @Override
     public int getWidth() {

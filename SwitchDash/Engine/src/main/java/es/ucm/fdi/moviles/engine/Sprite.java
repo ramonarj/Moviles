@@ -20,8 +20,13 @@ public class Sprite {
         this.graphics_=graphics;
     }
 
-    public void draw()
+    public void draw(int posX, int posY)
     {
-        graphics_.drawImage(img_,rect_.getX(),rect_.getY());
+        graphics_.drawImage(img_, posX, posY, rect_);
+    }
+
+    public void draw(Rect dstRect)
+    {
+        graphics_.drawImage(img_,rect_, dstRect, 0);
     }
 }

@@ -21,7 +21,7 @@ public class SwitchDash
     {
         //1. CREAMOS LA VENTANA
         Window ventana = new Window("Switch Dash");
-        if (!ventana.init())
+        if (!ventana.init(400, 600))
             return;
 
         //2. CREAMOS LOS SUBSISTEMAS Y SE LOS PASAMOS AL JUEGO
