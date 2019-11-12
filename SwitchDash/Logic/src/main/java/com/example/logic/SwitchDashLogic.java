@@ -7,6 +7,8 @@ import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 import es.ucm.fdi.moviles.engine.Input;
+import es.ucm.fdi.moviles.engine.Rect;
+import es.ucm.fdi.moviles.engine.Sprite;
 
 public class SwitchDashLogic implements GameState
 {
@@ -41,11 +43,9 @@ public class SwitchDashLogic implements GameState
     @Override
     public void render()
     {
-
-        Graphics g = game.getGraphics();
-       // g.clear(0xFF0000FF);
-        g.drawImage(test, 0, 0,255,(float)g.getWidth()/test.getWidth(),(float)  g.getHeight()/test.getHeigth());
-
+        Rect rect=new Rect(150,0,test.getWidth(),test.getHeigth());
+        Sprite sprite=new Sprite(test,rect,game .getGraphics());
+        sprite.draw();
     }
 
     @Override

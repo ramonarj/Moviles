@@ -1,5 +1,6 @@
 package es.ucm.fdi.moviles.androidModule;
 
+import es.ucm.fdi.moviles.engine.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 
@@ -20,7 +21,7 @@ import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AndroidGraphics implements Graphics
+public class AndroidGraphics extends AbstractGraphics
 {
     //Actividad de Android
     AppCompatActivity activity;
@@ -68,7 +69,7 @@ public class AndroidGraphics implements Graphics
     }
 
     @Override
-    public void drawImage(Image image,int posX, int posY) {
+    public void drawRealImage(Image image,int posX, int posY) {
         //Bloqueamos el canavas para pintar la imagen e inmediatamente
         //despues lo liberamos
         lockCanvas();
@@ -80,7 +81,7 @@ public class AndroidGraphics implements Graphics
     }
 
     @Override
-    public void drawImage(Image image, int posX, int posY, float alpha) {
+    public void drawRealImage(Image image, int posX, int posY, float alpha) {
         //Bloqueamos el canavas para pintar la imagen e inmediatamente
         //despues lo liberamos,creamos un Paint local el cual usaremos
         //para modificar el alpha de la imagen
@@ -95,7 +96,7 @@ public class AndroidGraphics implements Graphics
     }
 
     @Override
-    public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
+    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
         //Tamaño del rectángulo que se va a pintar (en píxeles)
         int tamX = (int)((float)image.getWidth() * scaleX);
         int tamY = (int)((float)image.getHeigth() * scaleY);
@@ -114,7 +115,7 @@ public class AndroidGraphics implements Graphics
     }
 
     @Override
-    public void drawImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
+    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
 
     }
 
@@ -124,7 +125,6 @@ public class AndroidGraphics implements Graphics
         int width=canvas.getWidth();
         unLockCanvas();
         return width;
-
     }
 
     @Override

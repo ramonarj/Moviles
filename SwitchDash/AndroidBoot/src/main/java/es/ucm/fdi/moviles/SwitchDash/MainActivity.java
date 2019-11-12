@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             logic.setHeight(1080);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             logic.setWidth(1080);
-            logic.setHeight(1920);
+            logic.setHeight(620);
         }
     }
     @Override
