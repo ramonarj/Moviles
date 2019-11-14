@@ -23,15 +23,16 @@ public class PlayState implements GameState
     @Override
     public boolean init()
     {
-        fondo =  game.getGraphics().newImage("Assets/backgrounds.png");
-        bola =  game.getGraphics().newImage("Assets/balls.png");
-        flechas =  game.getGraphics().newImage("Assets/arrowsBackground.png");
-        player =  game.getGraphics().newImage("Assets/players.png");
+        fondo =  game.getGraphics().newImage("backgrounds.png");
+        bola =  game.getGraphics().newImage("balls.png");
+        flechas =  game.getGraphics().newImage("arrowsBackground.png");
+        player =  game.getGraphics().newImage("players.png");
         backgroundNo = (int)Math.floor(Math.random() * 9);
         playerColor = 0;
         coloresFlechas = new int[]{ 0x41a85f, 0x00a885, 0x3d8eb9, 0x2969b0,
                 0x553982, 0x28324e, 0xf37934, 0xd14b41, 0x75706b };
-        posFlechas = game.getGraphics().getHeight() / 2;
+        //posFlechas = game.getGraphics().getHeight() / 2;
+        posFlechas=0;
         return true;
     }
 
@@ -53,18 +54,20 @@ public class PlayState implements GameState
     {
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(coloresFlechas[backgroundNo]);
+        g.clear(0x000000FF);
 
         //1. FONDO
-        Rect fullRect = new Rect(0,0,g.getWidth(), g.getHeight());
+        Rect fullRect = new Rect(0,0,g.getLogicalWidth(), g.getLogicalHeight());
         Rect backgroundRect=new Rect(fondo.getWidth() / 9 * backgroundNo,0,fondo.getWidth() / 9,fondo.getHeight());
         Sprite backSprite=new Sprite(fondo,backgroundRect,g);
-        backSprite.draw(fullRect);
+        backSprite.draw(fullRect,100);
 
+        /*
         //2. FLECHAS
         Rect rectFlechas = new Rect(0,posFlechas - flechas.getHeight() / 2, g.getWidth(), flechas.getHeight());
-        g.drawImage(flechas, rectFlechas, 0.25f);
-        posFlechas +=10;
+        g.drawImage(flechas, rectFlechas, 100);
+       // posFlechas +=10;
+
 
         //3. PELOTA
         Rect ballRect=new Rect(bola.getWidth() / 10 * 7,0,bola.getWidth() / 10,bola.getHeight() / 2);
@@ -75,6 +78,8 @@ public class PlayState implements GameState
         Rect playerRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
         Sprite playerSprite=new Sprite(player,playerRect,g);
         playerSprite.drawCentered(g.getWidth() / 2,g.getHeight()/2);
+
+         */
     }
 
     //@Override

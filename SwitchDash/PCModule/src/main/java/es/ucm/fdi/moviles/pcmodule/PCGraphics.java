@@ -169,6 +169,15 @@ public class PCGraphics extends AbstractGraphics
     }
 
     @Override
+    public int getLogicalWidth() {
+        return this.logicalWidth;
+    }
+
+    @Override
+    public int getLogicalHeight() {
+        return this.logicalHeight;
+    }
+    @Override
     public void setCanvasSize(int width, int height){window.setSize(width,height);}
 
     @Override
@@ -188,6 +197,11 @@ public class PCGraphics extends AbstractGraphics
 
     @Override
     public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
+
+    }
+
+    @Override
+    public void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha) {
 
     }
 }

@@ -6,10 +6,10 @@ package es.ucm.fdi.moviles.engine;
 public class Rect {
 
     //Coordenadas de la esquina superior izquierda del rectángulo
-    private int x1;
-    private int x2;
-    private int y1;
-    private int y2;
+    public int x1;
+    public int x2;
+    public int y1;
+    public int y2;
 
     //Anchura y altura del rectángulo
     private int w;

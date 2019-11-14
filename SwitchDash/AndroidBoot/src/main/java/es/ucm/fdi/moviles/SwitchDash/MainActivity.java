@@ -1,6 +1,7 @@
 package es.ucm.fdi.moviles.SwitchDash;
 
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
@@ -23,20 +24,32 @@ public class MainActivity extends AppCompatActivity {
         game=new AndroidGame(this);
         logic=new PlayState(game);
         game.setGameState(logic);
+        logic.init();
+        init();
         setContentView(game);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+        Point size=new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(size);
+        game.getGraphics().setCanvasSize(size.x ,size.y);
         // Checks the orientation of the screen
+        /*
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            logic.setWidth(1920);
-            logic.setHeight(1080);
+
+            //Guardamos las coordenadas fisicas de la ventana
+
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            logic.setWidth(1080);
-            logic.setHeight(620);
+            Point size=new Point();
+            //Guardamos las coordenadas fisicas de la ventana
+            this.getWindowManager().getDefaultDisplay().getSize(size);
+            game.getGraphics().setCanvasSize(size.x ,size.y);
         }
+        */
+
     }
     @Override
     protected void onResume() {
@@ -57,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
     protected void init()
     {
-
+        //Establecemos vision vertical como predeterminado
+        game.getGraphics().setLogicalView();
+        Point size=new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(size);
+        game.getGraphics().setCanvasSize(size.x ,size.y);
     }
 
 

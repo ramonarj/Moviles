@@ -16,33 +16,6 @@ public interface Graphics
     void clear(int color);
 
 
-    /**
-     * Pinta una imagen en una posición dada
-     * @param image imagen a pintar
-     * @param posX coordenada horizontal
-     * @param posY coordenada vertical
-     */
-    void drawImage(Image image, int posX, int posY);
-
-
-    /**
-     * Pinta una imagen en una posición dada
-     * @param image imagen a pintar
-     * @param posX coordenada horizontal
-     * @param posY coordenada vertical
-     * @param srcRect rectángulo origen de la imagen
-     */
-    void drawImage(Image image, int posX, int posY, Rect srcRect);
-
-    /**
-     * Pinta una imagen en una posición dada usando una transparencia
-     * @param image imagen a pintar
-     * @param posX coordenada horizontal
-     * @param posY coordenada vertical
-     * @param alpha transparencia a aplicarle
-     */
-    void drawImage(Image image, int posX, int posY, float alpha);
-
 
     /**
      * Pinta una imagen en un rectángulo dado usando una transparencia
@@ -53,6 +26,13 @@ public interface Graphics
     void drawImage(Image image, Rect destRect, float alpha);
 
     /**
+     * Pinta una imagen en un rectángulo dado
+     * @param image imagen a pintar
+     * @param destRect rectángulo destino
+     */
+    void drawImage(Image image, Rect destRect);
+
+    /**
      * Pinta una porción de la imagen en un rectángulo dado usando una transparencia
      * @param image imagen a pintar
      * @param srcRect rectángulo origen de la imagen
@@ -60,6 +40,14 @@ public interface Graphics
      * @param alpha transparencia a aplicarle
      */
     void drawImage(Image image, Rect srcRect, Rect destRect, float alpha);
+
+    /**
+     * Pinta una porción de la imagen en un rectángulo dado
+     * @param image imagen a pintar
+     * @param srcRect rectángulo origen de la imagen
+     * @param destRect rectángulo destino en la pantalla
+     */
+    void drawImage(Image image, Rect srcRect, Rect destRect);
 
 
     /**
@@ -74,6 +62,20 @@ public interface Graphics
      */
     int getHeight();
 
+    /**
+     * Getter
+     * @return ancho lógico del estado
+     */
+    int getLogicalWidth();
+
+    /**
+     * Getter
+     * @return ancho logico del estado
+     */
+    int getLogicalHeight();
+
+
+    void setLogicalView();
 
     /**
      * Sets canvas size manually
