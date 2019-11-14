@@ -17,11 +17,8 @@ public class PCGame implements Game {
     //Ventana
     Window window;
 
-
     //Estado actual
     GameState state;
-
-
 
 
     @Override
