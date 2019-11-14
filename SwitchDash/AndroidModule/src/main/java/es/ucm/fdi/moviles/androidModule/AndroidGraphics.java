@@ -119,31 +119,22 @@ public class AndroidGraphics extends AbstractGraphics
         unLockCanvas();
     }
 
-    @Override
-    public int getWidth() {
-        lockCanvas();
-        int width=canvas.getWidth();
-        unLockCanvas();
-        return width;
-    }
+    //@Override
+    //public int getWidth() {
+        //  lockCanvas();
+        //  int width=canvas.getWidth();
+        //  unLockCanvas();
+        //   return width;
+        //}
 
-    @Override
-    public int getHeight() {
-        lockCanvas();
-        int height=canvas.getHeight();
-        unLockCanvas();
-        return height;
-    }
+    //@Override
+    // public int getHeight() {
+        //    lockCanvas();
+        //    int height=canvas.getHeight();
+        //    unLockCanvas();
+        //   return height;
+    //}
 
-    @Override
-    public int getLogicalWidth() {
-        return this.logicalWidth;
-    }
-
-    @Override
-    public int getLogicalHeight() {
-        return this.logicalHeight;
-    }
 
     private void lockCanvas()
     {

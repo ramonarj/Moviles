@@ -102,6 +102,16 @@ public abstract class AbstractGraphics implements  Graphics {
     protected float windowWidth;
     protected float windowHeight;
 
+    @Override
+    public int getWidth() {
+        return this.logicalWidth;
+    }
+
+    @Override
+    public int getHeight() {
+        return this.logicalHeight;
+    }
+
 
     //Métodos que sobreescribiran las clases hijas haciendo que la imagen se pinta de una forma concreta
     //depediendo la plataforma

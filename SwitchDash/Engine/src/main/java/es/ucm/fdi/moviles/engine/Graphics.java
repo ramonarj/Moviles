@@ -54,25 +54,25 @@ public interface Graphics
      * Getter
      * @return window width
      */
-    int getWidth();
+    //int getWidth();
 
     /**
      * Getter
      * @return window height
      */
-    int getHeight();
+    //int getHeight();
 
     /**
      * Getter
      * @return ancho lógico del estado
      */
-    int getLogicalWidth();
+    int getWidth();
 
     /**
      * Getter
      * @return ancho logico del estado
      */
-    int getLogicalHeight();
+    int getHeight();
 
 
     void setLogicalView();
