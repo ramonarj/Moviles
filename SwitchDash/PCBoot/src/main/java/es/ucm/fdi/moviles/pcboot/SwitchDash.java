@@ -17,7 +17,7 @@ public class SwitchDash
     {
         //1. CREAMOS LA VENTANA
         Window ventana = new Window("Switch Dash");
-        if (!ventana.init(400, 600))
+        if (!ventana.init(400, 600, false))
             return;
 
         //2. CREAMOS LOS SUBSISTEMAS Y SE LOS PASAMOS AL JUEGO
@@ -27,6 +27,7 @@ public class SwitchDash
 
         //El graphics lo creamos referenciando la ventana
         PCGraphics graphics = new PCGraphics(ventana);
+        ventana.addComponentListener(graphics);
         //Al juego le pasamos los sistemas de input y gráficos además de la lógica
         PCGame game = new PCGame(graphics, input, ventana);
 

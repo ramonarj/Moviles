@@ -5,12 +5,14 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import es.ucm.fdi.moviles.engine.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.Image;
 import es.ucm.fdi.moviles.engine.Rect;
 
-public class PCGraphics extends AbstractGraphics
+public class PCGraphics extends AbstractGraphics implements ComponentListener
 {
     //Ventana de la aplicación
     java.awt.Window window;
@@ -113,11 +115,15 @@ public class PCGraphics extends AbstractGraphics
 
 
     @Override
+    public void drawImage(Image image, Rect destRect, float alpha) {
+        super.drawImage(image, destRect, alpha);
+    }
+
+    @Override
     public void setCanvasSize(int width, int height)
     {
         windowWidth=width;
         windowHeight=height;
-        window.setSize(width,height);
     }
 
 
@@ -145,5 +151,29 @@ public class PCGraphics extends AbstractGraphics
     public void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha)
     {
         drawImagePrivate((PCImage)image, srcRect, destRect, alpha);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent componentEvent)
+    {
+        setCanvasSize(window.getWidth(), window.getHeight());
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent componentEvent)
+    {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent componentEvent)
+    {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent componentEvent)
+    {
+
     }
 }

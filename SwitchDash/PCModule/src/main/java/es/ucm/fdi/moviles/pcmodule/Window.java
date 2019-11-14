@@ -1,5 +1,8 @@
 package es.ucm.fdi.moviles.pcmodule;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+
 import javax.swing.JFrame;
 
 
@@ -31,10 +34,19 @@ public class Window extends JFrame
      * @return Cierto si tod0 fue bien y falso en otro caso (se escribe una
      * descripción del problema en la salida de error).
      */
-    public boolean init(int width, int height)
+    public boolean init(int width, int height, boolean fullscreen)
     {
         setSize(width,height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Pantalla completa
+        if(fullscreen)
+        {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setUndecorated(true);
+            setVisible(true);
+        }
+
 
         //Añadido
         setIgnoreRepaint(true);
@@ -62,4 +74,7 @@ public class Window extends JFrame
         }
         return true;
     }
+
+
+
 }
