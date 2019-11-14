@@ -42,8 +42,8 @@ public class PlayState implements GameState
         backgroundNo = (int)Math.floor(Math.random() * 9);
         playerColor = 0;
         score = 0;
-        coloresFlechas = new int[]{ 0x41a85f, 0x00a885, 0x3d8eb9, 0x2969b0,
-                0x553982, 0x28324e, 0xf37934, 0xd14b41, 0x75706b };
+        coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
+                0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
         posFlechas = game.getGraphics().getHeight() / 2;
         posBolas = game.getGraphics().getHeight() / 5;
         return true;
@@ -151,7 +151,7 @@ public class PlayState implements GameState
         //g.drawImage(playAgain, dstRect, 1f);
     }
 
-    //IMÁGENES Y SUS DIMENSIONES:
+    //IMAGENES Y SUS DIMENSIONES:
     //Fondo
     private Image backgrounds; //1 fila, 9 columnas
     private Image white;

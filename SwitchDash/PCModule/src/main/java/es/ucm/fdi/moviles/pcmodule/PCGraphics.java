@@ -111,15 +111,6 @@ public class PCGraphics extends AbstractGraphics
     }
 
 
-    //@Override
-    //public int getWidth() {
-     //   return window.getWidth();
-    //}
-
-    //@Override
-    //public int getHeight() {
-     //   return window.getHeight();
-    //}
 
     @Override
     public void setCanvasSize(int width, int height)

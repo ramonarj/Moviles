@@ -50,17 +50,13 @@ public interface Graphics
     void drawImage(Image image, Rect srcRect, Rect destRect);
 
 
+    /*
     /**
      * Getter
      * @return window width
+<<<<<<< Updated upstream
      */
     //int getWidth();
-
-    /**
-     * Getter
-     * @return window height
-     */
-    //int getHeight();
 
     /**
      * Getter

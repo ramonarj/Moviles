@@ -60,9 +60,7 @@ public class AndroidGraphics extends AbstractGraphics
     public void clear(int color) {
         //Bloqueamos el canavas para limpiar la pantalla e inmediatamente
         //despues lo liberamos
-        lockCanvas();
         canvas.drawColor(color);
-        unLockCanvas();
     }
 
     @Override
@@ -74,10 +72,7 @@ public class AndroidGraphics extends AbstractGraphics
         Rect src=new Rect(0,0,image.getWidth(),image.getHeight());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
 
-        //Pintamos
-        lockCanvas();
         canvas.drawBitmap(((AndroidImage) image).sprite,src,dest,paint);
-        unLockCanvas();
     }
 
     @Override
@@ -86,10 +81,7 @@ public class AndroidGraphics extends AbstractGraphics
         Rect src=new Rect(0,0,image.getWidth(),image.getHeight());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
 
-        //Pintamos
-        lockCanvas();
         canvas.drawBitmap(((AndroidImage) image).sprite,src,dest,null);
-        unLockCanvas();
     }
 
     @Override
@@ -101,10 +93,8 @@ public class AndroidGraphics extends AbstractGraphics
         Rect src=new Rect(srcRect.x1(),srcRect.y1(),srcRect.x2(),srcRect.y2());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
 
-        //Pintamos
-        lockCanvas();
         canvas.drawBitmap(((AndroidImage) image).sprite,src,dest,paint);
-        unLockCanvas();
+
     }
 
     @Override
@@ -113,38 +103,12 @@ public class AndroidGraphics extends AbstractGraphics
         Rect src=new Rect(srcRect.x1(),srcRect.y1(),srcRect.x2(),srcRect.y2());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
 
-        //Pintamos
-        lockCanvas();
         canvas.drawBitmap(((AndroidImage) image).sprite,src,dest,null);
-        unLockCanvas();
     }
 
-    //@Override
-    //public int getWidth() {
-        //  lockCanvas();
-        //  int width=canvas.getWidth();
-        //  unLockCanvas();
-        //   return width;
-        //}
-
-    //@Override
-    // public int getHeight() {
-        //    lockCanvas();
-        //    int height=canvas.getHeight();
-        //    unLockCanvas();
-        //   return height;
-    //}
-
-
-    private void lockCanvas()
+    public void setCanvas(Canvas canvas_)
     {
-        while(!surfaceview_.getHolder().getSurface().isValid())
-            ;
-        canvas = surfaceview_.getHolder().lockCanvas();
-    }
-    private void unLockCanvas()
-    {
-        surfaceview_.getHolder().unlockCanvasAndPost(canvas);
+        this.canvas=canvas_;
     }
 
 }

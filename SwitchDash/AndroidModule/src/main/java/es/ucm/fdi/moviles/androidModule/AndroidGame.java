@@ -27,6 +27,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.activity_=Activity;
         this.graphic_=new AndroidGraphics(activity_,this);
         this.input_=new AndroidInput();
+        this.canvas=null;
         setOnTouchListener(this.input_);
     }
 
@@ -37,10 +38,32 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     @Override
     public void run() {
+        long lastFrameTime = System.nanoTime();
+
+        long informePrevio = lastFrameTime; // Informes de FPS
+        int frames = 0;
+
         init(); //Prueba para cargar una unica imagen
         while (running_) {
             //render
+
+            long currentTime = System.nanoTime();
+            long nanoElapsedTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            float elapsedTime = (float)(nanoElapsedTime / 1.0E9);
+            state_.update(elapsedTime);
+            // Informe de FPS
+            if (currentTime - informePrevio > 1000000000l) {
+                long fps = frames * 1000000000l / (currentTime - informePrevio);
+                System.out.println("" + fps + " fps");
+                frames = 0;
+                informePrevio = currentTime;
+            }
+            ++frames;
+            lockCanvas();
+            graphic_.setCanvas(this.canvas);
             state_.render();
+            unLockCanvas();
         }
     }
     public void pause() {
@@ -99,10 +122,24 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         //state_.setImage(image);
     }
 
+    private void lockCanvas()
+    {
+        while(!this.getHolder().getSurface().isValid())
+            ;
+        canvas = this.getHolder().lockCanvas();
+    }
+    private void unLockCanvas()
+    {
+        this.getHolder().unlockCanvasAndPost(canvas);
+    }
+
     private GameState state_;
     private AndroidGraphics graphic_;
     private AndroidInput input_;
     private AppCompatActivity activity_;
     boolean running_=false;
     Thread gameThread;
+    private Canvas canvas;
+
+
 }
