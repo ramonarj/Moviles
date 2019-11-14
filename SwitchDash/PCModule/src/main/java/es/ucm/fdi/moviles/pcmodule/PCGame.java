@@ -68,6 +68,10 @@ public class PCGame implements Game {
         this.graphics = graphics;
         this.input = input;
         this.window = window;
+
+        //Establecemos vision vertical como predeterminado
+        graphics.setLogicalView();
+        graphics.setCanvasSize(window.getWidth() ,window.getHeight());
     }
 
     /**

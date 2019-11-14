@@ -37,6 +37,7 @@ public class PCGraphics extends AbstractGraphics
     @Override
     public Image newImage(String name)
     {
+        name= "Assets/" + name;
         PCImage image = null;
         //TODO: gestionar errores cargando la imagen con un bucle
         try
@@ -65,96 +66,48 @@ public class PCGraphics extends AbstractGraphics
     }
 
 
-    protected void drawImagePrivate(PCImage image, Graphics g, Rect srcRect, Rect destRect)
-    {
-        //Pintamos
-        g.drawImage(image.img,
-                destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
-                srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
-                null);
-    }
-
-    @Override
-    public void drawImage(Image image, int posX, int posY)
-    {
-        PCImage pcImage = (PCImage)image;
-        java.awt.Graphics g = strategy.getDrawGraphics();
-        g.drawImage(pcImage.img, posX, posY, null);
-    }
-
-    @Override
-    public void drawImage(Image image, int posX, int posY, float alpha)
-    {
-        //Castings
-        java.awt.Graphics g = strategy.getDrawGraphics();
-        PCImage pcImage = (PCImage)image;
-        Graphics2D g2d = (Graphics2D)g;
-
-        //Creamos el composite de alpha y lo aplicamos
-        Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
-        g2d.setComposite(alphaComp);
-
-        //Pintamos
-        g.drawImage(pcImage.img, posX, posY, null);
-
-        //Dejamos como estaba
-        Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-        g2d.setComposite(alphaComp);
-    }
-
-
-    @Override
-    public void drawImage(Image image, int posX, int posY, Rect srcRect)
-    {
-        //Castings
-        PCImage pcImage = (PCImage)image;
-        java.awt.Graphics g = strategy.getDrawGraphics();
-        Rect destiny = new Rect(posX, posY, srcRect.getWidth(), srcRect.getHeight());
-        drawImagePrivate(pcImage, g, srcRect, destiny);
-    }
-
-    @Override
-    public void drawImage(Image image, Rect destRect, float alpha)
+    /**
+     * Method resposible for the painting of an image using Java graphics.
+     * It draws the specified image with the given parameters.
+     * All public "drawImage" methods end up calling this one
+     * @param image image to be drawn (type java.awt.Image)
+     * @param srcRect rectangle of the image (in px) taken
+     * @param destRect rectangle of the graphics (in px) where the portion of the image will show
+     * @param alpha transparence value (0 = fully transparent, 1 = fully opaque)
+     */
+    protected void drawImagePrivate(PCImage image, Rect srcRect, Rect destRect, float alpha)
     {
         java.awt.Graphics g = strategy.getDrawGraphics();
-        PCImage pcImage = (PCImage)image;
-        //Castings
-        Graphics2D g2d = (Graphics2D)g;
+        //No need to use alpha compositor
+        if(alpha == 1)
+        {
+            //Pintamos
+            g.drawImage(image.img,
+                    destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
+                    srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
+                    null);
+        }
 
-        //Creamos el composite de alpha y lo aplicamos
-        Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
-        g2d.setComposite(alphaComp);
+        //Usamos el composite
+        else
+        {
+            //Casting
+            Graphics2D g2d = (Graphics2D)g;
 
-        Rect source = new Rect(0,0, image.getWidth(), image.getHeight());
-        drawImagePrivate(pcImage, g2d, source, destRect);
+            //Creamos el composite de alpha y lo aplicamos
+            Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+            g2d.setComposite(alphaComp);
 
-        //Dejamos como estaba
-        Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-        g2d.setComposite(alphaComp);
-    }
+            //Pintamos
+            g.drawImage(image.img,
+                    destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
+                    srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
+                    null);
 
-    @Override
-    public void drawImage(Image image, Rect srcRect, Rect destRect, float alpha)
-    {
-        java.awt.Graphics g = strategy.getDrawGraphics();
-
-        //Castings
-        PCImage pcImage = (PCImage)image;
-        Graphics2D g2d = (Graphics2D)g;
-
-        //Creamos el composite de alpha y lo aplicamos
-        Composite alphaComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
-        g2d.setComposite(alphaComp);
-
-        //Pintamos
-        g.drawImage(pcImage.img,
-                destRect.x1(), destRect.y1(), destRect.x2(), destRect.y2(),       //Rectángulo destino
-                srcRect.x1(), srcRect.y1(), srcRect.x2(), srcRect.y2(),           //Rectángulo fuente
-                null);
-
-        //Dejamos como estaba
-        Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-        g2d.setComposite(alphaComp);
+            //Dejamos como estaba
+            Composite opaqueComp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
+            g2d.setComposite(alphaComp);
+        }
     }
 
 
@@ -178,30 +131,37 @@ public class PCGraphics extends AbstractGraphics
         return this.logicalHeight;
     }
     @Override
-    public void setCanvasSize(int width, int height){window.setSize(width,height);}
+    public void setCanvasSize(int width, int height)
+    {
+        windowWidth=width;
+        windowHeight=height;
+        window.setSize(width,height);
+    }
+
 
     @Override
-    public void drawRealImage(Image image, int posX, int posY) {
-
+    public void drawRealImage(Image image, Rect destRect)
+    {
+        Rect srcRect = new Rect(0,0, image.getWidth(), image.getHeight());
+        drawImagePrivate((PCImage)image, srcRect, destRect,1f);
     }
 
     @Override
-    public void drawRealImage(Image image, int posX, int posY, float alpha) {
-
+    public void drawRealImage(Image image, Rect destRect, float alpha)
+    {
+        Rect srcRect = new Rect(0,0, image.getWidth(), image.getHeight());
+        drawImagePrivate((PCImage)image, srcRect, destRect, alpha);
     }
 
     @Override
-    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY) {
-
+    public void drawRealImage(Image image, Rect srcRect, Rect destRect)
+    {
+        drawImagePrivate((PCImage)image, srcRect, destRect, 1f);
     }
 
     @Override
-    public void drawRealImage(Image image, int posX, int posY, float alpha, float scaleX, float scaleY, int rectMin, int rectMax) {
-
-    }
-
-    @Override
-    public void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha) {
-
+    public void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha)
+    {
+        drawImagePrivate((PCImage)image, srcRect, destRect, alpha);
     }
 }

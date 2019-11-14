@@ -23,16 +23,29 @@ public class PlayState implements GameState
     @Override
     public boolean init()
     {
-        fondo =  game.getGraphics().newImage("backgrounds.png");
-        bola =  game.getGraphics().newImage("balls.png");
+        //Carga de recursos
+        backgrounds =  game.getGraphics().newImage("backgrounds.png");
+        balls =  game.getGraphics().newImage("balls.png");
         flechas =  game.getGraphics().newImage("arrowsBackground.png");
         player =  game.getGraphics().newImage("players.png");
+        logo = game.getGraphics().newImage("switchDashLogo.png");
+        tapToPlay = game.getGraphics().newImage("tapToPlay.png");
+        buttons = game.getGraphics().newImage("buttons.png");
+        howToPlay = game.getGraphics().newImage("howToPlay.png");
+        instructions = game.getGraphics().newImage("instructions.png");
+        gameOver = game.getGraphics().newImage("gameOver.png");
+        playAgain = game.getGraphics().newImage("playAgain.png");
+        white = game.getGraphics().newImage("white.png");
+        scoreFont = game.getGraphics().newImage("scoreFont.png");
+
+        //Inicialización de las variables
         backgroundNo = (int)Math.floor(Math.random() * 9);
         playerColor = 0;
+        score = 0;
         coloresFlechas = new int[]{ 0x41a85f, 0x00a885, 0x3d8eb9, 0x2969b0,
                 0x553982, 0x28324e, 0xf37934, 0xd14b41, 0x75706b };
-        //posFlechas = game.getGraphics().getHeight() / 2;
-        posFlechas=0;
+        posFlechas = game.getGraphics().getLogicalHeight() / 2;
+        posBolas = game.getGraphics().getLogicalHeight() / 5;
         return true;
     }
 
@@ -44,9 +57,17 @@ public class PlayState implements GameState
         for(Input.TouchEvent evt: events)
         {
             //Cambiamos de color
-            if(evt.type == Input.TouchEvent.EventType.RELEASED)
+            if(evt.type == Input.TouchEvent.EventType.PRESSED)
                 playerColor = 1 - playerColor;
+
+            //TODO: registrar clicks en los botones de las esquinas
         }
+
+        //TODO: usar el deltaTime
+        posFlechas +=10;
+        posBolas+=12;
+
+        //TODO: registrar los choques entre jugador y bolas y aumentar la puntuación/acabar el juego
     }
 
     @Override
@@ -54,46 +75,111 @@ public class PlayState implements GameState
     {
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(0x000000FF);
+        g.clear(coloresFlechas[backgroundNo]);
 
         //1. FONDO
-        Rect fullRect = new Rect(0,0,g.getLogicalWidth(), g.getLogicalHeight());
-        Rect backgroundRect=new Rect(fondo.getWidth() / 9 * backgroundNo,0,fondo.getWidth() / 9,fondo.getHeight());
-        Sprite backSprite=new Sprite(fondo,backgroundRect,g);
-        backSprite.draw(fullRect,100);
+        Rect backRect = new Rect(g.getLogicalWidth() / 5,0,3 * g.getLogicalWidth() / 5, g.getLogicalHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
+        backSprite.draw(backRect);
 
-        /*
-        //2. FLECHAS
-        Rect rectFlechas = new Rect(0,posFlechas - flechas.getHeight() / 2, g.getWidth(), flechas.getHeight());
-        g.drawImage(flechas, rectFlechas, 100);
-       // posFlechas +=10;
+        //2. FLECHAS (hay 2 sprites)
+        //dstRect = new Rect(g.getLogicalWidth() / 5,posFlechas,
+               // 3 * g.getLogicalWidth() / 5, flechas.getHeight());
+        //g.drawImage(flechas, dstRect, 0.25f);
+        dstRect = new Rect(g.getLogicalWidth() / 5,posFlechas - flechas.getHeight(),
+                3 * g.getLogicalWidth() / 5, flechas.getHeight());
+        g.drawImage(flechas, dstRect, 0.25f);
 
 
         //3. PELOTA
-        Rect ballRect=new Rect(bola.getWidth() / 10 * 7,0,bola.getWidth() / 10,bola.getHeight() / 2);
-        Sprite ballSprite=new Sprite(bola,ballRect,g);
-        ballSprite.drawCentered(g.getWidth() / 2,g.getHeight()/4);
+        Rect srcRect=new Rect(balls.getWidth() / 10 * 7,0,balls.getWidth() / 10,balls.getHeight() / 2);
+        Sprite ballSprite=new Sprite(balls,srcRect,g);
+        ballSprite.drawCentered(g.getLogicalWidth() / 2,posBolas);
+
 
         //4. JUGADOR
-        Rect playerRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
-        Sprite playerSprite=new Sprite(player,playerRect,g);
-        playerSprite.drawCentered(g.getWidth() / 2,g.getHeight()/2);
+        srcRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
+        Sprite playerSprite=new Sprite(player,srcRect,g);
+        playerSprite.drawCentered(g.getLogicalWidth() / 2,1200);
 
-         */
+
+        //5. GUI
+        //Logo
+        dstRect = new Rect(g.getLogicalWidth() / 3,356 ,g.getLogicalWidth() / 3,g.getLogicalHeight() / 6);
+        g.drawImage(logo, dstRect, 1f);
+
+        //TapToPlay
+        //TODO: hacer que "parpadee"
+        dstRect = new Rect(g.getLogicalWidth() / 3,950 , //950, 1464 (depende de la pantalla)
+                g.getLogicalWidth() / 3,g.getLogicalHeight() / 30);
+        g.drawImage(tapToPlay, dstRect, 1f);
+
+        //Botón de sonido
+        srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
+        Sprite soundSprite=new Sprite(buttons,srcRect,g);
+        soundSprite.drawCentered(50, 200);
+
+        //Botón de info
+        srcRect=new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
+        Sprite infoSprite=new Sprite(buttons,srcRect,g);
+        infoSprite.drawCentered(g.getLogicalWidth() - 50,200);
+
+        //Puntuación
+        srcRect=new Rect(0,0, scoreFont.getWidth() / 15,scoreFont.getHeight() / 6);
+        Sprite scoreSprites=new Sprite(scoreFont,srcRect,g);
+        scoreSprites.drawCentered(g.getLogicalWidth() - 50,400);
+
+        //How to play
+        dstRect = new Rect(g.getLogicalWidth() / 3,290 ,
+                g.getLogicalWidth() / 3,g.getLogicalHeight() / 7);
+        //g.drawImage(howToPlay, dstRect, 1f);
+
+        //Instructions
+        dstRect = new Rect(g.getLogicalWidth() / 4,768 ,
+                g.getLogicalWidth() / 2, g.getLogicalHeight() / 3);
+        //g.drawImage(instructions, dstRect, 1f);
+
+        //Game Over
+        dstRect = new Rect(g.getLogicalWidth() / 3,364 ,
+                g.getLogicalWidth() / 4,g.getLogicalHeight() / 8);
+        //g.drawImage(gameOver, dstRect, 1f);
+
+        //Play again
+        dstRect = new Rect(g.getLogicalWidth() / 3,1396 , //950, 1464
+                g.getLogicalWidth() / 3,g.getLogicalHeight() / 30);
+        //g.drawImage(playAgain, dstRect, 1f);
     }
 
-    //@Override
-    //public  void setImage(Image im){fondo=im;}
-    //public void setWidth(int width){width_=width;}
-    //public void setHeight(int height){height_=height;}
+    //IMÁGENES Y SUS DIMENSIONES:
+    //Fondo
+    private Image backgrounds; //1 fila, 9 columnas
+    private Image white;
 
-
-    private Image fondo;
-    private Image bola;
+    //Objetos
+    private Image balls; //2 filas, 10 columnas
     private Image flechas;
-    private Image player;
-    private int playerColor; //1 = blanco, 2 = negro
+    private Image player; //2 filas, 1 columna
+    private Image logo;
+
+    //Textos
+    private Image tapToPlay;
+    private Image buttons; //1 fila, 10 columnas
+    private Image howToPlay;
+    private Image instructions;
+    private Image gameOver;
+    private Image playAgain;
+
+    //Fuente
+    private Image scoreFont; //6 filas, 15 columnas
+
+
+
+    //VARIABLES DE JUEGO:
+    private int playerColor; //0 = blanco, 1 = negro
+    private int score;
     private int backgroundNo;
     private int posFlechas;
+    private int posBolas;
     private int [] coloresFlechas;
 }

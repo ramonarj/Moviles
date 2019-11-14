@@ -105,10 +105,8 @@ public abstract class AbstractGraphics implements  Graphics {
 
     //Métodos que sobreescribiran las clases hijas haciendo que la imagen se pinta de una forma concreta
     //depediendo la plataforma
-    public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha);
-    public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect);
-    public abstract void drawRealImage(Image image, Rect destRect,float alpha);
     public abstract void drawRealImage(Image image, Rect destRect);
-
-
+    public abstract void drawRealImage(Image image, Rect destRect,float alpha);
+    public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect);
+    public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha);
 }

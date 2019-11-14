@@ -48,6 +48,8 @@ public class Window extends JFrame
                 break;
             }
             catch(Exception e) {
+                System.out.println(e.getMessage());
+
             }
         } // while pidiendo la creación de la buffeStrategy
         if (intentos == 0) {
@@ -56,7 +58,7 @@ public class Window extends JFrame
         }
         else {
             // En "modo debug" podríamos querer escribir esto.
-            System.out.println("BufferStrategy tras " + (100 - intentos) + " intentos.");
+            System.out.println("Creado BufferStrategy tras " + (100 - intentos) + " intentos.");
         }
         return true;
     }
