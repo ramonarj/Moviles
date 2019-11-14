@@ -8,6 +8,7 @@ import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 import es.ucm.fdi.moviles.engine.Input;
 import es.ucm.fdi.moviles.engine.Rect;
+import es.ucm.fdi.moviles.engine.ResourceMan;
 import es.ucm.fdi.moviles.engine.Sprite;
 
 public class PlayState implements GameState
@@ -24,17 +25,14 @@ public class PlayState implements GameState
     public boolean init()
     {
         //Carga de recursos
-        backgrounds =  game.getGraphics().newImage("backgrounds.png");
-        balls =  game.getGraphics().newImage("balls.png");
-        flechas =  game.getGraphics().newImage("arrowsBackground.png");
-        player =  game.getGraphics().newImage("players.png");
-        logo = game.getGraphics().newImage("switchDashLogo.png");
-        tapToPlay = game.getGraphics().newImage("tapToPlay.png");
-        buttons = game.getGraphics().newImage("buttons.png");
-        howToPlay = game.getGraphics().newImage("howToPlay.png");
-        instructions = game.getGraphics().newImage("instructions.png");
-        gameOver = game.getGraphics().newImage("gameOver.png");
-        playAgain = game.getGraphics().newImage("playAgain.png");
+        backgrounds = ResourceMan.getImage("Backgrounds");
+        balls = ResourceMan.getImage("Balls");
+        flechas = ResourceMan.getImage("Flechas");
+        player = ResourceMan.getImage("Players");
+        buttons = ResourceMan.getImage("Buttons");
+
+
+
         white = game.getGraphics().newImage("white.png");
         scoreFont = game.getGraphics().newImage("scoreFont.png");
 
@@ -153,16 +151,6 @@ public class PlayState implements GameState
 
 
         //5. GUI
-        //Logo
-        dstRect = new Rect(g.getWidth() / 3,356 ,g.getWidth() / 3,g.getHeight() / 6);
-        g.drawImage(logo, dstRect, 1f);
-
-        //TapToPlay
-        //TODO: hacer que "parpadee"
-        dstRect = new Rect(g.getWidth() / 3,950 , //950, 1464 (depende de la pantalla)
-                g.getWidth() / 3,g.getHeight() / 30);
-        g.drawImage(tapToPlay, dstRect, 1f);
-
         //Botón de sonido
         srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
         Sprite soundSprite=new Sprite(buttons,srcRect,g);
@@ -177,26 +165,6 @@ public class PlayState implements GameState
         srcRect=new Rect(0,0, scoreFont.getWidth() / 15,scoreFont.getHeight() / 6);
         Sprite scoreSprites=new Sprite(scoreFont,srcRect,g);
         scoreSprites.drawCentered(g.getWidth() - 50,400);
-
-        //How to play
-        dstRect = new Rect(g.getWidth() / 3,290 ,
-                g.getWidth() / 3,g.getHeight() / 7);
-        //g.drawImage(howToPlay, dstRect, 1f);
-
-        //Instructions
-        dstRect = new Rect(g.getWidth() / 4,768 ,
-                g.getWidth() / 2, g.getHeight() / 3);
-        //g.drawImage(instructions, dstRect, 1f);
-
-        //Game Over
-        dstRect = new Rect(g.getWidth() / 3,364 ,
-                g.getWidth() / 4,g.getHeight() / 8);
-        //g.drawImage(gameOver, dstRect, 1f);
-
-        //Play again
-        dstRect = new Rect(g.getWidth() / 3,1396 , //950, 1464
-                g.getWidth() / 3,g.getHeight() / 30);
-        //g.drawImage(playAgain, dstRect, 1f);
     }
 
     //IMAGENES Y SUS DIMENSIONES:
@@ -208,20 +176,12 @@ public class PlayState implements GameState
     private Image balls; //2 filas, 10 columnas
     private Image flechas;
     private Image player; //2 filas, 1 columna
-    private Image logo;
 
     //Textos
-    private Image tapToPlay;
     private Image buttons; //1 fila, 10 columnas
-    private Image howToPlay;
-    private Image instructions;
-    private Image gameOver;
-    private Image playAgain;
 
     //Fuente
     private Image scoreFont; //6 filas, 15 columnas
-
-
 
     //VARIABLES DE JUEGO:
     private int playerColor; //0 = blanco, 1 = negro

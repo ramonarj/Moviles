@@ -17,11 +17,8 @@ public class PCGame implements Game {
     //Ventana
     Window window;
 
-
     //Estado actual
     GameState state;
-
-
 
 
     @Override
@@ -100,5 +97,6 @@ public class PCGame implements Game {
     public void setGameState(GameState state)
     {
         this.state = state;
+        state.init();
     }
 }
