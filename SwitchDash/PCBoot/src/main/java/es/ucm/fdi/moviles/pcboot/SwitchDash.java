@@ -1,7 +1,9 @@
 package es.ucm.fdi.moviles.pcboot;
 
+import com.example.logic.LoadState;
 import com.example.logic.PlayState;
 
+import es.ucm.fdi.moviles.engine.ResourceMan;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
 import es.ucm.fdi.moviles.pcmodule.PCGraphics;
 import es.ucm.fdi.moviles.pcmodule.PCInput;
@@ -31,12 +33,14 @@ public class SwitchDash
         //Al juego le pasamos los sistemas de input y gráficos además de la lógica
         PCGame game = new PCGame(graphics, input, ventana);
 
-        //3. EL JUEGO Y LA LÓGICA TIENEN REFERENCIAS MUTUAS
-        PlayState logica = new PlayState(game);
-        logica.init();
-        game.setGameState(logica);
+        //3. INICIALIZAR EL RESOURCEMANAGER
+        ResourceMan.initInstance(game);
 
-        //4. EJECUTAR EL JUEGO
+        //4. EL JUEGO Y LA LÓGICA TIENEN REFERENCIAS MUTUAS
+        LoadState loadState = new LoadState(game);
+        game.setGameState(loadState);
+
+        //5. EJECUTAR EL JUEGO
         game.run();
     }
 }

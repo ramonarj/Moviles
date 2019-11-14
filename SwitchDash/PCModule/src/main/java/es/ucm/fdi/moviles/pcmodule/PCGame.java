@@ -100,5 +100,6 @@ public class PCGame implements Game {
     public void setGameState(GameState state)
     {
         this.state = state;
+        state.init();
     }
 }
