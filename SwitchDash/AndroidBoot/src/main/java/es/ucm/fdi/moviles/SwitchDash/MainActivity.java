@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         game.setGameState(logic);
         logic.init();
         init();
+        this.getSupportActionBar().hide();
         setContentView(game);
     }
 

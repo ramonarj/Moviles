@@ -44,9 +44,19 @@ public class PlayState implements GameState
         score = 0;
         coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
                 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
+
         posFlechas = game.getGraphics().getHeight() / 2;
-        posBolas = game.getGraphics().getHeight() / 5;
-        return true;
+
+        //Inicializamos las bolas
+        numBolas=6;
+        ballColor=new int[numBolas];
+        posBolas=new int[numBolas];
+        for(int i=0;i<numBolas;i++) {
+            posBolas[i] = -(i*395);
+            ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
+        }
+        velBolas=430;
+        return  true;
     }
 
     @Override
@@ -63,11 +73,37 @@ public class PlayState implements GameState
             //TODO: registrar clicks en los botones de las esquinas
         }
 
+        if(contBolas%10==0)velBolas+=90;
         //TODO: usar el deltaTime
         posFlechas += (deltaTime*384);
-        posBolas += (deltaTime*430);
+
+        for(int i=0;i<numBolas;i++) {
+            posBolas[i] += (deltaTime * velBolas);
+            if(posBolas[i]>game.getGraphics().getHeight()) {
+                posBolas[i] = getMenor() - 395;
+                ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
+            }
+            else if(match(ballColor[i],posBolas[i]))
+            {
+                posBolas[i] = getMenor() - 395;
+                ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
+            }
+        }
 
         //TODO: registrar los choques entre jugador y bolas y aumentar la puntuación/acabar el juego
+    }
+
+    private int getMenor()
+    {
+        int value=game.getGraphics().getHeight();
+        for(int i=0;i<numBolas;i++)
+            if(posBolas[i]<value)value=posBolas[i];
+        return value;
+    }
+
+    private boolean match(int ballcolor,int posBola) {
+        return (posBola>1200 && posBola<1200+player.getHeight() &&((ballcolor==0 &&
+               playerColor==0) || (ballcolor==balls.getHeight()/2 && playerColor==1)));
     }
 
     @Override
@@ -93,13 +129,16 @@ public class PlayState implements GameState
 
 
         //3. PELOTA
-        Rect srcRect=new Rect(balls.getWidth() / 10 * 7,0,balls.getWidth() / 10,balls.getHeight() / 2);
-        Sprite ballSprite=new Sprite(balls,srcRect,g);
-        ballSprite.drawCentered(g.getWidth() / 2,posBolas);
 
+        for(int i=0;i<numBolas;i++)
+        {
+            Rect srcRect=new Rect(balls.getWidth() / 10 * 7,ballColor[i],balls.getWidth() / 10,balls.getHeight() / 2);
+            Sprite ballSprite=new Sprite(balls,srcRect,g);
+            ballSprite.drawCentered(g.getWidth() / 2,posBolas[i]);
+        }
 
         //4. JUGADOR
-        srcRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
+        Rect srcRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
         Sprite playerSprite=new Sprite(player,srcRect,g);
         playerSprite.drawCentered(g.getWidth() / 2,1200);
 
@@ -180,6 +219,10 @@ public class PlayState implements GameState
     private int score;
     private int backgroundNo;
     private int posFlechas;
-    private int posBolas;
     private int [] coloresFlechas;
+    private int contBolas=1;
+    private int velBolas;
+    private int posBolas[];
+    private int numBolas;
+    private int ballColor[];
 }
