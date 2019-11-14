@@ -96,6 +96,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     @Override
     public void setGameState(GameState state) {
         state_=state;
+        state_.init();
     }
 
     public void onResume()

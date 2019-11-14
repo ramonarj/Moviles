@@ -1,3 +1,5 @@
+package com.example.logic;
+
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;

@@ -7,12 +7,13 @@ import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.logic.LoadState;
 import com.example.logic.PlayState;
 
 import es.ucm.fdi.moviles.androidModule.AndroidGraphics;
 import es.ucm.fdi.moviles.androidModule.AndroidInput;
 import es.ucm.fdi.moviles.androidModule.AndroidGame;
-
+import es.ucm.fdi.moviles.engine.ResourceMan;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,9 +23,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         game=new AndroidGame(this);
-        logic=new PlayState(game);
+        LoadState logic=new LoadState(game);
+
+        //Inicializar Resouce Manager
+        ResourceMan.initInstance(game);
+
         game.setGameState(logic);
-        logic.init();
         init();
         setContentView(game);
     }
@@ -81,6 +85,5 @@ public class MainActivity extends AppCompatActivity {
     private AndroidGame game;
     private AndroidInput input;
     private AndroidGraphics graphics;
-    private PlayState logic;
     private SurfaceView surf;
 }
