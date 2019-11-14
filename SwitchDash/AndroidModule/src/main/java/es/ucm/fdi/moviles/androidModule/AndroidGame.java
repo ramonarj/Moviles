@@ -28,7 +28,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.graphic_=new AndroidGraphics(activity_,this);
         this.input_=new AndroidInput();
         this.canvas=null;
-        setOnTouchListener(this.input_);
+        setOnTouchListener((AndroidInput)(this.input_));
     }
 
     private void init()
@@ -61,7 +61,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             }
             ++frames;
             lockCanvas();
-            graphic_.setCanvas(this.canvas);
+            ((AndroidGraphics)graphic_).setCanvas(this.canvas);
             state_.render();
             unLockCanvas();
         }
@@ -131,6 +131,9 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     private void unLockCanvas()
     {
         this.getHolder().unlockCanvasAndPost(canvas);
+    }
+    private void GameOver(){
+        running_=false;
     }
 
     private GameState state_;
