@@ -133,7 +133,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     {
         this.getHolder().unlockCanvasAndPost(canvas);
     }
-    private void GameOver(){
+    public void GameOver(){
         running_=false;
     }
 

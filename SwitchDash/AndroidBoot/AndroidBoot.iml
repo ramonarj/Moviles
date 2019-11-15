@@ -133,5 +133,11 @@
     <orderEntry type="module" module-name="AndroidModule" />
     <orderEntry type="module" module-name="Logic" />
     <orderEntry type="module" module-name="Engine" />
+    <orderEntry type="module" module-name="AndroidModule" />
+    <orderEntry type="module" module-name="Logic" />
+    <orderEntry type="module" module-name="Engine" />
+    <orderEntry type="module" module-name="AndroidModule" />
+    <orderEntry type="module" module-name="Logic" />
+    <orderEntry type="module" module-name="Engine" />
   </component>
 </module>

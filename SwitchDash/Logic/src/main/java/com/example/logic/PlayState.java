@@ -24,26 +24,27 @@ public class PlayState implements GameState
     @Override
     public boolean init()
     {
+        //Carga del graphics
+        g=game.getGraphics();
+
         //Carga de recursos
         backgrounds = ResourceMan.getImage("Backgrounds");
         balls = ResourceMan.getImage("Balls");
         flechas = ResourceMan.getImage("Flechas");
         player = ResourceMan.getImage("Players");
         buttons = ResourceMan.getImage("Buttons");
-
-
-
         white = game.getGraphics().newImage("white.png");
         scoreFont = game.getGraphics().newImage("scoreFont.png");
 
         //Inicialización de las variables
         backgroundNo = (int)Math.floor(Math.random() * 9);
         playerColor = 0;
-        score = 0;
         coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
                 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
 
-        posFlechas = game.getGraphics().getHeight() / 2;
+        posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
+        posflechas2 = posFlechas1-flechas.getHeight();
+
 
         //Inicializamos las bolas
         contBolas=0;
@@ -55,11 +56,15 @@ public class PlayState implements GameState
             ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
         }
         velBolas=430;
+
+        //Inicalizamos las variables de la puntiacion
+        score = 0;
+        NumScores=1;
+        division=10;
         return  true;
     }
 
-    @Override
-    public void update(float deltaTime)
+    private void checkInput()
     {
         Input input = game.getInput();
         ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
@@ -71,26 +76,49 @@ public class PlayState implements GameState
 
             //TODO: registrar clicks en los botones de las esquinas
         }
+    }
 
+    private void addBallsVelocity()
+    {
         if(contBolas==10) {
             velBolas += 90;
             contBolas=0;
         }
+    }
+
+    private void checkImpact()
+    {
+
+    }
+    @Override
+    public void update(float deltaTime)
+    {
+
+        checkInput();
+
+        addBallsVelocity();
 
         //TODO: usar el deltaTime
-        posFlechas += (deltaTime*384);
+        posFlechas1 += (deltaTime*384);
+        posflechas2 += (deltaTime*384);
 
+        //Recorremos cada una de las pelotas y comprobamos si al estar en contacto con la barra
+        //han podido ser atrapdas o en caso contrario , ha finalizado la partida
         for(int i=0;i<numBolas;i++) {
             posBolas[i] += (deltaTime * velBolas);
-            if(posBolas[i]>game.getGraphics().getHeight()) {
-                posBolas[i] = getMenor() - 395;
-                ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
-            }
-            else if(match(ballColor[i],posBolas[i]))
+            if(checkPosition(posBolas[i]))
             {
-                posBolas[i] = getMenor() - 395;
-                ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
-                contBolas++;
+                if(match(ballColor[i])) {
+                    posBolas[i] = getMenor() - 395;
+                    ballColor[i] = balls.getHeight() / 2 ;
+                    contBolas++;
+                    score++;
+                    if(score%division==0)
+                    {
+                        NumScores++;
+                        division*=10;
+                    }
+                } else game.GameOver();
             }
         }
 
@@ -98,6 +126,89 @@ public class PlayState implements GameState
         //TODO: registrar los choques entre jugador y bolas y aumentar la puntuación/acabar el juego
     }
 
+
+    @Override
+    public void render()
+    {
+        g.clear(coloresFlechas[backgroundNo]);
+
+        //Fondo
+        drawBackground();
+
+        //Flechas
+        drawArrows();
+
+        //Pelota
+        drawBalls();
+
+        //Jugador
+        drawPlayer();
+
+        //Puntuación
+        drawScore();
+    }
+
+    /**
+     * Pinta del color aleatorio escogido anteriormente el fondo del juego
+     */
+    private void drawBackground() {
+        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
+        backSprite.draw(backRect);
+    }
+
+    /**
+     * Pinta la barra de blanco o negro dependiendo del input del usuario
+     */
+    private void drawPlayer() {
+        Rect srcRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
+        Sprite playerSprite=new Sprite(player,srcRect,g);
+        playerSprite.drawCentered(g.getWidth() / 2,1200);
+    }
+
+    /**
+     * Pinta un numero maximo de bolas escogidas con la intencion de
+     * que sean reutilizadas hasta el final de la misma
+     */
+    private void drawBalls() {
+        for(int i=0;i<numBolas;i++)
+        {
+            Rect srcRect=new Rect(balls.getWidth() / 10 * 7,ballColor[i],balls.getWidth() / 10,balls.getHeight() / 2);
+            Sprite ballSprite=new Sprite(balls,srcRect,g);
+            ballSprite.drawCentered(g.getWidth() / 2,posBolas[i]);
+        }
+    }
+
+    /**
+     * Pinta dos imagenes de flechas completas haciendo que una se ponga
+     * encima de la otra hasta el final de la partida
+     */
+    private void drawArrows() {
+        Rect dstRect = new Rect(g.getWidth() / 5,posFlechas1,
+                3 * g.getWidth() / 5, flechas.getHeight());
+        g.drawImage(flechas, dstRect, 100f);
+
+
+        Rect dstRect2 = new Rect(g.getWidth() / 5,posflechas2 ,
+                3 * g.getWidth() / 5, flechas.getHeight());
+        g.drawImage(flechas, dstRect2, 100f);
+
+
+       /*
+        if(posFlechas1>game.getGraphics().getHeight())
+            posFlechas1=posflechas2-flechas2.getHeight();
+        /*
+        else if(posflechas2>game.getGraphics().getHeight())
+            posflechas2=posFlechas1-flechas1.getHeight();
+            */
+
+    }
+
+    /**
+     * Escoge la bola que este mas alta dentro de la pantalla
+     * @return
+     */
     private int getMenor()
     {
         int value=game.getGraphics().getHeight();
@@ -106,65 +217,52 @@ public class PlayState implements GameState
         return value;
     }
 
-    private void endGame(){}
-
-    private boolean match(int ballcolor,int posBola) {
-        return (posBola+balls.getHeight()/4>1200-player.getHeight()/4 && posBola<1200+player.getHeight()/4 &&((ballcolor==0 &&
-               playerColor==0) || (ballcolor==balls.getHeight()/2 && playerColor==1)));
+    /**
+     *
+     * @param posBola posicion de la bola i-esima
+     * @return true si la bola toca con la barra del juego, false en caso contrario
+     */
+    private boolean checkPosition(int posBola) {
+        return (posBola+balls.getHeight()/4>1200-player.getHeight()/4 && posBola<1200+player.getHeight()/4);
     }
 
-    @Override
-    public void render()
+    /**
+     *
+     * @param ballcolor color de la bola i-esima
+     * @return true si el color de la bola es igual al de la barra, false en caso contraio
+     */
+    private boolean match(int ballcolor) {
+        return (ballcolor==0 && playerColor==0) || (ballcolor==balls.getHeight()/2 && playerColor==1);
+    }
+
+    /**
+     * Pinta la puntacion actucal calculando tanto la posicion deonde pintar cada uno
+     * de los digitos como el numero que pintare en cada uno de ellos
+     */
+    private void drawScore()
     {
-        //Color de fondo (para las barras laterales)
-        Graphics g = game.getGraphics();
-        g.clear(coloresFlechas[backgroundNo]);
+        for(int i=0;i<NumScores;i++) {
 
-        //1. FONDO
-        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
-        backSprite.draw(backRect);
+            int numeroApintar;
+            if(i==0)numeroApintar=score%10;
+            else numeroApintar=(score/(int)(Math.pow(10,i))%10);
 
-        //2. FLECHAS (hay 2 sprites)
-        //dstRect = new Rect(g.getWidth() / 5,posFlechas,
-               // 3 * g.getWidth() / 5, flechas.getHeight());
-        //g.drawImage(flechas, dstRect, 0.25f);
-        dstRect = new Rect(g.getWidth() / 5,posFlechas - flechas.getHeight(),
-                3 * g.getWidth() / 5, flechas.getHeight());
-        g.drawImage(flechas, dstRect, 0.25f);
-
-
-        //3. PELOTA
-
-        for(int i=0;i<numBolas;i++)
-        {
-            Rect srcRect=new Rect(balls.getWidth() / 10 * 7,ballColor[i],balls.getWidth() / 10,balls.getHeight() / 2);
-            Sprite ballSprite=new Sprite(balls,srcRect,g);
-            ballSprite.drawCentered(g.getWidth() / 2,posBolas[i]);
+            int posicion=7+numeroApintar;
+            int posicionY=3;
+            if(posicion>14 && posicion<=16)
+            {
+                posicion-=15;
+                posicionY=4;
+            }
+            else if(posicion>1 && posicionY==4)
+            {
+                posicion=7;
+                posicionY=3;
+            }
+            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15, posicionY * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+            Sprite scoreSprites = new Sprite(scoreFont, srcRect, g);
+            scoreSprites.drawCentered(g.getWidth() - 50 -(i*75), 200);
         }
-
-        //4. JUGADOR
-        Rect srcRect=new Rect(0,playerColor * player.getHeight() / 2,player.getWidth(),player.getHeight() / 2);
-        Sprite playerSprite=new Sprite(player,srcRect,g);
-        playerSprite.drawCentered(g.getWidth() / 2,1200);
-
-
-        //5. GUI
-        //Botón de sonido
-        srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite soundSprite=new Sprite(buttons,srcRect,g);
-        soundSprite.drawCentered(50, 200);
-
-        //Botón de info
-        srcRect=new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite infoSprite=new Sprite(buttons,srcRect,g);
-        infoSprite.drawCentered(g.getWidth() - 50,200);
-
-        //Puntuación
-        srcRect=new Rect(0,0, scoreFont.getWidth() / 15,scoreFont.getHeight() / 6);
-        Sprite scoreSprites=new Sprite(scoreFont,srcRect,g);
-        scoreSprites.drawCentered(g.getWidth() - 50,400);
     }
 
     //IMAGENES Y SUS DIMENSIONES:
@@ -187,11 +285,15 @@ public class PlayState implements GameState
     private int playerColor; //0 = blanco, 1 = negro
     private int score;
     private int backgroundNo;
-    private int posFlechas;
+    private int posFlechas1;
+    private int posflechas2;
     private int [] coloresFlechas;
     private int contBolas;
     private int velBolas;
     private int posBolas[];
     private int numBolas;
     private int ballColor[];
+    private int NumScores;
+    private int division;
+    private Graphics g;
 }

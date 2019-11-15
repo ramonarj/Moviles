@@ -128,5 +128,7 @@
     <orderEntry type="library" name="Gradle: androidx.interpolator:interpolator:1.0.0@aar" level="project" />
     <orderEntry type="module" module-name="Engine" />
     <orderEntry type="module" module-name="Engine" />
+    <orderEntry type="module" module-name="Engine" />
+    <orderEntry type="module" module-name="Engine" />
   </component>
 </module>

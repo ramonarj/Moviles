@@ -6,4 +6,5 @@ public interface Game
     Input getInput();
     void setGameState(GameState state);
     void run();
+    public void GameOver();
 }
