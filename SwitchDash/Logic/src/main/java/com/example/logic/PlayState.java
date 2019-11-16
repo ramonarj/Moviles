@@ -48,17 +48,19 @@ public class PlayState implements GameState
 
         //Inicializamos las bolas
         contBolas=0;
-        numBolas=6;
+        numBolas=4;
         ballColor=new int[numBolas];
         posBolas=new int[numBolas];
-        for(int i=0;i<numBolas;i++) {
-            posBolas[i] = -(i*395);
-            ballColor[i]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
+        posBolas[0]=-395;
+        ballColor[0]=balls.getHeight()/2*(int)Math.floor(Math.random() * 2);
+        for(int i=1;i<numBolas-1;i++) {
+            posBolas[i] = -((i+1)*395);
+            ballColor[i]=setballColor(ballColor[i-1]);
         }
         velBolas=430;
 
         //Inicalizamos las variables de la puntiacion
-        score = 0;
+        score =0;
         NumScores=1;
         division=10;
         return  true;
@@ -95,9 +97,6 @@ public class PlayState implements GameState
     {
 
         checkInput();
-
-        addBallsVelocity();
-
         //TODO: usar el deltaTime
         posFlechas1 += (deltaTime*384);
         posflechas2 += (deltaTime*384);
@@ -110,15 +109,20 @@ public class PlayState implements GameState
             {
                 if(match(ballColor[i])) {
                     posBolas[i] = getMenor() - 395;
-                    ballColor[i] = balls.getHeight() / 2 ;
+                    ballColor[i] = setballColor(ballColor[takeBallIndex(i-1,numBolas)]);
                     contBolas++;
                     score++;
+                    addBallsVelocity();
                     if(score%division==0)
                     {
                         NumScores++;
                         division*=10;
                     }
-                } else game.GameOver();
+                } else
+                {
+                    game.setGameState(new GameOverState(game,backgroundNo,coloresFlechas[backgroundNo],score,NumScores));
+                    break;
+                }
             }
         }
 
@@ -126,6 +130,15 @@ public class PlayState implements GameState
         //TODO: registrar los choques entre jugador y bolas y aumentar la puntuación/acabar el juego
     }
 
+    /**
+     * Dado que % en java puede devolver negativo, usaremos este metodo
+     * @param index Indice anterior a la bola que queremos pintar para saber que colo tiene
+     * @param numBolas Numero de bolas que usamos en el bucle de juego
+     * @return el indice en el array de colores de bolas que usaremos para pintar la siguiente bola
+     */
+    private int takeBallIndex(int index,int numBolas) {
+        return (((index % numBolas) + numBolas) % numBolas);
+    }
 
     @Override
     public void render()
@@ -147,6 +160,21 @@ public class PlayState implements GameState
         //Puntuación
         drawScore();
     }
+
+
+    /**
+     * @param lastColor color de la siguiente pelota
+     * @returnel color de la siguiente pelota, haciendo que el 70% sea el de la anterior
+     * y el 30% el otro.
+     */
+    private int setballColor(int lastColor)
+    {
+        int value=(int)Math.floor(Math.random()*9);
+        if(value<=6)return lastColor;
+        else if(lastColor==balls.getHeight()/2)return 0;
+        else return balls.getHeight()/2;
+    }
+
 
     /**
      * Pinta del color aleatorio escogido anteriormente el fondo del juego
@@ -195,13 +223,12 @@ public class PlayState implements GameState
         g.drawImage(flechas, dstRect2, 100f);
 
 
-       /*
+
         if(posFlechas1>game.getGraphics().getHeight())
-            posFlechas1=posflechas2-flechas2.getHeight();
-        /*
+            posFlechas1=posflechas2-flechas.getHeight();
         else if(posflechas2>game.getGraphics().getHeight())
-            posflechas2=posFlechas1-flechas1.getHeight();
-            */
+            posflechas2=posFlechas1-flechas.getHeight();
+
 
     }
 
@@ -259,9 +286,11 @@ public class PlayState implements GameState
                 posicion=7;
                 posicionY=3;
             }
+
             Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15, posicionY * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
             Sprite scoreSprites = new Sprite(scoreFont, srcRect, g);
-            scoreSprites.drawCentered(g.getWidth() - 50 -(i*75), 200);
+            scoreSprites.drawCentered(g.getWidth() - 50 - (i * 75), 200);
+
         }
     }
 

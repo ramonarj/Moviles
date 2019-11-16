@@ -52,6 +52,13 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             lastFrameTime = currentTime;
             float elapsedTime = (float)(nanoElapsedTime / 1.0E9);
             state_.update(elapsedTime);
+            lockCanvas();
+            ((AndroidGraphics)graphic_).setCanvas(this.canvas);
+            state_.render();
+            unLockCanvas();
+
+
+            //Contador de Frames
             // Informe de FPS
             if (currentTime - informePrevio > 1000000000l) {
                 long fps = frames * 1000000000l / (currentTime - informePrevio);
@@ -60,10 +67,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
                 informePrevio = currentTime;
             }
             ++frames;
-            lockCanvas();
-            ((AndroidGraphics)graphic_).setCanvas(this.canvas);
-            state_.render();
-            unLockCanvas();
         }
     }
     public void pause() {

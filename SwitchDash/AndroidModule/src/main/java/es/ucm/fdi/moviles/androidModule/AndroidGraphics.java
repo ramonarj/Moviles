@@ -67,7 +67,7 @@ public class AndroidGraphics extends AbstractGraphics
     public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
 
         Paint paint=new Paint();
-        paint.setAlpha((int)alpha);
+        paint.setAlpha((int)(alpha*255));
 
         Rect src=new Rect(0,0,image.getWidth(),image.getHeight());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
@@ -88,7 +88,7 @@ public class AndroidGraphics extends AbstractGraphics
     public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
 
         Paint paint=new Paint();
-        paint.setAlpha((int)alpha);
+        paint.setAlpha((int)(alpha*255));
 
         Rect src=new Rect(srcRect.x1(),srcRect.y1(),srcRect.x2(),srcRect.y2());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());

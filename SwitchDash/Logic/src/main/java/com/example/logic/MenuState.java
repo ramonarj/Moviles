@@ -28,7 +28,11 @@ public class MenuState implements GameState {
         tapToPlay = ResourceMan.getImage("TapToPlay");
         buttons = ResourceMan.getImage("Buttons");
 
+        coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
+                0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
         backgroundNo = (int)Math.floor(Math.random() * 9);
+        alphaTap=1f;
+        veloidad=0.6f;
         return true;
     }
 
@@ -41,7 +45,15 @@ public class MenuState implements GameState {
         {
             //Cambiamos al juego
             if(evt.type == Input.TouchEvent.EventType.RELEASED)
-                game.setGameState(new PlayState(game));
+                game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo]));
+        }
+
+        alphaTap+=(deltaTime*veloidad);
+        if(alphaTap>=1 || alphaTap<=0)
+        {
+            if(alphaTap<=0f)alphaTap=0;
+            else if(alphaTap>=1f)alphaTap=1f;
+            veloidad*=-1;
         }
 
     }
@@ -51,7 +63,7 @@ public class MenuState implements GameState {
     {
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(0x000000);
+        g.clear(coloresFlechas[backgroundNo]);
 
         //1. FONDO
         Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
@@ -61,13 +73,13 @@ public class MenuState implements GameState {
 
         //Logo
         dstRect = new Rect(g.getWidth() / 3,356 ,g.getWidth() / 3,g.getHeight() / 6);
-        g.drawImage(logo, dstRect, 1f);
+        g.drawImage(logo, dstRect,1f );
 
         //TapToPlay
         //TODO: hacer que "parpadee"
-        dstRect = new Rect(g.getWidth() / 3,950 , //950, 1464 (depende de la pantalla)
+        dstRect = new Rect(g.getWidth() / 3,g.getHeight()/2 , //950, 1464 (depende de la pantalla)
                 g.getWidth() / 3,g.getHeight() / 30);
-        g.drawImage(tapToPlay, dstRect, 1f);
+        g.drawImage(tapToPlay, dstRect, alphaTap);
 
         //Botón de sonido
         Rect srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
@@ -87,4 +99,7 @@ public class MenuState implements GameState {
     private Image logo;
     private Image tapToPlay;
     private Image buttons; //1 fila, 10 columnas
+    private int[] coloresFlechas;
+    private float alphaTap;
+    private float veloidad;
 }
