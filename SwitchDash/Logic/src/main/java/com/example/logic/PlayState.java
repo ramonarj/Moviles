@@ -1,5 +1,6 @@
 package com.example.logic;
 
+import java.awt.Button;
 import java.util.ArrayList;
 
 import es.ucm.fdi.moviles.engine.Game;
@@ -33,8 +34,8 @@ public class PlayState implements GameState
         flechas = ResourceMan.getImage("Flechas");
         player = ResourceMan.getImage("Players");
         buttons = ResourceMan.getImage("Buttons");
-        white = game.getGraphics().newImage("white.png");
-        scoreFont = game.getGraphics().newImage("scoreFont.png");
+        white = ResourceMan.getImage("White");
+        scoreFont = ResourceMan.getImage("ScoreFont");
 
         //Inicialización de las variables
         backgroundNo = (int)Math.floor(Math.random() * 9);
@@ -75,7 +76,6 @@ public class PlayState implements GameState
             //Cambiamos de color
             if(evt.type == Input.TouchEvent.EventType.PRESSED)
                 playerColor = 1 - playerColor;
-
             //TODO: registrar clicks en los botones de las esquinas
         }
     }
@@ -88,6 +88,8 @@ public class PlayState implements GameState
         }
     }
 
+
+
     private void checkImpact()
     {
 
@@ -95,9 +97,10 @@ public class PlayState implements GameState
     @Override
     public void update(float deltaTime)
     {
-
+        //Input
         checkInput();
-        //TODO: usar el deltaTime
+
+        //Flechas
         posFlechas1 += (deltaTime*384);
         posflechas2 += (deltaTime*384);
 
@@ -125,9 +128,6 @@ public class PlayState implements GameState
                 }
             }
         }
-
-
-        //TODO: registrar los choques entre jugador y bolas y aumentar la puntuación/acabar el juego
     }
 
     /**
@@ -215,12 +215,12 @@ public class PlayState implements GameState
     private void drawArrows() {
         Rect dstRect = new Rect(g.getWidth() / 5,posFlechas1,
                 3 * g.getWidth() / 5, flechas.getHeight());
-        g.drawImage(flechas, dstRect, 100f);
+        g.drawImage(flechas, dstRect, 0.4f);
 
 
         Rect dstRect2 = new Rect(g.getWidth() / 5,posflechas2 ,
                 3 * g.getWidth() / 5, flechas.getHeight());
-        g.drawImage(flechas, dstRect2, 100f);
+        g.drawImage(flechas, dstRect2, 0.4f);
 
 
 
@@ -254,7 +254,7 @@ public class PlayState implements GameState
     }
 
     /**
-     *
+     * Comprueba si el color del jugadory el de la bola comprueban
      * @param ballcolor color de la bola i-esima
      * @return true si el color de la bola es igual al de la barra, false en caso contraio
      */
@@ -309,6 +309,9 @@ public class PlayState implements GameState
 
     //Fuente
     private Image scoreFont; //6 filas, 15 columnas
+
+    //Botones
+    private Rect ExitButton;
 
     //VARIABLES DE JUEGO:
     private int playerColor; //0 = blanco, 1 = negro

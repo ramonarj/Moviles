@@ -1,5 +1,11 @@
 package es.ucm.fdi.moviles.engine;
 
+/**
+ * Clase para representar un Sprite
+ * Almacena una imagen y un rectángulo fuente de esta para automatizar
+ * el pintado de partes específicas de imágenes (especialmente útil para spritesheets)
+ * Tambíén contiene una referencia a los gráficos usados para pintarla.
+ */
 public class Sprite {
 
     //Imagen que usa el sprite
@@ -31,7 +37,7 @@ public class Sprite {
         graphics_.drawImage(img_,rect_, dstRect);
     }
 
-    public void draw(Rect dstRect,int alpha)
+    public void draw(Rect dstRect,float alpha)
     {
         graphics_.drawImage(img_,rect_, dstRect,alpha);
     }

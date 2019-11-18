@@ -2,6 +2,7 @@ package com.example.logic;
 
 import java.util.ArrayList;
 
+import es.ucm.fdi.moviles.engine.Button;
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
@@ -23,18 +24,28 @@ public class MenuState implements GameState {
     @Override
     public boolean init()
     {
-        backgrounds = ResourceMan.getImage("Backgrounds");
-        logo = ResourceMan.getImage("Logo");
-        tapToPlay = ResourceMan.getImage("TapToPlay");
-        buttons = ResourceMan.getImage("Buttons");
+        Graphics g = game.getGraphics();
 
+        backgrounds = ResourceMan.getImage("Backgrounds");
+        logo =        ResourceMan.getImage("Logo");
+        tapToPlay =   ResourceMan.getImage("TapToPlay");
+        buttons =     ResourceMan.getImage("Buttons");
+
+        //Botón de instrucciones
+        Rect srcRect =new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
+        Sprite infoSprite=new Sprite(buttons,srcRect,g);
+        Rect buttonRect = new Rect(g.getWidth() - srcRect.getWidth(),200 - srcRect.getHeight() / 2, buttons.getWidth() / 10,buttons.getHeight());
+        instructionsButton = new Button(infoSprite, buttonRect, "Instructions");
+
+        //Otros
         coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
                 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
         backgroundNo = (int)Math.floor(Math.random() * 9);
         alphaTap=1f;
-        veloidad=0.6f;
+        velocidad =0.6f;
         return true;
     }
+
 
     @Override
     public void update(float deltaTime)
@@ -43,17 +54,26 @@ public class MenuState implements GameState {
         ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
         for(Input.TouchEvent evt: events)
         {
-            //Cambiamos al juego
-            if(evt.type == Input.TouchEvent.EventType.RELEASED)
-                game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo]));
+            if(evt.type == Input.TouchEvent.EventType.PRESSED)
+            {
+                //Botón de instrucciones
+                if(instructionsButton.isPressed(evt.x, evt.y))
+                    game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo]));
+
+            }
+            //Detectamos las pulsaciones
+            else if(evt.type == Input.TouchEvent.EventType.RELEASED)
+            {
+                game.setGameState(new PlayState(game));
+            }
         }
 
-        alphaTap+=(deltaTime*veloidad);
+        alphaTap+=(deltaTime* velocidad);
         if(alphaTap>=1 || alphaTap<=0)
         {
             if(alphaTap<=0f)alphaTap=0;
             else if(alphaTap>=1f)alphaTap=1f;
-            veloidad*=-1;
+            velocidad *=-1;
         }
 
     }
@@ -76,7 +96,6 @@ public class MenuState implements GameState {
         g.drawImage(logo, dstRect,1f );
 
         //TapToPlay
-        //TODO: hacer que "parpadee"
         dstRect = new Rect(g.getWidth() / 3,g.getHeight()/2 , //950, 1464 (depende de la pantalla)
                 g.getWidth() / 3,g.getHeight() / 30);
         g.drawImage(tapToPlay, dstRect, alphaTap);
@@ -87,10 +106,7 @@ public class MenuState implements GameState {
         soundSprite.drawCentered(50, 200);
 
         //Botón de info
-        srcRect=new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite infoSprite=new Sprite(buttons,srcRect,g);
-        infoSprite.drawCentered(g.getWidth() - 50,200);
-
+        instructionsButton.draw();
     }
 
 
@@ -101,5 +117,7 @@ public class MenuState implements GameState {
     private Image buttons; //1 fila, 10 columnas
     private int[] coloresFlechas;
     private float alphaTap;
-    private float veloidad;
+    private float velocidad;
+
+    private Button instructionsButton;
 }

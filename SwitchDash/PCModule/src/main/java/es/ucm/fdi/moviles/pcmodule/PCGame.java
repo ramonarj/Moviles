@@ -20,13 +20,15 @@ public class PCGame implements Game {
     //Estado actual
     GameState state;
 
+    boolean running_;
+
 
     @Override
     public void run()
     {
         BufferStrategy strategy = window.getBufferStrategy();
         long lastFrameTime = System.nanoTime();
-        while(true)
+        while(running_)
         {
             //Calcular el deltaTime
             long currentTime = System.nanoTime();
@@ -53,6 +55,11 @@ public class PCGame implements Game {
         }
     }
 
+    @Override
+    public void GameOver(){
+        running_=false;
+    }
+
 
 
     /**
@@ -67,8 +74,9 @@ public class PCGame implements Game {
         this.window = window;
 
         //Establecemos vision vertical como predeterminado
-        graphics.setLogicalView();
-        graphics.setCanvasSize(window.getWidth() ,window.getHeight());
+        this.graphics.setLogicalView();
+        this.graphics.setCanvasSize(window.getWidth() ,window.getHeight());
+        running_ = true;
     }
 
     /**

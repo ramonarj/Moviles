@@ -33,7 +33,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     private void init()
     {
-        chargeImage();
+
     }
 
     @Override
@@ -111,21 +111,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         }
     }
 
-    private void chargeImage()
-    {
-        InputStream inputStream = null;
-        AssetManager assetManager = activity_.getAssets();
-        AndroidImage image=null;
-        try {
-            inputStream = assetManager.open("Chestplate.jpg");
-            image = new AndroidImage(BitmapFactory.decodeStream(inputStream));
-        }
-        catch (IOException e) {
-            android.util.Log.e("MainActivity", "Error leyendo el sprite");
-        }
-        //state_.setImage(image);
-    }
-
     private void lockCanvas()
     {
         while(!this.getHolder().getSurface().isValid())
@@ -136,6 +121,8 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     {
         this.getHolder().unlockCanvasAndPost(canvas);
     }
+
+    @Override
     public void GameOver(){
         running_=false;
     }

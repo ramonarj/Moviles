@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * Implementa las funcionalidades comunes de la clase para cualquier plataforma
  */
-public abstract class AbstractInput implements Input {
+public abstract class AbstractInput implements Input
+{
     protected ArrayList<TouchEvent> events;
 
     public AbstractInput()
@@ -43,6 +44,8 @@ public abstract class AbstractInput implements Input {
      */
     synchronized protected void addEvent(TouchEvent evt)
     {
+        //TODO: hay que pasar las coordenadas de reales a lógicas
+        //para queal recibir los eventos, el usuario los tenga así
         events.add(evt);
     }
 }

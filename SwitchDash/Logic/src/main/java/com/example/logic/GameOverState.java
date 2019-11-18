@@ -24,15 +24,15 @@ public class GameOverState implements GameState {
         this.lateralColor=lateralColor;
         this.score=score;
         this.NumScores=numDigitos;
-        buttons = ResourceMan.getImage("Buttons");
     }
 
     @Override
     public boolean init() {
+        buttons = ResourceMan.getImage("Buttons");
         gameOver = ResourceMan.getImage("GameOver");
         playAgain = ResourceMan.getImage("PlayAgain");
         backgrounds = ResourceMan.getImage("Backgrounds");
-        scoreFont = game.getGraphics().newImage("scoreFont.png");
+        scoreFont = ResourceMan.getImage("ScoreFont");
         alphaTap=1f;
         veloidad=0.6f;
         return true;

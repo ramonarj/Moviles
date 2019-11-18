@@ -23,13 +23,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         game=new AndroidGame(this);
-        LoadState logic=new LoadState(game);
+        LoadState loadState=new LoadState(game);
+        init();
 
         //Inicializar Resouce Manager
         ResourceMan.initInstance(game);
 
-        game.setGameState(logic);
-        init();
+        //Cargar el estado inicial
+        game.setGameState(loadState);
+
         setContentView(game);
     }
 

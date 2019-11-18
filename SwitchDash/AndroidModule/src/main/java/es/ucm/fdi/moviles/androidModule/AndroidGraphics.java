@@ -25,6 +25,11 @@ public class AndroidGraphics extends AbstractGraphics
     SurfaceView surfaceview_;
     Canvas canvas;
 
+    /**
+     * Constructora
+     * @param activity la actividad en que usaremos los gráficos
+     * @param surfaceview la superficie sobre la que se pintará
+     */
     public AndroidGraphics(AppCompatActivity activity, SurfaceView surfaceview)
     {
         this.activity = activity;
@@ -32,7 +37,11 @@ public class AndroidGraphics extends AbstractGraphics
         canvas=null;
     }
 
-    //Laod image from file
+    /**
+     * Crea una imagen a partir de la ruta especificada y la devuelve
+     * @param path ruta relativa hasta la imagen desde la carpeta raíz
+     * @return imagen que acaba de ser creada
+     */
     public Image newImage(String path)
     {
         InputStream inputStream = null;
@@ -55,6 +64,7 @@ public class AndroidGraphics extends AbstractGraphics
         }
         return image;
     }
+
 
     @Override
     public void clear(int color) {
