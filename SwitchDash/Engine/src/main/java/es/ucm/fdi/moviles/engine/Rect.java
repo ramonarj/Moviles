@@ -70,4 +70,18 @@ public class Rect {
      * @return coordenada vertical de la esquina inferior derecha
      */
     public int y2() {return y2;};
+
+
+    /**
+     * Mueve el rectángulo al sitio solicitado, manteniendo las dimensiones
+     * @param newX1 coordenanda horizontal de la nueva esquina superior izquierda
+     * @param newY1 coordenanda vertical de la nueva esquina superior izquierda
+     */
+    public void moveTo(int newX1, int newY1)
+    {
+        this.x1 = newX1;
+        this.x2 = x1 + w;
+        this.y1 = newY1;
+        this.y2 = y1 + h;
+    }
 }

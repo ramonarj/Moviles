@@ -31,11 +31,21 @@ public class MenuState implements GameState {
         tapToPlay =   ResourceMan.getImage("TapToPlay");
         buttons =     ResourceMan.getImage("Buttons");
 
+        barsWidth = g.getWidth() / 5;
+
+        int buttonWidth = buttons.getWidth() / 10;
+        int buttonHeight = buttons.getHeight();
+
         //Botón de instrucciones
-        Rect srcRect =new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
+        Rect srcRect =new Rect(0,0, buttonWidth,buttonHeight);
         Sprite infoSprite=new Sprite(buttons,srcRect,g);
-        Rect buttonRect = new Rect(g.getWidth() - srcRect.getWidth(),200 - srcRect.getHeight() / 2, buttons.getWidth() / 10,buttons.getHeight());
-        instructionsButton = new Button(infoSprite, buttonRect, "Instructions");
+        instructionsButton = new Button(infoSprite, g.getWidth() - barsWidth / 2, 200, "Instrucciones");
+
+        //Botón de sonido
+        srcRect = new Rect(2* buttonWidth,0,  buttonWidth,buttonHeight);
+        Sprite soundSprite=new Sprite(buttons,srcRect,g);
+        soundButton = new Button(soundSprite, barsWidth / 2,200, "Sonido");
+
 
         //Otros
         coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
@@ -86,7 +96,7 @@ public class MenuState implements GameState {
         g.clear(coloresFlechas[backgroundNo]);
 
         //1. FONDO
-        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
+        Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());
         Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,dstRect,g);
         backSprite.draw(backRect);
@@ -101,9 +111,7 @@ public class MenuState implements GameState {
         g.drawImage(tapToPlay, dstRect, alphaTap);
 
         //Botón de sonido
-        Rect srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite soundSprite=new Sprite(buttons,srcRect,g);
-        soundSprite.drawCentered(50, 200);
+        soundButton.draw();
 
         //Botón de info
         instructionsButton.draw();
@@ -119,5 +127,8 @@ public class MenuState implements GameState {
     private float alphaTap;
     private float velocidad;
 
+    private int barsWidth;
+
+    private Button soundButton;
     private Button instructionsButton;
 }

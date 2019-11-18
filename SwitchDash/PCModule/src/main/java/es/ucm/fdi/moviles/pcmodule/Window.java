@@ -1,10 +1,6 @@
 package es.ucm.fdi.moviles.pcmodule;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
 import javax.swing.JFrame;
-
 
 /**
  * Clase que hereda de JFrame y contiene lo necesario para pintar cosas en Java

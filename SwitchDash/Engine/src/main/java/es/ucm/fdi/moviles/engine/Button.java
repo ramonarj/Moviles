@@ -15,7 +15,7 @@ public class Button
     private String name;
 
     /**
-     * Constructora
+     * Constructora con rectángulo destino
      * @param sprite sprite que usará el botón
      * @param rect posición donde se pintará
      * @param name nombre del botón
@@ -26,6 +26,23 @@ public class Button
         this.rect = rect;
         this.name = name;
     }
+
+    /**
+     * Constructora con posición (el botón se pintará centrado en esa posición)
+     * @param sprite sprite que usará el botón
+     * @param X posición X se pintará
+     * @param name nombre del botón
+     */
+    public Button(Sprite sprite, int X, int Y, String name)
+    {
+        int width = sprite.rect_.getWidth();
+        int height = sprite.rect_.getHeight();
+
+        this.sprite = sprite;
+        this.rect = new Rect(X - width / 2, Y - height / 2, width, height);
+        this.name = name;
+    }
+
 
     /**
      * Dibuja el botón

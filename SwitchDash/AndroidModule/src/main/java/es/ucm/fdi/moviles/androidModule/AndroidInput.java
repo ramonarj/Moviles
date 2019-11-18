@@ -3,8 +3,6 @@ package es.ucm.fdi.moviles.androidModule;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.List;
-
 import es.ucm.fdi.moviles.engine.AbstractInput;
 import es.ucm.fdi.moviles.engine.Input;
 

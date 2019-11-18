@@ -1,9 +1,6 @@
 
 package es.ucm.fdi.moviles.androidModule;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.SurfaceView;
 
@@ -13,10 +10,7 @@ import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Input;
-import android.content.Context;
 
-import java.io.IOException;
-import java.io.InputStream;
 
 public class AndroidGame extends SurfaceView implements Runnable , Game {
 

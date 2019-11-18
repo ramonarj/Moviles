@@ -1,7 +1,6 @@
 package es.ucm.fdi.moviles.engine;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 /**
  * Implementa las funcionalidades comunes de la clase para cualquier plataforma
@@ -25,10 +24,7 @@ public abstract class AbstractInput implements Input
         if(events.size() > 0)
         {
             //Creamos una nueva lista que sea copia de "events"
-
             ArrayList<TouchEvent> aux =  (ArrayList<TouchEvent>) events.clone();
-            //List<TouchEvent> aux = new ArrayList<TouchEvent>(events.size());
-            //Collections.copy(aux, events);
 
             //Vaciamos "events" para la próxsima invocación
             events.clear();
