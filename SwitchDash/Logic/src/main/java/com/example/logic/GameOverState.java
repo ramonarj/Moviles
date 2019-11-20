@@ -2,6 +2,7 @@ package com.example.logic;
 
 import java.util.ArrayList;
 
+import es.ucm.fdi.moviles.engine.Button;
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
@@ -17,22 +18,41 @@ public class GameOverState implements GameState {
     //Objeto del juego
     private Game game;
 
-    public GameOverState(Game game,int backgroundColor,int lateralColor,int score,int numDigitos)
+    public GameOverState(Game game,int backgroundColor,int lateralColor,int score,int numDigitos, int barsWidth)
     {
         this.game = game;
-        this.backgroundColor=backgroundColor;
+        this.backGroundNo =backgroundColor;
         this.lateralColor=lateralColor;
         this.score=score;
         this.NumScores=numDigitos;
+        this.barsWidth = barsWidth;
     }
 
     @Override
     public boolean init() {
+        Graphics g = game.getGraphics();
+
         buttons = ResourceMan.getImage("Buttons");
         gameOver = ResourceMan.getImage("GameOver");
         playAgain = ResourceMan.getImage("PlayAgain");
         backgrounds = ResourceMan.getImage("Backgrounds");
         scoreFont = ResourceMan.getImage("ScoreFont");
+
+        barsWidth = g.getWidth() / 5;
+
+        int buttonWidth = buttons.getWidth() / 10;
+        int buttonHeight = buttons.getHeight();
+
+        //Botón de sonido
+        Rect srcRect = new Rect(2* buttonWidth,0,  buttonWidth,buttonHeight);
+        Sprite soundSprite=new Sprite(buttons,srcRect,g);
+        soundButton = new Button(soundSprite, barsWidth / 2,200, "Sonido");
+
+        //Botón de instrucciones
+        srcRect =new Rect(0,0, buttonWidth,buttonHeight);
+        Sprite infoSprite=new Sprite(buttons,srcRect,g);
+        instructionsButton = new Button(infoSprite, g.getWidth() - barsWidth / 2, 200, "Instrucciones");
+
         alphaTap=1f;
         veloidad=0.6f;
         return true;
@@ -45,8 +65,11 @@ public class GameOverState implements GameState {
         for(Input.TouchEvent evt: events)
         {
             //Cambiamos al juego
-            if(evt.type == Input.TouchEvent.EventType.RELEASED)
-                game.setGameState(new PlayState(game));
+            if(evt.type == Input.TouchEvent.EventType.PRESSED)
+                if(instructionsButton.isPressed(evt.x, evt.y))
+                    game.setGameState(new InstructionsState(game,backGroundNo,lateralColor, barsWidth));
+                else
+                    game.setGameState(new PlayState(game, backGroundNo,lateralColor, barsWidth));
         }
 
         alphaTap+=(deltaTime*veloidad);
@@ -66,7 +89,7 @@ public class GameOverState implements GameState {
         g.clear(lateralColor);
 
         Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundColor,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,dstRect,g);
         backSprite.draw(backRect);
 
@@ -81,14 +104,10 @@ public class GameOverState implements GameState {
         g.drawImage(playAgain, dstRect, alphaTap);
 
         //Botón de sonido
-        Rect srcRect=new Rect(2 * buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite soundSprite=new Sprite(buttons,srcRect,g);
-        soundSprite.drawCentered(50, 200);
+        soundButton.draw();
 
         //Botón de info
-        srcRect=new Rect(0,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite infoSprite=new Sprite(buttons,srcRect,g);
-        infoSprite.drawCentered(g.getWidth() - 50,200);
+        instructionsButton.draw();
 
        // drawScore();
 
@@ -156,7 +175,7 @@ public class GameOverState implements GameState {
 
     private Image gameOver;
     private Image playAgain;
-    private int backgroundColor;
+    private int backGroundNo;
     private int lateralColor;
     private Image backgrounds;
     private Image buttons;
@@ -165,4 +184,8 @@ public class GameOverState implements GameState {
     private int score;
     private int NumScores;
     private Image scoreFont;
+    private int barsWidth;
+
+    private Button soundButton;
+    private Button instructionsButton;
 }

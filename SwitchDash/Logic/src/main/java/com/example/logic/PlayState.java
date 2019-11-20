@@ -1,6 +1,5 @@
 package com.example.logic;
 
-import java.awt.Button;
 import java.util.ArrayList;
 
 import es.ucm.fdi.moviles.engine.Game;
@@ -17,9 +16,12 @@ public class PlayState implements GameState
     //Objeto del juego
     private Game game;
 
-    public PlayState(Game game)
+    public PlayState(Game game, int backGroundNo,int lateralColor, int barsWidth)
     {
         this.game = game;
+        this.backGroundNo = backGroundNo;
+        this.lateralColor = lateralColor;
+        this.barsWidth = barsWidth;
     }
 
     @Override
@@ -38,10 +40,7 @@ public class PlayState implements GameState
         scoreFont = ResourceMan.getImage("ScoreFont");
 
         //Inicialización de las variables
-        backgroundNo = (int)Math.floor(Math.random() * 9);
         playerColor = 0;
-        coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
-                0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
 
         posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
         posflechas2 = posFlechas1-flechas.getHeight();
@@ -76,7 +75,6 @@ public class PlayState implements GameState
             //Cambiamos de color
             if(evt.type == Input.TouchEvent.EventType.PRESSED)
                 playerColor = 1 - playerColor;
-            //TODO: registrar clicks en los botones de las esquinas
         }
     }
 
@@ -89,11 +87,6 @@ public class PlayState implements GameState
     }
 
 
-
-    private void checkImpact()
-    {
-
-    }
     @Override
     public void update(float deltaTime)
     {
@@ -123,7 +116,7 @@ public class PlayState implements GameState
                     }
                 } else
                 {
-                    game.setGameState(new GameOverState(game,backgroundNo,coloresFlechas[backgroundNo],score,NumScores));
+                    game.setGameState(new GameOverState(game, backGroundNo,lateralColor,score,NumScores, barsWidth));
                     break;
                 }
             }
@@ -143,7 +136,7 @@ public class PlayState implements GameState
     @Override
     public void render()
     {
-        g.clear(coloresFlechas[backgroundNo]);
+        g.clear(lateralColor);
 
         //Fondo
         drawBackground();
@@ -180,8 +173,8 @@ public class PlayState implements GameState
      * Pinta del color aleatorio escogido anteriormente el fondo del juego
      */
     private void drawBackground() {
-        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,dstRect,g);
         backSprite.draw(backRect);
     }
@@ -213,13 +206,13 @@ public class PlayState implements GameState
      * encima de la otra hasta el final de la partida
      */
     private void drawArrows() {
-        Rect dstRect = new Rect(g.getWidth() / 5,posFlechas1,
-                3 * g.getWidth() / 5, flechas.getHeight());
+        Rect dstRect = new Rect(barsWidth,posFlechas1,
+                3 * barsWidth, flechas.getHeight());
         g.drawImage(flechas, dstRect, 0.4f);
 
 
-        Rect dstRect2 = new Rect(g.getWidth() / 5,posflechas2 ,
-                3 * g.getWidth() / 5, flechas.getHeight());
+        Rect dstRect2 = new Rect(barsWidth,posflechas2 ,
+                3 * barsWidth, flechas.getHeight());
         g.drawImage(flechas, dstRect2, 0.4f);
 
 
@@ -316,10 +309,8 @@ public class PlayState implements GameState
     //VARIABLES DE JUEGO:
     private int playerColor; //0 = blanco, 1 = negro
     private int score;
-    private int backgroundNo;
     private int posFlechas1;
     private int posflechas2;
-    private int [] coloresFlechas;
     private int contBolas;
     private int velBolas;
     private int posBolas[];
@@ -327,5 +318,8 @@ public class PlayState implements GameState
     private int ballColor[];
     private int NumScores;
     private int division;
+    private int lateralColor;
+    private int backGroundNo;
+    private int barsWidth;
     private Graphics g;
 }

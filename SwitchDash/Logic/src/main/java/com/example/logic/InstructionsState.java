@@ -2,6 +2,7 @@ package com.example.logic;
 
 import java.util.ArrayList;
 
+import es.ucm.fdi.moviles.engine.Button;
 import es.ucm.fdi.moviles.engine.Game;
 import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
@@ -17,21 +18,34 @@ public class InstructionsState implements GameState {
     //Objeto del juego
     private Game game;
 
-    public InstructionsState(Game game,int backgroundColor,int lateralColor)
+    public InstructionsState(Game game,int backGroundNo,int lateralColor, int barsWidth)
     {
         this.game = game;
-        this.backGroundColor=backgroundColor;
+        this.backGroundNo =backGroundNo;
         this.lateralColor=lateralColor;
+        this.barsWidth = barsWidth;
     }
 
     @Override
     public boolean init()
     {
+        Graphics g = game.getGraphics();
+
         backgrounds = ResourceMan.getImage("Backgrounds");
         howToPlay = ResourceMan.getImage("HowToPlay");
         instructions = ResourceMan.getImage("instructions");
         tapToPlay = ResourceMan.getImage("TapToPlay");
         buttons = ResourceMan.getImage("Buttons");
+
+        barsWidth = g.getWidth() / 5;
+
+        int buttonWidth = buttons.getWidth() / 10;
+        int buttonHeight = buttons.getHeight();
+
+        //Botón de instrucciones
+        Rect srcRect =new Rect(buttonWidth,0, buttonWidth ,buttonHeight);
+        Sprite infoSprite=new Sprite(buttons,srcRect,g);
+        closeButton = new Button(infoSprite, g.getWidth() - barsWidth / 2, 200, "Cerrar");
 
         veloidad=0.6f;
         alphaTap=1f;
@@ -54,8 +68,11 @@ public class InstructionsState implements GameState {
         for(Input.TouchEvent evt: events)
         {
             //Cambiamos al juego
-            if(evt.type == Input.TouchEvent.EventType.RELEASED)
-                game.setGameState(new PlayState(game));
+            if(evt.type == Input.TouchEvent.EventType.PRESSED)
+                if(closeButton.isPressed(evt.x, evt.y))
+                    game.setGameState(new MenuState(game));
+                else
+                    game.setGameState(new PlayState(game, backGroundNo,lateralColor, barsWidth));
         }
 
     }
@@ -69,7 +86,7 @@ public class InstructionsState implements GameState {
 
         //1. FONDO
         Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundColor,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,dstRect,g);
         backSprite.draw(backRect);
 
@@ -89,9 +106,7 @@ public class InstructionsState implements GameState {
         g.drawImage(tapToPlay, dstRect, alphaTap);
 
         //Botón de salir
-        Rect srcRect=new Rect(buttons.getWidth() / 10,0, buttons.getWidth() / 10,buttons.getHeight());
-        Sprite infoSprite=new Sprite(buttons,srcRect,g);
-        infoSprite.drawCentered(g.getWidth() - 50,200);
+        closeButton.draw();
     }
 
     private Image howToPlay;
@@ -103,6 +118,9 @@ public class InstructionsState implements GameState {
     private float alphaTap;
     private float veloidad;
     private int lateralColor;
-    private int backGroundColor;
+    private int backGroundNo;
+    private int barsWidth;
+
+    Button closeButton;
 }
 

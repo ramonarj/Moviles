@@ -1,7 +1,9 @@
 
 package es.ucm.fdi.moviles.androidModule;
 
+import android.annotation.TargetApi;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +23,9 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.activity_=Activity;
         this.graphic_=new AndroidGraphics(activity_,this);
         this.input_=new AndroidInput();
-        this.canvas=null;
-        setOnTouchListener((AndroidInput)(this.input_));
+
+        setOnTouchListener(this.input_);
+        this.input_.init(this);
     }
 
     private void init()
@@ -46,11 +49,12 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             lastFrameTime = currentTime;
             float elapsedTime = (float)(nanoElapsedTime / 1.0E9);
             state_.update(elapsedTime);
-            lockCanvas();
-            ((AndroidGraphics)graphic_).setCanvas(this.canvas);
-            state_.render();
-            unLockCanvas();
 
+            //Bloqueamos el canvas, se lo pasamos al graphics y pintamos antes de desbloquearlo
+            Canvas canvas = lockCanvas();
+            graphic_.setCanvas(canvas);
+            state_.render();
+            unLockCanvas(canvas);
 
             //Contador de Frames
             // Informe de FPS
@@ -82,12 +86,12 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     @Override
     public Graphics getGraphics() {
-        return (Graphics) graphic_;
+        return graphic_;
     }
 
     @Override
     public Input getInput() {
-        return (Input) input_;
+        return input_;
     }
 
     @Override
@@ -105,15 +109,28 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         }
     }
 
-    private void lockCanvas()
+    /**
+     * Bloquea el canvas para poder usarlo para renderizar
+     */
+    private Canvas lockCanvas()
     {
-        while(!this.getHolder().getSurface().isValid())
-            ;
-        canvas = this.getHolder().lockCanvas();
+        while(!getHolder().getSurface().isValid());
+
+        //Ejecución condicional (solo usamos un canvas acelerado si estamos en un API >=23,
+        //que es el que lo soporta
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return getHolder().getSurface().lockHardwareCanvas();
+        else
+            return getHolder().lockCanvas();
     }
-    private void unLockCanvas()
+
+
+    private void unLockCanvas(Canvas canvas)
     {
-        this.getHolder().unlockCanvasAndPost(canvas);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            getHolder().getSurface().unlockCanvasAndPost(canvas);
+        else
+            getHolder().unlockCanvasAndPost(canvas);
     }
 
     @Override
@@ -127,7 +144,4 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     private AppCompatActivity activity_;
     boolean running_=false;
     Thread gameThread;
-    private Canvas canvas;
-
-
 }

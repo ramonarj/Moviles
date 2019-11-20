@@ -54,14 +54,25 @@ public abstract class AbstractGraphics implements  Graphics {
         float factor=takeScaleFactor();
         int newx1=(int)(windowWidth/2-((logicalWidth*factor)/2));
         int newy1=(int)(windowHeight/2-((logicalHeight*factor)/2));
+
         Rect newRect=new Rect(0,0,0,0);
         newRect.x1=(int)(newx1+(destRect.x1*factor));
         newRect.y1=(int)(newy1+destRect.y1*factor);
         newRect.x2=(int)(windowWidth/2-((logicalWidth*factor)/2)+destRect.x2*factor);
         newRect.y2=(int)(windowHeight/2-((logicalHeight*factor)/2)+destRect.y2*factor);
 
+
         return newRect;
     }
+
+    public Point physicalToLogical(Point physical)
+    {
+        float factor = takeScaleFactor();
+        int newx1=(int)(logicalWidth/2-((windowWidth/factor)/2));
+        int newy1=(int)(logicalHeight/2-((windowHeight/factor)/2));
+        return new Point((int)(newx1 + (float)physical.getX() / factor), (int)( newy1 + (float)physical.getY() / factor));
+    }
+
 
     @Override
     public void setLogicalView()
@@ -76,6 +87,7 @@ public abstract class AbstractGraphics implements  Graphics {
         windowWidth=width;
         windowHeight=height;
     }
+
 
 
     private float takeScaleFactor()

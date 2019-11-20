@@ -30,7 +30,9 @@ public class SwitchDash
         PCGraphics graphics = new PCGraphics(ventana);
         ventana.addComponentListener(graphics);
         //Al juego le pasamos los sistemas de input y gráficos además de la lógica
-        PCGame game = new PCGame(graphics, input, ventana);
+        PCGame game = new PCGame();
+        game.init(graphics, input, ventana);
+        input.init(game);
 
         //3. INICIALIZAR EL RESOURCEMANAGER
         ResourceMan.initInstance(game);

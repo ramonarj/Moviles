@@ -62,12 +62,18 @@ public class PCGame implements Game {
 
 
 
+
+    public PCGame()
+    {
+
+    }
+
     /**
      * Creaa la instancia recibiendo como parámetro la lógica del juego
      * @param graphics El sistema de gráficos que usará el juego
      * @param input El sistema de entrada que usará el juego
      */
-    public PCGame(PCGraphics graphics, PCInput input, Window window)
+    public boolean init(PCGraphics graphics, PCInput input, Window window)
     {
         this.graphics = graphics;
         this.input = input;
@@ -77,6 +83,8 @@ public class PCGame implements Game {
         this.graphics.setLogicalView();
         this.graphics.setCanvasSize(window.getWidth() ,window.getHeight());
         running_ = true;
+
+        return true;
     }
 
     /**

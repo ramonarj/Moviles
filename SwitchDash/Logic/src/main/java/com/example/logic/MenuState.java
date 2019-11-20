@@ -68,13 +68,10 @@ public class MenuState implements GameState {
             {
                 //Botón de instrucciones
                 if(instructionsButton.isPressed(evt.x, evt.y))
-                    game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo]));
+                    game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo], barsWidth));
+                else
+                    game.setGameState(new PlayState(game, backgroundNo,coloresFlechas[backgroundNo], barsWidth));
 
-            }
-            //Detectamos las pulsaciones
-            else if(evt.type == Input.TouchEvent.EventType.RELEASED)
-            {
-                game.setGameState(new PlayState(game));
             }
         }
 

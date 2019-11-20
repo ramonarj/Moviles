@@ -7,11 +7,24 @@ import java.util.List;
  */
 public abstract class AbstractInput implements Input
 {
+    protected Game game;
+
     protected ArrayList<TouchEvent> events;
 
     public AbstractInput()
     {
         events = new ArrayList<TouchEvent>();
+    }
+
+    /**
+     * Inicializa el input recibiendo una referencia al juego
+     * @param game juego al que corresponde
+     * @return false si el juego no ha sido creado, true e.o.c
+     */
+    public boolean init(Game game)
+    {
+        this.game = game;
+        return (this.game != null);
     }
 
     /**
@@ -38,10 +51,16 @@ public abstract class AbstractInput implements Input
      * a la vez que otro método (getTouchEvents), así que pedimos permiso al semáforo del objeto.
      * @param evt El evento a añadir a la cola
      */
-    synchronized protected void addEvent(TouchEvent evt)
+    protected void addEvent(TouchEvent evt)
     {
-        //TODO: hay que pasar las coordenadas de reales a lógicas
-        //para queal recibir los eventos, el usuario los tenga así
-        events.add(evt);
+        if(game.getGraphics() != null)
+        {
+            Point logicalPoint = ((AbstractGraphics) game.getGraphics()).physicalToLogical(new Point(evt.x, evt.y));
+            evt.x = logicalPoint.getX();
+            evt.y = logicalPoint.getY();
+            System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "} con ID=" + evt.id);
+
+            synchronized (this){ events.add(evt);}
+        }
     }
 }

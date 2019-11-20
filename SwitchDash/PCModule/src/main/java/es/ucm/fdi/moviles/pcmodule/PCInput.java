@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import es.ucm.fdi.moviles.engine.AbstractInput;
+import es.ucm.fdi.moviles.engine.Game;
 
 /**
  * Implementa la clase Input para PC
@@ -35,8 +36,6 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
         evt.id = mouseEvent.getID();
         evt.type = type;
 
-        //Debug
-        System.out.println("Evento de tipo " + evt.type.toString() + " en {" +  evt.x + ", " + evt.y + "}");
         addEvent(evt);
     }
 
