@@ -16,12 +16,12 @@ public class PlayState implements GameState
     //Objeto del juego
     private Game game;
 
-    public PlayState(Game game, int backGroundNo,int lateralColor, int barsWidth)
+    public PlayState(Game game)
     {
         this.game = game;
-        this.backGroundNo = backGroundNo;
-        this.lateralColor = lateralColor;
-        this.barsWidth = barsWidth;
+        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
+        this.lateralColor=GameManager.getInstance().getLateralColor();
+        this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class PlayState implements GameState
                     }
                 } else
                 {
-                    game.setGameState(new GameOverState(game, backGroundNo,lateralColor,score,NumScores, barsWidth));
+                    game.setGameState(new GameOverState(game, score,NumScores));
                     break;
                 }
             }

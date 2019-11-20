@@ -18,12 +18,12 @@ public class InstructionsState implements GameState {
     //Objeto del juego
     private Game game;
 
-    public InstructionsState(Game game,int backGroundNo,int lateralColor, int barsWidth)
+    public InstructionsState(Game game)
     {
         this.game = game;
-        this.backGroundNo =backGroundNo;
-        this.lateralColor=lateralColor;
-        this.barsWidth = barsWidth;
+        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
+        this.lateralColor=GameManager.getInstance().getLateralColor();
+        this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class InstructionsState implements GameState {
                 if(closeButton.isPressed(evt.x, evt.y))
                     game.setGameState(new MenuState(game));
                 else
-                    game.setGameState(new PlayState(game, backGroundNo,lateralColor, barsWidth));
+                    game.setGameState(new PlayState(game));
         }
 
     }

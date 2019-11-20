@@ -10,6 +10,9 @@ public class Button
 
     //Sprite utilizado
     private Sprite sprite;
+    private Sprite spriteToggle;
+
+    boolean toggled;
 
     //Nombre del botón
     private String name;
@@ -25,6 +28,8 @@ public class Button
         this.sprite = sprite;
         this.rect = rect;
         this.name = name;
+        this.spriteToggle = null;
+        this.toggled = false;
     }
 
     /**
@@ -41,6 +46,26 @@ public class Button
         this.sprite = sprite;
         this.rect = new Rect(X - width / 2, Y - height / 2, width, height);
         this.name = name;
+        this.spriteToggle = null;
+        this.toggled = false;
+    }
+
+    /**
+     * Constructora con posición (el botón se pintará centrado en esa posición)
+     * @param sprite sprite que usará el botón
+     * @param X posición X se pintará
+     * @param name nombre del botón
+     */
+    public Button(Sprite sprite,Sprite toggle, int X, int Y, String name)
+    {
+        int width = sprite.rect_.getWidth();
+        int height = sprite.rect_.getHeight();
+
+        this.sprite = sprite;
+        this.spriteToggle = toggle;
+        this.rect = new Rect(X - width / 2, Y - height / 2, width, height);
+        this.name = name;
+        this.toggled = false;
     }
 
 
@@ -49,7 +74,10 @@ public class Button
      */
     public void draw()
     {
-        sprite.draw(rect);
+        if(toggled)
+            spriteToggle.draw(rect);
+        else
+            sprite.draw(rect);
     }
 
     /**
@@ -70,4 +98,10 @@ public class Button
      * @return el nombre del botón
      */
     public String getName(){return this.name;}
+
+    public void toggleSprite()
+    {
+        if(spriteToggle != null)
+            toggled = !toggled;
+    }
 }

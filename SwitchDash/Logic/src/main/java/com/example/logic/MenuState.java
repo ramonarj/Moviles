@@ -31,7 +31,27 @@ public class MenuState implements GameState {
         tapToPlay =   ResourceMan.getImage("TapToPlay");
         buttons =     ResourceMan.getImage("Buttons");
 
-        barsWidth = g.getWidth() / 5;
+        //Primera vez que pasamos por el menú
+        if(GameManager.getInstance() == null)
+        {
+            GameManager.initInstance();
+
+            coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
+                    0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
+            backgroundNo = (int)Math.floor(Math.random() * 9);
+            barsWidth = g.getWidth() / 5;
+
+            //Inicializar atributos
+            GameManager.getInstance().setBarsWidth(barsWidth);
+            GameManager.getInstance().setBackGroundNo(backgroundNo);
+            GameManager.getInstance().setLateralColor(coloresFlechas[backgroundNo]);
+        }
+        else
+        {
+            this.backgroundNo =GameManager.getInstance().getBackGroundNo();
+            this.barsWidth = GameManager.getInstance().getBarsWidth();
+        }
+
 
         int buttonWidth = buttons.getWidth() / 10;
         int buttonHeight = buttons.getHeight();
@@ -44,13 +64,13 @@ public class MenuState implements GameState {
         //Botón de sonido
         srcRect = new Rect(2* buttonWidth,0,  buttonWidth,buttonHeight);
         Sprite soundSprite=new Sprite(buttons,srcRect,g);
-        soundButton = new Button(soundSprite, barsWidth / 2,200, "Sonido");
+        srcRect = new Rect(3* buttonWidth,0,  buttonWidth,buttonHeight);
+        Sprite soundSprite2=new Sprite(buttons,srcRect,g);
+
+        soundButton = new Button(soundSprite, soundSprite2, barsWidth / 2,200, "Sonido");
 
 
         //Otros
-        coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
-                0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
-        backgroundNo = (int)Math.floor(Math.random() * 9);
         alphaTap=1f;
         velocidad =0.6f;
         return true;
@@ -68,9 +88,11 @@ public class MenuState implements GameState {
             {
                 //Botón de instrucciones
                 if(instructionsButton.isPressed(evt.x, evt.y))
-                    game.setGameState(new InstructionsState(game,backgroundNo,coloresFlechas[backgroundNo], barsWidth));
+                    game.setGameState(new InstructionsState(game));
+                else if (soundButton.isPressed(evt.x, evt.y))
+                    soundButton.toggleSprite();
                 else
-                    game.setGameState(new PlayState(game, backgroundNo,coloresFlechas[backgroundNo], barsWidth));
+                    game.setGameState(new PlayState(game));
 
             }
         }
@@ -90,7 +112,7 @@ public class MenuState implements GameState {
     {
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(coloresFlechas[backgroundNo]);
+        g.clear(GameManager.getInstance().getLateralColor());
 
         //1. FONDO
         Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());

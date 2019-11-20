@@ -18,14 +18,14 @@ public class GameOverState implements GameState {
     //Objeto del juego
     private Game game;
 
-    public GameOverState(Game game,int backgroundColor,int lateralColor,int score,int numDigitos, int barsWidth)
+    public GameOverState(Game game,int score,int numDigitos)
     {
         this.game = game;
-        this.backGroundNo =backgroundColor;
-        this.lateralColor=lateralColor;
         this.score=score;
         this.NumScores=numDigitos;
-        this.barsWidth = barsWidth;
+        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
+        this.lateralColor=GameManager.getInstance().getLateralColor();
+        this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
     @Override
@@ -67,10 +67,10 @@ public class GameOverState implements GameState {
             //Cambiamos al juego
             if(evt.type == Input.TouchEvent.EventType.PRESSED)
                 if(instructionsButton.isPressed(evt.x, evt.y))
-                    game.setGameState(new InstructionsState(game,backGroundNo,lateralColor, barsWidth));
+                    game.setGameState(new InstructionsState(game));
                 else
-                    game.setGameState(new PlayState(game, backGroundNo,lateralColor, barsWidth));
-        }
+                    game.setGameState(new PlayState(game));
+    }
 
         alphaTap+=(deltaTime*veloidad);
         if(alphaTap>=1 || alphaTap<=0)
