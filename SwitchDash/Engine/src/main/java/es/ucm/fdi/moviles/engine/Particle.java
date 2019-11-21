@@ -14,6 +14,7 @@ public class Particle {
         this.height=height;
         this.alpha=alpha;
         this.color=color;
+        this.randomScale=(float)(Math.floor(Math.random()*4)+1)/4;
 
     }
 
@@ -31,6 +32,7 @@ public class Particle {
     public int getheight(){return height;}
     public Image getImage(){return im_;}
     public int getColor(){return  color;}
+    public float getRandomScale(){return randomScale;}
 
 
     private Image im_;
@@ -42,4 +44,5 @@ public class Particle {
     private int height;
     private float alpha;
     private int color;
+    private float randomScale;
 }

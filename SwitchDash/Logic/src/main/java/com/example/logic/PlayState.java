@@ -24,6 +24,7 @@ public class PlayState implements GameState
         this.lateralColor=GameManager.getInstance().getLateralColor();
         this.barsWidth = GameManager.getInstance().getBarsWidth();
         this.particleGenerator=new ParticleGenerator(this.game.getGraphics());
+        this.whiteAlpha=1;
     }
 
     @Override
@@ -136,6 +137,9 @@ public class PlayState implements GameState
             }
         }
         particleGenerator.update(deltaTime);
+
+        //Necesario para hacer la animacion del flash al principio de cada estado
+        whiteAlpha-=(float)10*deltaTime;
     }
 
     /**
@@ -151,26 +155,40 @@ public class PlayState implements GameState
     @Override
     public void render()
     {
-        g.clear(lateralColor);
+        if(whiteAlpha<0) {
+            g.clear(lateralColor);
 
-        //Fondo
-        drawBackground();
+            //Fondo
+            drawBackground();
 
-        //Flechas
-        drawArrows();
+            //Flechas
+            drawArrows();
 
-        //Pelota
-        drawBalls();
+            //Pelota
+            drawBalls();
 
-        particleGenerator.Render();
+            particleGenerator.Render();
 
-        //Jugador
-        drawPlayer();
+            //Jugador
+            drawPlayer();
 
-        //Puntuación
-        drawScore();
+            //Puntuación
+            drawScore();
+        } else drawFlash();
     }
 
+    /**
+     * Al principio pintaremos una pantalla blanca bajando de alpha hasta que sea 0 y empezamos el render
+     */
+    private void drawFlash()
+    {
+        Rect srcRect=new Rect(0,0,white.getWidth(),white.getHeight());
+        Sprite playerSprite=new Sprite(white,srcRect,g);
+
+        Rect dest=new Rect(0,0,g.getWidth(),g.getHeight());
+        playerSprite.draw(dest,whiteAlpha);
+
+    }
 
     /**
      * @param lastColor color de la siguiente pelota
@@ -329,6 +347,7 @@ public class PlayState implements GameState
     private int lateralColor;
     private int backGroundNo;
     private int barsWidth;
+    private float whiteAlpha;
 
     private int test;
     private Graphics g;
