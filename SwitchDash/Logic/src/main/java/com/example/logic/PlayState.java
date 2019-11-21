@@ -7,6 +7,7 @@ import es.ucm.fdi.moviles.engine.GameState;
 import es.ucm.fdi.moviles.engine.Graphics;
 import es.ucm.fdi.moviles.engine.Image;
 import es.ucm.fdi.moviles.engine.Input;
+import es.ucm.fdi.moviles.engine.ParticleGenerator;
 import es.ucm.fdi.moviles.engine.Rect;
 import es.ucm.fdi.moviles.engine.ResourceMan;
 import es.ucm.fdi.moviles.engine.Sprite;
@@ -22,6 +23,7 @@ public class PlayState implements GameState
         this.backGroundNo =GameManager.getInstance().getBackGroundNo();
         this.lateralColor=GameManager.getInstance().getLateralColor();
         this.barsWidth = GameManager.getInstance().getBarsWidth();
+        this.particleGenerator=new ParticleGenerator(this.game.getGraphics());
     }
 
     @Override
@@ -104,6 +106,7 @@ public class PlayState implements GameState
             if(checkPosition(posBolas[i]))
             {
                 if(match(ballColor[i])) {
+                    particleGenerator.createSimulation(g.getWidth()/2-((balls.getWidth() / 10)/2),posBolas[i]);
                     posBolas[i] = getMenor() - 395;
                     ballColor[i] = setballColor(ballColor[takeBallIndex(i-1,numBolas)]);
                     contBolas++;
@@ -121,6 +124,7 @@ public class PlayState implements GameState
                 }
             }
         }
+        particleGenerator.update(deltaTime);
     }
 
     /**
@@ -146,6 +150,8 @@ public class PlayState implements GameState
 
         //Pelota
         drawBalls();
+
+        particleGenerator.Render();
 
         //Jugador
         drawPlayer();
@@ -322,4 +328,5 @@ public class PlayState implements GameState
     private int backGroundNo;
     private int barsWidth;
     private Graphics g;
+    private ParticleGenerator particleGenerator;
 }

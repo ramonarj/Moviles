@@ -118,7 +118,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
         //Ejecución condicional (solo usamos un canvas acelerado si estamos en un API >=23,
         //que es el que lo soporta
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             return getHolder().getSurface().lockHardwareCanvas();
         else
             return getHolder().lockCanvas();
@@ -127,7 +127,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     private void unLockCanvas(Canvas canvas)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             getHolder().getSurface().unlockCanvasAndPost(canvas);
         else
             getHolder().unlockCanvasAndPost(canvas);
