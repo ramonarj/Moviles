@@ -54,7 +54,7 @@ public class GameOverState implements GameState {
         instructionsButton = new Button(infoSprite, g.getWidth() - barsWidth / 2, 200, "Instrucciones");
 
         alphaTap=1f;
-        veloidad=0.6f;
+        velocidad =0.6f;
         return true;
     }
 
@@ -70,14 +70,14 @@ public class GameOverState implements GameState {
                     game.setGameState(new InstructionsState(game));
                 else
                     game.setGameState(new PlayState(game));
-    }
+        }
 
-        alphaTap+=(deltaTime*veloidad);
+        alphaTap+=(deltaTime* velocidad);
         if(alphaTap>=1 || alphaTap<=0)
         {
             if(alphaTap<=0f)alphaTap=0;
             else if(alphaTap>=1f)alphaTap=1f;
-            veloidad*=-1;
+            velocidad *=-1;
         }
     }
 
@@ -88,20 +88,20 @@ public class GameOverState implements GameState {
         Graphics g = game.getGraphics();
         g.clear(lateralColor);
 
-        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
-        backSprite.draw(backRect);
+        Rect destRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
+        Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Sprite backSprite=new Sprite(backgrounds,srcRect,g);
+        backSprite.draw(destRect);
 
         //Game Over
-        dstRect = new Rect((int)(g.getWidth() / 2.75),(int)(g.getHeight()/5) ,
-                g.getWidth() / 4,g.getHeight() / 8);
-        g.drawImage(gameOver, dstRect, 1f);
+        srcRect = new Rect(0,0, gameOver.getWidth(), gameOver.getHeight());
+        Sprite gameOverSprite=new Sprite(gameOver,srcRect,g);
+        gameOverSprite.drawCentered(g.getWidth() / 2, 364);
 
         //Play again
-        dstRect = new Rect(g.getWidth() / 3,(int)(g.getHeight()/1.5) , //950, 1464
-                g.getWidth() / 3,g.getHeight() / 30);
-        g.drawImage(playAgain, dstRect, alphaTap);
+        srcRect = new Rect(0,0, playAgain.getWidth(), playAgain.getHeight());
+        Sprite playAgainSprite=new Sprite(playAgain,srcRect,g);
+        playAgainSprite.drawCentered(g.getWidth() / 2, 1396, 1, alphaTap);
 
         //Botón de sonido
         soundButton.draw();
@@ -112,14 +112,13 @@ public class GameOverState implements GameState {
         drawScore();
 
         drawText();
-
     }
 
     private void drawScore()
     {
         int auxScore = score;
         int gap = (int)((float)(scoreFont.getHeight() / 15) * 1.5f);
-        int initialX = game.getGraphics().getWidth() - 3 * barsWidth / 2;
+        int initialX = game.getGraphics().getWidth() / 2;
         int initialY = 1035 - (int)((float)(scoreFont.getHeight() / 7) * 1.5f);
 
         //Pintamos una vez por cada dígito (de derecha a izquierda)
@@ -143,41 +142,48 @@ public class GameOverState implements GameState {
                 posicionY=3;
             }
 
-            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15, posicionY * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+            //El 16 y el 24 son la mitad del espacio en blanco que hay en cada caracter (33px en X, 48px en Y)
+            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15 + 16, posicionY * scoreFont.getHeight() / 7 + 24, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
             Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
 
-            scoreSprites.drawCentered(initialX - gap * i, initialY, 1.5f);
+            scoreSprites.drawCentered(initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f);
         }
     }
     private void drawText()
     {
         //P
-        Rect srcRect = new Rect(11 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        Rect srcRect = new Rect(11 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+75,1035);
 
         //O
-        srcRect = new Rect(10 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        srcRect = new Rect(10 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+150,1035);
 
         //I
-        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+225,1035);
 
         //N
-        srcRect = new Rect(9 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        srcRect = new Rect(9 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+300,1035);
 
         //T
-        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 1 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 1 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+375,1035);
 
         //S
-        srcRect = new Rect(14 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
+        srcRect = new Rect(14 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
+                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
         scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
         scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+450,1035);
     }
@@ -191,7 +197,7 @@ public class GameOverState implements GameState {
     private Image backgrounds;
     private Image buttons;
     private float alphaTap;
-    private float veloidad;
+    private float velocidad;
     private int score;
     private int NumScores;
     private Image scoreFont;

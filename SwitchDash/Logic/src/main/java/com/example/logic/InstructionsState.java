@@ -82,28 +82,30 @@ public class InstructionsState implements GameState {
 
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
+        int width = g.getWidth();
+        int height = g.getHeight();
         g.clear(lateralColor);
 
         //1. FONDO
-        Rect backRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
-        backSprite.draw(backRect);
+        Rect destRect = new Rect(width / 5,0,3 * width / 5, height);
+        Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Sprite backSprite=new Sprite(backgrounds,srcRect,g);
+        backSprite.draw(destRect);
 
         //How to play
-        dstRect = new Rect((int)(g.getWidth() / 3.25),g.getHeight()/7 ,
-                (int)(g.getWidth() / 2.5),g.getHeight() / 6);
-        g.drawImage(howToPlay, dstRect, 1f);
+        destRect = new Rect((int)(width / 3.25),height / 7 ,
+                (int)(width / 2.5),height / 6);
+        g.drawImage(howToPlay, destRect, 1f);
 
         //Instructions
-        dstRect = new Rect(g.getWidth() / 4,(int)(g.getHeight() / 2.75) ,
-                g.getWidth() / 2,(int)(g.getHeight()/4));
-        g.drawImage(instructions, dstRect, 1f);
+        srcRect = new Rect(0,0,instructions.getWidth(), instructions.getHeight());
+        Sprite instructionsSprite=new Sprite(instructions,srcRect,g);
+        instructionsSprite.drawCentered(width / 2, 950);
 
         //TapToPlay
-        dstRect = new Rect(g.getWidth() / 3,(int)(g.getHeight()/1.5f),
-                g.getWidth() / 3,g.getHeight() / 30);
-        g.drawImage(tapToPlay, dstRect, alphaTap);
+        srcRect = new Rect(0,0,tapToPlay.getWidth(), tapToPlay.getHeight());
+        Sprite tapSprite=new Sprite(tapToPlay,srcRect,g);
+        tapSprite.drawCentered(width / 2, 1400, 1, alphaTap);
 
         //Botón de salir
         closeButton.draw();

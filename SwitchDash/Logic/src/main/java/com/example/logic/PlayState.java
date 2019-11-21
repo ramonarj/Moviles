@@ -225,12 +225,12 @@ public class PlayState implements GameState
     private void drawArrows() {
         Rect dstRect = new Rect(barsWidth,posFlechas1,
                 3 * barsWidth, flechas.getHeight());
-        g.drawImage(flechas, dstRect, 0.4f);
+        g.drawImage(flechas, dstRect, 0.25f);
 
 
         Rect dstRect2 = new Rect(barsWidth,posflechas2 ,
                 3 * barsWidth, flechas.getHeight());
-        g.drawImage(flechas, dstRect2, 0.4f);
+        g.drawImage(flechas, dstRect2, 0.25f);
     }
 
     /**
