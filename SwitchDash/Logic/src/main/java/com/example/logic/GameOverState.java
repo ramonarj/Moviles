@@ -117,9 +117,11 @@ public class GameOverState implements GameState {
     private void drawScore()
     {
         int auxScore = score;
-        int gap = (int)((float)(scoreFont.getHeight() / 15) * 1.5f);
+        int gap = 125;
+
+
         int initialX = game.getGraphics().getWidth() / 2;
-        int initialY = 1035 - (int)((float)(scoreFont.getHeight() / 7) * 1.5f);
+        int initialY = 800;
 
         //Pintamos una vez por cada dígito (de derecha a izquierda)
         for(int i=0;i<NumScores;i++)
@@ -128,25 +130,7 @@ public class GameOverState implements GameState {
             int numeroApintar = auxScore % 10;
             auxScore /= 10;
 
-            //Posición en la spritesheet
-            int posicion=7+numeroApintar;
-            int posicionY=3;
-            if(posicion>14 && posicion<=16)
-            {
-                posicion-=15;
-                posicionY=4;
-            }
-            else if(posicion>1 && posicionY==4)
-            {
-                posicion=7;
-                posicionY=3;
-            }
-
-            //El 16 y el 24 son la mitad del espacio en blanco que hay en cada caracter (33px en X, 48px en Y)
-            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15 + 16, posicionY * scoreFont.getHeight() / 7 + 24, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-            Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-
-            scoreSprites.drawCentered(initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f);
+            GameManager.getInstance().drawNumber(numeroApintar, initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f);
         }
     }
     private void drawText()
