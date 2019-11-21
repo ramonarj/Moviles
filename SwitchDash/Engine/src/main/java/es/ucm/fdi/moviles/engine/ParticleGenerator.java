@@ -32,7 +32,7 @@ public class ParticleGenerator {
             //Actualizamos los valores de cada particula
             Particle par = (Particle) particles_.elementAt(i);
             //Pintamos cada una de las particulas
-            Rect srcRect = new Rect(par.getImage().getWidth() / 10 * 7, 0,
+            Rect srcRect = new Rect(0, 0,
                     par.getImage().getWidth() / 10, par.getImage().getHeight() / 2);
 
             Rect destRect = new Rect(par.getX(), par.getY(), par.getImage().getWidth() / 10, par.getImage().getHeight() / 2);

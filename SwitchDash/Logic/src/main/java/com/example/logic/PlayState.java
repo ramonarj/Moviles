@@ -47,6 +47,8 @@ public class PlayState implements GameState
         posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
         posflechas2 = posFlechas1-flechas.getHeight();
 
+        test = Math.abs(posFlechas1-posflechas2);
+
 
         //Inicializamos las bolas
         contBolas=0;
@@ -96,8 +98,17 @@ public class PlayState implements GameState
         checkInput();
 
         //Flechas
-        posFlechas1 += (deltaTime*384);
-        posflechas2 += (deltaTime*384);
+        int incr = (int)(deltaTime*384);
+        posFlechas1 += incr;
+        posflechas2 += incr;
+
+
+        //Comprobar si hay que moverla al salirse de la pantalla
+        if(posFlechas1>game.getGraphics().getHeight())
+            posFlechas1=posflechas2-flechas.getHeight();
+        else if(posflechas2>game.getGraphics().getHeight())
+            posflechas2=posFlechas1-flechas.getHeight();
+
 
         //Recorremos cada una de las pelotas y comprobamos si al estar en contacto con la barra
         //han podido ser atrapdas o en caso contrario , ha finalizado la partida
@@ -201,7 +212,7 @@ public class PlayState implements GameState
     private void drawBalls() {
         for(int i=0;i<numBolas;i++)
         {
-            Rect srcRect=new Rect(balls.getWidth() / 10 * 7,ballColor[i],balls.getWidth() / 10,balls.getHeight() / 2);
+            Rect srcRect=new Rect(0,ballColor[i],balls.getWidth() / 10,balls.getHeight() / 2);
             Sprite ballSprite=new Sprite(balls,srcRect,g);
             ballSprite.drawCentered(g.getWidth() / 2,posBolas[i]);
         }
@@ -220,15 +231,6 @@ public class PlayState implements GameState
         Rect dstRect2 = new Rect(barsWidth,posflechas2 ,
                 3 * barsWidth, flechas.getHeight());
         g.drawImage(flechas, dstRect2, 0.4f);
-
-
-
-        if(posFlechas1>game.getGraphics().getHeight())
-            posFlechas1=posflechas2-flechas.getHeight();
-        else if(posflechas2>game.getGraphics().getHeight())
-            posflechas2=posFlechas1-flechas.getHeight();
-
-
     }
 
     /**
@@ -327,6 +329,8 @@ public class PlayState implements GameState
     private int lateralColor;
     private int backGroundNo;
     private int barsWidth;
+
+    private int test;
     private Graphics g;
     private ParticleGenerator particleGenerator;
 }
