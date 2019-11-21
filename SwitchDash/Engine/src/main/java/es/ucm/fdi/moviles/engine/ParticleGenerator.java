@@ -32,31 +32,30 @@ public class ParticleGenerator {
             //Actualizamos los valores de cada particula
             Particle par = (Particle) particles_.elementAt(i);
             //Pintamos cada una de las particulas
-            Rect srcRect = new Rect(0, 0,
+            Rect srcRect = new Rect(0, par.getColor(),
                     par.getImage().getWidth() / 10, par.getImage().getHeight() / 2);
 
-            Rect destRect = new Rect(par.getX(), par.getY(), par.getImage().getWidth() / 10, par.getImage().getHeight() / 2);
 
             Sprite particleSprite = new Sprite(par.getImage(), srcRect, graphics);
-            particleSprite.draw(destRect,par.getAlpha());
+            particleSprite.drawCentered(par.getX(),par.getY(),1,par.getAlpha());
         }
     }
-    private void createParticle(int initialPositionX,int initialPositionY)
+    private void createParticle(int initialPositionX,int initialPositionY,int color)
     {
         float alpha=(float)(Math.floor(Math.random() * 255)/255);
         int velX=rand.nextInt(250+250)-250;
         int velY=rand.nextInt(-15 + 150)-150;
-        int widthDivison=rand.nextInt(10)+10;
-        int heigthDivison=rand.nextInt(2)+2;
-        Particle particle=new Particle(initialPositionX,initialPositionY,velX,velY,widthDivison,heigthDivison,alpha);
+        int widthDivison=1+(int)Math.floor(Math.random() * 2);
+        int heigthDivison=1+(int)Math.floor(Math.random() * 2);
+        Particle particle=new Particle(initialPositionX,initialPositionY,velX,velY,widthDivison,heigthDivison,alpha,color);
         particles_.add(particle);
     }
 
-    public void createSimulation(int initialPositionX,int initialPositionY)
+    public void createSimulation(int initialPositionX,int initialPositionY,int color)
     {
-        for(int i=0;i<5;i++)
+        for(int i=0;i<7;i++)
         {
-            createParticle(initialPositionX,initialPositionY);
+            createParticle(initialPositionX,initialPositionY,color);
         }
     }
     private Vector particles_;

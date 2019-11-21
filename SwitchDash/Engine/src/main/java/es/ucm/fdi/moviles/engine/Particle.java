@@ -2,17 +2,18 @@ package es.ucm.fdi.moviles.engine;
 
 public class Particle {
 
-    public Particle(int posX,int posY, int velX,int velY,int width, int height,float alpha)
+    public Particle(int posX,int posY, int velX,int velY,int width, int height,float alpha,int color)
     {
         this.im_=ResourceMan.getImage("Balls");
         this.posX=posX;
         this.posY=posY;
         this.velX=velX;
         this.velY=velY;
-        this.width=im_.getWidth()/width;
-        this.height=im_.getHeight()/height;
+        this.width=im_.getWidth() / (10*width);
+        this.height=im_.getHeight()/(2*height);
         this.height=height;
         this.alpha=alpha;
+        this.color=color;
 
     }
 
@@ -29,6 +30,7 @@ public class Particle {
     public int getWidth(){return  width;}
     public int getheight(){return height;}
     public Image getImage(){return im_;}
+    public int getColor(){return  color;}
 
 
     private Image im_;
@@ -39,4 +41,5 @@ public class Particle {
     private int width;
     private int height;
     private float alpha;
+    private int color;
 }

@@ -117,7 +117,7 @@ public class PlayState implements GameState
             if(checkPosition(posBolas[i]))
             {
                 if(match(ballColor[i])) {
-                    particleGenerator.createSimulation(g.getWidth()/2-((balls.getWidth() / 10)/2),posBolas[i]);
+                    particleGenerator.createSimulation(g.getWidth()/2,posBolas[i],ballColor[i]);
                     posBolas[i] = getMenor() - 395;
                     ballColor[i] = setballColor(ballColor[takeBallIndex(i-1,numBolas)]);
                     contBolas++;

@@ -54,6 +54,12 @@ public class Sprite {
         graphics_.drawImage(img_,rect_,dest);
     }
 
+    public void drawCentered(int posX, int posY,float scale,float alpha)
+    {
+        Rect dest=new Rect(posX-rect_.getWidth() / 2,posY-rect_.getHeight() / 2,rect_.getWidth(),rect_.getHeight());
+        graphics_.drawImage(img_,rect_,dest,alpha);
+    }
+
 
     public void drawCentered(int posX, int posY, float scale)
     {
