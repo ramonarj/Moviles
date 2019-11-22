@@ -3,6 +3,9 @@ package es.ucm.fdi.moviles.engine.utils;
 import es.ucm.fdi.moviles.engine.graphics.Image;
 import es.ucm.fdi.moviles.engine.system.ResourceMan;
 
+/**
+ * Clase que representa una partícula
+ */
 public class Particle {
 
     /**

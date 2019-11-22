@@ -3,7 +3,9 @@ package es.ucm.fdi.moviles.engine.utils;
 import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 /**
- * Clase auxiliar para ayudar con la representación de un botón
+ * Clase auxiliar que representa un botón. Contiene métodos para pintarse
+ * y para saber si está pulsado, permitiendo tener 2 sprites entre los que cambia
+ * en caso de que se quiera
  */
 public class Button
 {
@@ -12,8 +14,10 @@ public class Button
 
     //Sprite utilizado
     private Sprite sprite;
+    //Segundo sprite utilizado (no obligatorio)
     private Sprite spriteToggle;
 
+    //Indica si se está usando el 2º sprite en este momento
     boolean toggled;
 
     //Nombre del botón
@@ -72,7 +76,7 @@ public class Button
 
 
     /**
-     * Dibuja el botón
+     * Dibuja el botón en su posición
      */
     public void draw()
     {
@@ -83,7 +87,7 @@ public class Button
     }
 
     /**
-     * Ini
+     * Indica si el las coordenadas proporcionadas pertenecen al rectángulo del botón
      * @param x coordenada horizontal
      * @param y coordenada vertical
      * @return true si está siendo pulsado
@@ -94,11 +98,16 @@ public class Button
     }
 
     /**
-     * Nombre del botón
+     * Devuelve el nombre del botón
      * @return el nombre del botón
      */
     public String getName(){return this.name;}
 
+    /**
+     * Cambia entre los 2 sprites del botón.
+     * Si se llama en un botón que no ha sido creado con 2 sprites,
+     * no tendrá ningún efecto
+     */
     public void toggleSprite()
     {
         if(spriteToggle != null)

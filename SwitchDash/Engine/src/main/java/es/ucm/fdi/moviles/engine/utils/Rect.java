@@ -7,17 +7,17 @@ package es.ucm.fdi.moviles.engine.utils;
 public class Rect {
 
     //Coordenadas de la esquina superior izquierda del rectángulo
-    public int x1;
-    public int x2;
-    public int y1;
-    public int y2;
+    private int x1;
+    private int x2;
+    private int y1;
+    private int y2;
 
     //Anchura y altura del rectángulo
     private int w;
     private int h;
 
     /**
-     * Constructora que recibe una esquine y unas dimensiones
+     * Constructora que recibe una esquina y unas dimensiones
      * @param x Coordenada x de la esquina superior izquierda
      * @param y Coordenada y de la esquina superior izquierda
      * @param width Anchura del rectángulo
@@ -84,5 +84,18 @@ public class Rect {
         this.x2 = x1 + w;
         this.y1 = newY1;
         this.y2 = y1 + h;
+    }
+
+    /**
+     * Modifica el tamaño del rectángulo, dejando inmutable su esquina inferior izquierda
+     * @param newWidth nueva anchura del rectángulo
+     * @param newHeight nueva altura del rectángulo
+     */
+    public void resize(int newWidth, int newHeight)
+    {
+        this.x2 = x1 + newWidth;
+        this.y2 = y1+ newHeight;
+        this.w = newWidth;
+        this.h = newHeight;
     }
 }
