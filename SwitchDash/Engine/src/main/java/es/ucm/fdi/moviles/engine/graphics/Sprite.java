@@ -1,4 +1,6 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.graphics;
+
+import es.ucm.fdi.moviles.engine.utils.Rect;
 
 /**
  * Clase para representar un Sprite
@@ -70,7 +72,8 @@ public class Sprite {
         graphics_.drawImage(img_,rect_,dest);
     }
 
-    //TODO:lo
+    public int getWidth(){return this.rect_.getWidth();}
+    public int getHeight(){return this.rect_.getHeight();}
 
 
 

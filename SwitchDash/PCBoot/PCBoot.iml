@@ -32,8 +32,5 @@
     <orderEntry type="module" module-name="Engine" exported="" />
     <orderEntry type="module" module-name="Logic" exported="" />
     <orderEntry type="module" module-name="PCModule" exported="" />
-    <orderEntry type="module" module-name="Engine" exported="" />
-    <orderEntry type="module" module-name="Logic" exported="" />
-    <orderEntry type="module" module-name="PCModule" exported="" />
   </component>
 </module>

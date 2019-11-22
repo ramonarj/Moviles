@@ -1,7 +1,7 @@
 package es.ucm.fdi.moviles.androidModule;
 
-import es.ucm.fdi.moviles.engine.AbstractGraphics;
-import es.ucm.fdi.moviles.engine.Image;
+import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
+import es.ucm.fdi.moviles.engine.graphics.Image;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -74,7 +74,7 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
-    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
+    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.utils.Rect destRect, float alpha) {
 
         Paint paint=new Paint();
         paint.setAlpha((int)(alpha*255));
@@ -86,7 +86,7 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
-    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect destRect) {
+    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.utils.Rect destRect) {
 
         Rect src=new Rect(0,0,image.getWidth(),image.getHeight());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());
@@ -95,7 +95,7 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
-    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect, float alpha) {
+    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.utils.Rect srcRect, es.ucm.fdi.moviles.engine.utils.Rect destRect, float alpha) {
 
         Paint paint=new Paint();
         paint.setAlpha((int)(alpha*255));
@@ -108,7 +108,7 @@ public class AndroidGraphics extends AbstractGraphics
     }
 
     @Override
-    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.Rect srcRect, es.ucm.fdi.moviles.engine.Rect destRect) {
+    public void drawRealImage(Image image, es.ucm.fdi.moviles.engine.utils.Rect srcRect, es.ucm.fdi.moviles.engine.utils.Rect destRect) {
 
         Rect src=new Rect(srcRect.x1(),srcRect.y1(),srcRect.x2(),srcRect.y2());
         Rect dest=new Rect(destRect.x1(),destRect.y1(),destRect.x2(),destRect.y2());

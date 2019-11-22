@@ -1,4 +1,4 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.system;
 
 public interface GameState {
     public boolean init();

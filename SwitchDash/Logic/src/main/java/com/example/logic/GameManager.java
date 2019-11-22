@@ -1,10 +1,10 @@
 package com.example.logic;
 
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.Image;
-import es.ucm.fdi.moviles.engine.Rect;
-import es.ucm.fdi.moviles.engine.ResourceMan;
-import es.ucm.fdi.moviles.engine.Sprite;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.utils.Rect;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 class GameManager {
     private static GameManager ourInstance = null;

@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import es.ucm.fdi.moviles.engine.AbstractGraphics;
-import es.ucm.fdi.moviles.engine.Image;
-import es.ucm.fdi.moviles.engine.Rect;
+import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.utils.Rect;
 
 public class PCGraphics extends AbstractGraphics implements ComponentListener
 {
@@ -63,7 +63,7 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
     {
         java.awt.Graphics g = strategy.getDrawGraphics();
         g.setColor(new Color(color));
-        g.fillRect(0,0, getWidth(), getHeight());
+        g.fillRect(0,0, getWindowWidth(), getWindowHeight());
     }
 
 

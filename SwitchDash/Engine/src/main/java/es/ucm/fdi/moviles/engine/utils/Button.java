@@ -1,4 +1,6 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.utils;
+
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 /**
  * Clase auxiliar para ayudar con la representación de un botón
@@ -40,8 +42,8 @@ public class Button
      */
     public Button(Sprite sprite, int X, int Y, String name)
     {
-        int width = sprite.rect_.getWidth();
-        int height = sprite.rect_.getHeight();
+        int width = sprite.getWidth();
+        int height = sprite.getHeight();
 
         this.sprite = sprite;
         this.rect = new Rect(X - width / 2, Y - height / 2, width, height);
@@ -58,8 +60,8 @@ public class Button
      */
     public Button(Sprite sprite,Sprite toggle, int X, int Y, String name)
     {
-        int width = sprite.rect_.getWidth();
-        int height = sprite.rect_.getHeight();
+        int width = sprite.getWidth();
+        int height = sprite.getHeight();
 
         this.sprite = sprite;
         this.spriteToggle = toggle;

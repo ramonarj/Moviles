@@ -1,4 +1,4 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.utils;
 
 /**
  * Clase usada para representar un rectángulo

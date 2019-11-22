@@ -1,4 +1,6 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.graphics;
+
+import es.ucm.fdi.moviles.engine.utils.Rect;
 
 public interface Graphics
 {
@@ -69,6 +71,18 @@ public interface Graphics
      * @return ancho logico del estado
      */
     int getHeight();
+
+    /**
+     * Getter
+     * @return ancho físico del estado
+     */
+    int getWindowWidth();
+
+    /**
+     * Getter
+     * @return ancho físico del estado
+     */
+    int getWindowHeight();
 
 
     void setLogicalView();

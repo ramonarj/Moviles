@@ -1,10 +1,13 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.utils;
+
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
 
 public class Particle {
 
     public Particle(int posX,int posY, int velX,int velY,int width, int height,float alpha,int color)
     {
-        this.im_=ResourceMan.getImage("Balls");
+        this.im_= ResourceMan.getImage("Balls");
         this.posX=posX;
         this.posY=posY;
         this.velX=velX;

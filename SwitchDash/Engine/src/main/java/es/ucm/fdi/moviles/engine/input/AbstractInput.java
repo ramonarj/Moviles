@@ -1,7 +1,12 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.input;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.utils.Point;
+import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
+
 /**
  * Implementa las funcionalidades comunes de la clase para cualquier plataforma
  */
