@@ -1,4 +1,4 @@
-package com.example.logic;
+package es.ucm.fdi.moviles.logic;
 
 import java.util.ArrayList;
 
@@ -100,7 +100,8 @@ public class GameOverState implements GameState {
     public void render()
     {
         Graphics g = game.getGraphics();
-        //Color de fondo (para las barras laterales)
+
+        //Fondo
         GameManager.getInstance().drawBackground();
 
         //Flechas

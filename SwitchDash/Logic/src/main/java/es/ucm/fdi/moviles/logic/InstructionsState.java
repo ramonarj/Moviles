@@ -1,4 +1,4 @@
-package com.example.logic;
+package es.ucm.fdi.moviles.logic;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,6 @@ public class InstructionsState implements GameState {
     public InstructionsState(Game game)
     {
         this.game = game;
-        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
-        this.lateralColor=GameManager.getInstance().getLateralColor();
         this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
@@ -36,7 +34,6 @@ public class InstructionsState implements GameState {
     {
         Graphics g = game.getGraphics();
 
-        backgrounds = ResourceMan.getImage("Backgrounds");
         howToPlay = ResourceMan.getImage("HowToPlay");
         instructions = ResourceMan.getImage("instructions");
         tapToPlay = ResourceMan.getImage("TapToPlay");
@@ -101,24 +98,20 @@ public class InstructionsState implements GameState {
         Graphics g = game.getGraphics();
         int width = g.getWidth();
         int height = g.getHeight();
-        g.clear(lateralColor);
 
-        //1. FONDO
-        Rect destRect = new Rect(width / 5,0,3 * width / 5, height);
-        Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,srcRect,g);
-        backSprite.draw(destRect);
+        //Fondo
+        GameManager.getInstance().drawBackground();;
 
         //Flechas
         GameManager.getInstance().drawArrows();
 
         //How to play
-        destRect = new Rect((int)(width / 3.25),height / 7 ,
+        Rect destRect = new Rect((int)(width / 3.25),height / 7 ,
                 (int)(width / 2.5),height / 6);
         g.drawImage(howToPlay, destRect, 1f);
 
         //Instructions
-        srcRect = new Rect(0,0,instructions.getWidth(), instructions.getHeight());
+        Rect srcRect = new Rect(0,0,instructions.getWidth(), instructions.getHeight());
         Sprite instructionsSprite=new Sprite(instructions,srcRect,g);
         instructionsSprite.drawCentered(width / 2, 950);
 
@@ -134,13 +127,10 @@ public class InstructionsState implements GameState {
     private Image howToPlay;
     private Image instructions;
     private Image tapToPlay;
-    private Image backgrounds;
 
     private Image buttons; //1 fila, 10 columnas
     private float alphaTap;
     private float veloidad;
-    private int lateralColor;
-    private int backGroundNo;
     private int barsWidth;
 
     Button closeButton;

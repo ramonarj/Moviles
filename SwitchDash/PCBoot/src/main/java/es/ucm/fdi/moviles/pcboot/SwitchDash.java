@@ -1,6 +1,6 @@
 package es.ucm.fdi.moviles.pcboot;
 
-import com.example.logic.LoadState;
+import es.ucm.fdi.moviles.logic.LoadState;
 
 import es.ucm.fdi.moviles.engine.system.ResourceMan;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
@@ -28,7 +28,7 @@ public class SwitchDash
         ventana.addKeyListener(input);
 
         //El graphics lo creamos referenciando la ventana
-        PCGraphics graphics = new PCGraphics(ventana);
+        PCGraphics graphics = new PCGraphics(ventana, 1080, 1920);
         ventana.addComponentListener(graphics);
         //Al juego le pasamos los sistemas de input y gráficos además de la lógica
         PCGame game = new PCGame();

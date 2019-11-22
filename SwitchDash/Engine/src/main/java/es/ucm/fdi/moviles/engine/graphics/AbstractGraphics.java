@@ -39,7 +39,6 @@ public abstract class AbstractGraphics implements  Graphics {
     @Override
     public void drawImage(Image image, Rect srcRect, Rect destRect)
     {
-
         Rect newRect = realDestRect(destRect);
         drawRealImage(image,srcRect,newRect);
     }
@@ -84,10 +83,10 @@ public abstract class AbstractGraphics implements  Graphics {
 
 
     @Override
-    public void setLogicalView()
+    public void setLogicalView(int width, int height)
     {
-        logicalWidth=1080;
-        logicalHeight=1920;
+        logicalWidth=width;
+        logicalHeight=height;
     }
 
     @Override
@@ -98,7 +97,12 @@ public abstract class AbstractGraphics implements  Graphics {
     }
 
 
-
+    /**
+     * Calcula el factor de escala por el que multiplicar/dividir
+     * al hacer las conversiones físicas y lógicas, usando las dimensiones
+     * reales y las de la lógica de juego especificadas
+     * @return
+     */
     private float takeScaleFactor()
     {
         float widthFactor = windowWidth / logicalWidth;
@@ -108,8 +112,11 @@ public abstract class AbstractGraphics implements  Graphics {
         else return  heigthFactor;
     }
 
+    //Dimensiones lógicas
     protected int logicalWidth;
     protected int logicalHeight;
+
+    //Dimensiones físicas
     protected float windowWidth;
     protected float windowHeight;
 
@@ -136,8 +143,31 @@ public abstract class AbstractGraphics implements  Graphics {
 
     //Métodos que sobreescribiran las clases hijas haciendo que la imagen se pinta de una forma concreta
     //depediendo la plataforma
+
+    /**
+     * Mirar documentación de drawRealImage (Image image, Rect srcRect, Rect destRect, float alpha)
+     */
     public abstract void drawRealImage(Image image, Rect destRect);
+
+    /**
+     * Mirar documentación de drawRealImage (Image image, Rect srcRect, Rect destRect, float alpha)
+     */
     public abstract void drawRealImage(Image image, Rect destRect,float alpha);
+
+    /**
+     * Mirar documentación de drawRealImage (Image image, Rect srcRect, Rect destRect, float alpha)
+     */
     public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect);
+
+    /**
+     * Pinta una porción de la imagen dada en un rectángulo destino usando transparencia.
+     * Este método y sus parientes son los que deben implementar las clases específicas de gráficos
+     * para cada plataforma, teniendo en cuenta que las coordenadas del rectángulo destino
+     * ya están reescaladas a coordenadas lógicas.
+     * @param image imagen a pintar
+     * @param srcRect rectángulo de la imagen a pintar
+     * @param destRect rectángulo de la ventana lógica en el que pintamos
+     * @param alpha
+     */
     public abstract void drawRealImage(Image image, Rect srcRect, Rect destRect, float alpha);
 }

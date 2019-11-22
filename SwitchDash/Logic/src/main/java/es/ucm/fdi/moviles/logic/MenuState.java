@@ -1,4 +1,4 @@
-package com.example.logic;
+package es.ucm.fdi.moviles.logic;
 
 import java.util.ArrayList;
 
@@ -74,6 +74,7 @@ public class MenuState implements GameState {
         soundButton = new Button(soundSprite, soundSprite2, barsWidth / 2,200, "Sonido");
 
 
+
         //Otros
         alphaTap=1f;
         velocidad =0.6f;
@@ -127,19 +128,15 @@ public class MenuState implements GameState {
     {
         //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(GameManager.getInstance().getLateralColor());
 
-        //1. FONDO
-        Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
-        backSprite.draw(backRect);
+        //Fondo
+        GameManager.getInstance().drawBackground();
 
         //Flechas
         GameManager.getInstance().drawArrows();
 
         //Logo
-        dstRect = new Rect(g.getWidth() / 3,356 ,g.getWidth() / 3,g.getHeight() / 6);
+        Rect dstRect = new Rect(g.getWidth() / 3,356 ,g.getWidth() / 3,g.getHeight() / 6);
         g.drawImage(logo, dstRect,1f );
 
         //TapToPlay

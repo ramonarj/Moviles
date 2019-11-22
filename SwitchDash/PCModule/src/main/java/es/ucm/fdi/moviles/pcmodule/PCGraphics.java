@@ -25,10 +25,11 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
         this.strategy = null;
     }
 
-    public PCGraphics(java.awt.Window window)
+    public PCGraphics(java.awt.Window window, int logicalWidth, int logicalHeight)
     {
         this.window = window;
         this.strategy = window.getBufferStrategy();
+
     }
 
     /**

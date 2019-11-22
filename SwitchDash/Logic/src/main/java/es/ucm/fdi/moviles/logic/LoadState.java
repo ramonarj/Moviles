@@ -1,4 +1,4 @@
-package com.example.logic;
+package es.ucm.fdi.moviles.logic;
 
 import es.ucm.fdi.moviles.engine.system.Game;
 import es.ucm.fdi.moviles.engine.system.GameState;

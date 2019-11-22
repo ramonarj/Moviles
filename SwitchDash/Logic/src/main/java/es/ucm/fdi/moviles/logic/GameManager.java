@@ -1,4 +1,4 @@
-package com.example.logic;
+package es.ucm.fdi.moviles.logic;
 
 import es.ucm.fdi.moviles.engine.graphics.Graphics;
 import es.ucm.fdi.moviles.engine.system.Game;
@@ -228,7 +228,7 @@ class GameManager {
     }
 
     /**
-     * por cada tick,suma 90 de velocidad a todas las bolas del estado
+     * suma 90 de velocidad a todas las bolas del estado
      */
     public void increaseVelocity()
     {
@@ -236,9 +236,6 @@ class GameManager {
         velFlechas+=90;
     }
 
-    /**
-     * por cada tick,suma 90 de velocidad a todas las bolas del estado
-     */
     public int getBallVel(){return velBolas;}
 
 

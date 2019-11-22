@@ -90,8 +90,6 @@ public class Button
      */
     public boolean isPressed(int x, int y)
     {
-        System.out.println("Clicado en X: " + x + ", Y: " + y);
-        System.out.println("El botón va del {" + rect.x1() + "," + rect.y1() + "} al {" + rect.x2() + "," + rect.y2() + "}");
         return (x >= rect.x1() && x <= rect.x2() && y >= rect.y1() && y <= rect.y2());
     }
 

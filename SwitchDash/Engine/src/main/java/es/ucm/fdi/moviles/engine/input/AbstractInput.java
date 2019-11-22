@@ -8,14 +8,22 @@ import es.ucm.fdi.moviles.engine.utils.Point;
 import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
 
 /**
- * Implementa las funcionalidades comunes de la clase para cualquier plataforma
+ * Implementa las funcionalidades comunes de la clase Input para cualquier plataforma,
+ * lidiando con los problemas que tiene el hecho de acceder a la lista de eventos registrados
+ * desde distintas hebras, por lo que usa el semáforo de Java para sincronizar los accesos
  */
 public abstract class AbstractInput implements Input
 {
+    //Referencia al juego
     protected Game game;
 
+    //Lista de eventos registrados que no han sido solicitados todavía
     protected ArrayList<TouchEvent> events;
 
+    /**
+     * Constructora
+     * Crea la lista de eventos
+     */
     public AbstractInput()
     {
         events = new ArrayList<TouchEvent>();
@@ -32,10 +40,7 @@ public abstract class AbstractInput implements Input
         return (this.game != null);
     }
 
-    /**
-     * Devuelve la lista de eventos producidos dede la última llamada a la función
-     * @return lista de eventos, de tamaño 0 si no ha habido
-     */
+
     @Override
     synchronized public List<TouchEvent> getTouchEvents()
     {

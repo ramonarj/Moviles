@@ -7,7 +7,7 @@ import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.logic.LoadState;
+import es.ucm.fdi.moviles.logic.LoadState;
 
 import es.ucm.fdi.moviles.androidModule.AndroidGraphics;
 import es.ucm.fdi.moviles.androidModule.AndroidInput;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     protected void init()
     {
         //Establecemos vision vertical como predeterminado
-        game.getGraphics().setLogicalView();
+        game.getGraphics().setLogicalView(1080, 1920);
         Point size=new Point();
         this.getWindowManager().getDefaultDisplay().getSize(size);
         game.getGraphics().setCanvasSize(size.x ,size.y);

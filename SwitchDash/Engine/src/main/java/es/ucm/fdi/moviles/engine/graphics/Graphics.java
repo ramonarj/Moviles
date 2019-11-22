@@ -2,21 +2,24 @@ package es.ucm.fdi.moviles.engine.graphics;
 
 import es.ucm.fdi.moviles.engine.utils.Rect;
 
+/**
+ * Motor gráfico; esta interfaz define métodos para crear y pintar imágenes,
+ * así como para lidiar con las dimensiones de la ventana (tanato física como lógica)
+ */
 public interface Graphics
 {
     /**
-     * Creates a new image using the given path
-     * @param path relative path to the image from the root folder
+     * Crea una nueva imagen con la ruta dada
+     * @param path ruta relativa a la imagen desde la carpeta raíz
      * @return
      */
     Image newImage(String path);
 
     /**
-     * Clears the screen using the given color as the filler one
-     * @param color Color used to fill the screen
+     * Limpia la pantalla con el color proporcionado
+     * @param color Color usado para pintar la pantalla
      */
     void clear(int color);
-
 
 
     /**
@@ -51,44 +54,44 @@ public interface Graphics
      */
     void drawImage(Image image, Rect srcRect, Rect destRect);
 
-
-    /*
     /**
-     * Getter
-     * @return window width
-<<<<<<< Updated upstream
-     */
-    //int getWidth();
-
-    /**
-     * Getter
-     * @return ancho lógico del estado
+     * Devuelve el ancho lógico
+     * @return altura lógica del estado
      */
     int getWidth();
 
     /**
-     * Getter
+     * Devuelve el ancho lógico
      * @return ancho logico del estado
      */
     int getHeight();
 
     /**
-     * Getter
-     * @return ancho físico del estado
+     * Devuelve el ancho físico
+     * @return ancho física de la ventana
      */
     int getWindowWidth();
 
     /**
-     * Getter
-     * @return ancho físico del estado
+     * Devuelve la altura física
+     * @return altura física de la ventana
      */
     int getWindowHeight();
 
 
-    void setLogicalView();
+    /**
+     * Establece las dimensiones lógicas
+     * @param width anchura lógica
+     * @param height altura lógica
+     */
+    void setLogicalView(int width, int height);
 
     /**
-     * Sets canvas size manually
+     * Establece el tamaño físico de la ventana
+     * Nótese que este método deberá llamarse una vez al inicio,
+     * y luego únicamente en casos de reescalado de la ventana.
+     * @param width anchra física
+     * @param height altura física
      */
     void setCanvasSize(int width,int height);
 }
