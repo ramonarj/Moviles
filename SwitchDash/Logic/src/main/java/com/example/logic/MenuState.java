@@ -35,7 +35,7 @@ public class MenuState implements GameState {
         //Primera vez que pasamos por el menú
         if(GameManager.getInstance() == null)
         {
-            GameManager.initInstance();
+            GameManager.initInstance(game);
 
             coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
                     0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
