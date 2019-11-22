@@ -21,7 +21,6 @@ public class PlayState implements GameState
     {
         this.game = game;
         this.particleGenerator=new ParticleGenerator(this.game.getGraphics());
-        this.whiteAlpha=1;
     }
 
     /**
@@ -64,6 +63,8 @@ public class PlayState implements GameState
             posBolas[i] = -((i+1)*395);
             ballColor[i]=setballColor(ballColor[i-1]);
         }
+
+        this.whiteAlpha=1.0f;
 
         return  true;
     }
@@ -112,7 +113,8 @@ public class PlayState implements GameState
         particleGenerator.update(deltaTime);
 
         //Necesario para hacer la animacion del flash al principio de cada estado
-        whiteAlpha-=(float)10*deltaTime;
+        whiteAlpha-=(float)10*(deltaTime);
+        if(whiteAlpha<0.0f)whiteAlpha=0.0f;
     }
 
     /**
@@ -121,26 +123,28 @@ public class PlayState implements GameState
     @Override
     public void render()
     {
-        if(whiteAlpha<0)
-        {
-            GameManager.getInstance().drawBackground();
 
-            //Flechas
-            GameManager.getInstance().drawArrows();
+        GameManager.getInstance().drawBackground();
 
-            //Pelota
-            drawBalls();
+        //Flechas
+        GameManager.getInstance().drawArrows();
 
-            //Particulas
-            particleGenerator.Render();
+        //Pelota
+        drawBalls();
 
-            //Jugador
-            drawPlayer();
+        //Particulas
+        particleGenerator.Render();
 
-            //Puntuación
-            GameManager.getInstance().drawNumber(GameManager.getInstance().getScore(), 1000,
-                    200, 1f, GameManager.getInstance().getScoreDigits());
-        } else drawFlash();
+        //Jugador
+        drawPlayer();
+
+        //Puntuación
+        GameManager.getInstance().drawNumber(GameManager.getInstance().getScore(), 1000,
+                200, 1f, GameManager.getInstance().getScoreDigits());
+
+        if(whiteAlpha>0.0f)
+              drawFlash();
+
     }
 
 
@@ -180,10 +184,8 @@ public class PlayState implements GameState
     private void drawFlash()
     {
         Rect srcRect=new Rect(0,0,white.getWidth(),white.getHeight());
-        Sprite playerSprite=new Sprite(white,srcRect,g);
-
-        Rect dest=new Rect(0,0,g.getWidth(),g.getHeight());
-        playerSprite.draw(dest,whiteAlpha);
+        Rect destRect=new Rect(0,0,g.getWidth(),g.getHeight());
+        g.drawImage(white,srcRect,destRect,whiteAlpha);
 
     }
 

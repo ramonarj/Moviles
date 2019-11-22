@@ -123,15 +123,13 @@ public class GameOverState implements GameState {
         //Botón de info
         instructionsButton.draw();
 
-        //Score
+
         GameManager.getInstance().drawNumber(GameManager.getInstance().getScore(), game.getGraphics().getWidth() / 2,
-                800, 1.5f, GameManager.getInstance().getScoreDigits());
+                800, 1.5f, GameManager.getInstance().getScoreDigits());;
 
         //Score text
         GameManager.getInstance().drawText("POINTS", barsWidth + 3 * barsWidth / 4, 1000, 0.75f);
     }
-
-
 
     private Image gameOver;
     private Image playAgain;

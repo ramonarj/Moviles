@@ -38,6 +38,7 @@ public class InstructionsState implements GameState {
         instructions = ResourceMan.getImage("instructions");
         tapToPlay = ResourceMan.getImage("TapToPlay");
         buttons = ResourceMan.getImage("Buttons");
+        white = ResourceMan.getImage("White");
 
         barsWidth = g.getWidth() / 5;
 
@@ -51,6 +52,7 @@ public class InstructionsState implements GameState {
 
         veloidad=0.6f;
         alphaTap=1f;
+        this.whiteAlpha=1.0f;
 
         return true;
     }
@@ -85,7 +87,9 @@ public class InstructionsState implements GameState {
                 else
                     game.setGameState(new PlayState(game));
         }
-
+        //Necesario para hacer la animacion del flash al principio de cada estado
+        whiteAlpha-=(float)10*(deltaTime);
+        if(whiteAlpha<0.0f)whiteAlpha=0.0f;
     }
 
     /**
@@ -122,7 +126,24 @@ public class InstructionsState implements GameState {
 
         //Botón de salir
         closeButton.draw();
+
+        if(whiteAlpha>0.0f)
+            drawFlash();
     }
+
+    /**
+     * Al principio pintaremos una pantalla blanca bajando de alpha hasta que sea 0 y empezamos el render
+     */
+    private void drawFlash()
+    {
+        Rect srcRect=new Rect(0,0,white.getWidth(),white.getHeight());
+        Rect destRect=new Rect(0,0,game.getGraphics().getWidth(),game.getGraphics().getHeight());
+        game.getGraphics().drawImage(white,srcRect,destRect,whiteAlpha);
+
+    }
+
+    //Fondo
+    private Image white;
 
     private Image howToPlay;
     private Image instructions;
@@ -132,6 +153,7 @@ public class InstructionsState implements GameState {
     private float alphaTap;
     private float veloidad;
     private int barsWidth;
+    private float whiteAlpha;
 
     Button closeButton;
 }

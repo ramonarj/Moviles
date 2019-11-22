@@ -105,7 +105,7 @@ public class MenuState implements GameState {
                 else if (soundButton.isPressed(evt.x, evt.y))
                     soundButton.toggleSprite();
                 else
-                    game.setGameState(new PlayState(game));
+                    game.setGameState(new InstructionsState(game));
 
             }
         }
