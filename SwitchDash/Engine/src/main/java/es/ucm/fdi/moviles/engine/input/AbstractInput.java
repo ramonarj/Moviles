@@ -1,7 +1,12 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.input;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.utils.Point;
+import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
+
 /**
  * Implementa las funcionalidades comunes de la clase para cualquier plataforma
  */
@@ -58,8 +63,9 @@ public abstract class AbstractInput implements Input
             Point logicalPoint = ((AbstractGraphics) game.getGraphics()).physicalToLogical(new Point(evt.x, evt.y));
             evt.x = logicalPoint.getX();
             evt.y = logicalPoint.getY();
-            System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "} con ID=" + evt.id);
+            //System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "} con ID=" + evt.id);
 
+            //Solo necesitamos que esta línea esté protegida
             synchronized (this){ events.add(evt);}
         }
     }

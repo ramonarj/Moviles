@@ -4,8 +4,7 @@ package es.ucm.fdi.moviles.pcmodule;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import es.ucm.fdi.moviles.engine.AbstractInput;
-import es.ucm.fdi.moviles.engine.Game;
+import es.ucm.fdi.moviles.engine.input.AbstractInput;
 
 /**
  * Implementa la clase Input para PC

@@ -1,4 +1,7 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.graphics;
+
+import es.ucm.fdi.moviles.engine.utils.Point;
+import es.ucm.fdi.moviles.engine.utils.Rect;
 
 /**
  * Clase intermedia entre la interfaz y las implementaciones de cada plataforma
@@ -118,6 +121,16 @@ public abstract class AbstractGraphics implements  Graphics {
     @Override
     public int getHeight() {
         return this.logicalHeight;
+    }
+
+    @Override
+    public int getWindowWidth() {
+        return (int)this.windowWidth;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        return (int)this.windowHeight;
     }
 
 

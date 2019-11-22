@@ -1,17 +1,16 @@
 
 package es.ucm.fdi.moviles.androidModule;
 
-import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.GameState;
-import es.ucm.fdi.moviles.engine.Graphics;
-import es.ucm.fdi.moviles.engine.Input;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.system.GameState;
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.input.Input;
 
 
 public class AndroidGame extends SurfaceView implements Runnable , Game {

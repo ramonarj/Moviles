@@ -2,15 +2,15 @@ package com.example.logic;
 
 import java.util.ArrayList;
 
-import es.ucm.fdi.moviles.engine.Button;
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.GameState;
-import es.ucm.fdi.moviles.engine.Graphics;
-import es.ucm.fdi.moviles.engine.Image;
-import es.ucm.fdi.moviles.engine.Input;
-import es.ucm.fdi.moviles.engine.Rect;
-import es.ucm.fdi.moviles.engine.ResourceMan;
-import es.ucm.fdi.moviles.engine.Sprite;
+import es.ucm.fdi.moviles.engine.utils.Button;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.system.GameState;
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.input.Input;
+import es.ucm.fdi.moviles.engine.utils.Rect;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 public class GameOverState implements GameState {
 
@@ -71,7 +71,11 @@ public class GameOverState implements GameState {
      * @param deltaTime time usado para actualizar los elementos del estado
      */
     @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime)
+    {
+        //Actualizar las flechas
+        GameManager.getInstance().updateArrows(deltaTime);
+
         Input input = game.getInput();
         ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
         for(Input.TouchEvent evt: events)
@@ -105,10 +109,14 @@ public class GameOverState implements GameState {
         Graphics g = game.getGraphics();
         g.clear(lateralColor);
 
+        //Fondo
         Rect destRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
         Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,srcRect,g);
         backSprite.draw(destRect);
+
+        //Flechas
+        GameManager.getInstance().drawArrows();
 
         //Game Over
         srcRect = new Rect(0,0, gameOver.getWidth(), gameOver.getHeight());

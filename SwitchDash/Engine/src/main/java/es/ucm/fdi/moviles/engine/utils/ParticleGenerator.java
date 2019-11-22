@@ -1,7 +1,10 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.utils;
 
 import java.util.Random;
 import java.util.Vector;
+
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 public class ParticleGenerator {
     public ParticleGenerator(Graphics graphics)

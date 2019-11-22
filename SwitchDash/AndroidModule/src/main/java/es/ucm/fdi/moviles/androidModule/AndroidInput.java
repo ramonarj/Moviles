@@ -3,8 +3,8 @@ package es.ucm.fdi.moviles.androidModule;
 import android.view.MotionEvent;
 import android.view.View;
 
-import es.ucm.fdi.moviles.engine.AbstractInput;
-import es.ucm.fdi.moviles.engine.Input;
+import es.ucm.fdi.moviles.engine.input.AbstractInput;
+import es.ucm.fdi.moviles.engine.input.Input;
 
 /**
  * Implementa la clase Input para Android

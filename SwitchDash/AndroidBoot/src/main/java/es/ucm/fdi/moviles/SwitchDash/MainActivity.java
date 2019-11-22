@@ -4,8 +4,6 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +12,7 @@ import com.example.logic.LoadState;
 import es.ucm.fdi.moviles.androidModule.AndroidGraphics;
 import es.ucm.fdi.moviles.androidModule.AndroidInput;
 import es.ucm.fdi.moviles.androidModule.AndroidGame;
-import es.ucm.fdi.moviles.engine.ResourceMan;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
 
 
 public class MainActivity extends AppCompatActivity {

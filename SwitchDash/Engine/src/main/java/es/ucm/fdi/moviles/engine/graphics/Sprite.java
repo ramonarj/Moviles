@@ -1,4 +1,7 @@
-package es.ucm.fdi.moviles.engine;
+
+package es.ucm.fdi.moviles.engine.graphics;
+
+import es.ucm.fdi.moviles.engine.utils.Rect;
 
 /**
  * Clase para representar un Sprite
@@ -59,7 +62,6 @@ public class Sprite {
      * @param scale
      * @param alpha
      */
-
     public void drawCentered(int posX, int posY,float scale,float alpha)
     {
 
@@ -68,6 +70,7 @@ public class Sprite {
         graphics_.drawImage(img_,rect_,dest,alpha);
     }
 
+
     /**
      * Pinta un Sprite centrado en una posicion dada y con
      * una escala concreta
@@ -75,17 +78,12 @@ public class Sprite {
      * @param posY
      * @param scale
      */
-
     public void drawCentered(int posX, int posY, float scale)
     {
         Rect dest=new Rect(posX-rect_.getWidth() / 2,posY-rect_.getHeight() / 2,
                 (int)((float)rect_.getWidth() * scale),(int)((float)rect_.getHeight() * scale));
         graphics_.drawImage(img_,rect_,dest);
     }
-
-    //TODO:lo
-
-
 
     public Image getImage(){return this.img_;}
 

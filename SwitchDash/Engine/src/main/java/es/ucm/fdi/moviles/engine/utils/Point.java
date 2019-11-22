@@ -1,4 +1,4 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.utils;
 
 public class Point
 {
@@ -10,7 +10,7 @@ public class Point
      * @param x
      * @param y
      */
-    Point(int x, int y)
+    public Point(int x, int y)
     {
         this.x=x;
         this.y=y;

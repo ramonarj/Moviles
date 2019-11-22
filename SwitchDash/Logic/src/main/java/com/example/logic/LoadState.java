@@ -1,8 +1,8 @@
 package com.example.logic;
 
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.GameState;
-import es.ucm.fdi.moviles.engine.ResourceMan;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.system.GameState;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
 
 public class LoadState implements GameState {
     //Objeto del juego

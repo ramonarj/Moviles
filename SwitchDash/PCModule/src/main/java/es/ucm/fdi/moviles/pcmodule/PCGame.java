@@ -3,10 +3,10 @@ package es.ucm.fdi.moviles.pcmodule;
 import java.awt.Window;
 import java.awt.image.BufferStrategy;
 
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.GameState;
-import es.ucm.fdi.moviles.engine.Graphics;
-import es.ucm.fdi.moviles.engine.Input;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.system.GameState;
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.input.Input;
 
 public class PCGame implements Game {
 

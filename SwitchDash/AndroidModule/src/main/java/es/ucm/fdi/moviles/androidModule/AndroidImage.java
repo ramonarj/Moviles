@@ -2,7 +2,7 @@ package es.ucm.fdi.moviles.androidModule;
 import android.graphics.Bitmap;
 
 
-import es.ucm.fdi.moviles.engine.Image;
+import es.ucm.fdi.moviles.engine.graphics.Image;
 
 /**
  * Clase que implementa la interfaz "Imagen" única y exclusivamente

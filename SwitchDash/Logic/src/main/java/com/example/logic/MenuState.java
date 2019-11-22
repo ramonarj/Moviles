@@ -2,15 +2,15 @@ package com.example.logic;
 
 import java.util.ArrayList;
 
-import es.ucm.fdi.moviles.engine.Button;
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.GameState;
-import es.ucm.fdi.moviles.engine.Graphics;
-import es.ucm.fdi.moviles.engine.Image;
-import es.ucm.fdi.moviles.engine.Input;
-import es.ucm.fdi.moviles.engine.Rect;
-import es.ucm.fdi.moviles.engine.ResourceMan;
-import es.ucm.fdi.moviles.engine.Sprite;
+import es.ucm.fdi.moviles.engine.utils.Button;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.system.GameState;
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.input.Input;
+import es.ucm.fdi.moviles.engine.utils.Rect;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 public class MenuState implements GameState {
     //Objeto del juego
@@ -27,10 +27,12 @@ public class MenuState implements GameState {
     {
         Graphics g = game.getGraphics();
 
+        //Pedimos imágenes al ResourceManager
         backgrounds = ResourceMan.getImage("Backgrounds");
         logo =        ResourceMan.getImage("Logo");
         tapToPlay =   ResourceMan.getImage("TapToPlay");
         buttons =     ResourceMan.getImage("Buttons");
+
 
         //Primera vez que pasamos por el menú
         if(GameManager.getInstance() == null)
@@ -46,6 +48,7 @@ public class MenuState implements GameState {
             GameManager.getInstance().setBarsWidth(barsWidth);
             GameManager.getInstance().setBackGroundNo(backgroundNo);
             GameManager.getInstance().setLateralColor(coloresFlechas[backgroundNo]);
+            GameManager.getInstance().setArrowSprite(ResourceMan.getImage("Flechas"));
         }
         else
         {
@@ -86,6 +89,9 @@ public class MenuState implements GameState {
     @Override
     public void update(float deltaTime)
     {
+        //Actualizar las flechas
+        GameManager.getInstance().updateArrows(deltaTime);
+
         Input input = game.getInput();
         ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
         for(Input.TouchEvent evt: events)
@@ -128,6 +134,9 @@ public class MenuState implements GameState {
         Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backgroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,dstRect,g);
         backSprite.draw(backRect);
+
+        //Flechas
+        GameManager.getInstance().drawArrows();
 
         //Logo
         dstRect = new Rect(g.getWidth() / 3,356 ,g.getWidth() / 3,g.getHeight() / 6);

@@ -1,6 +1,6 @@
 package es.ucm.fdi.moviles.pcmodule;
 
-import es.ucm.fdi.moviles.engine.Image;
+import es.ucm.fdi.moviles.engine.graphics.Image;
 
 public class PCImage implements Image
 {

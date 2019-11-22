@@ -1,7 +1,9 @@
-package es.ucm.fdi.moviles.engine;
+package es.ucm.fdi.moviles.engine.system;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import es.ucm.fdi.moviles.engine.graphics.Image;
 
 public class ResourceMan {
     private static ResourceMan ourInstance = null;

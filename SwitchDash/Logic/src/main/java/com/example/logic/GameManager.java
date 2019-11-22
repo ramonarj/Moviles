@@ -1,10 +1,13 @@
 package com.example.logic;
 
-import es.ucm.fdi.moviles.engine.Game;
-import es.ucm.fdi.moviles.engine.Image;
-import es.ucm.fdi.moviles.engine.Rect;
-import es.ucm.fdi.moviles.engine.ResourceMan;
-import es.ucm.fdi.moviles.engine.Sprite;
+import javax.print.attribute.ResolutionSyntax;
+
+import es.ucm.fdi.moviles.engine.graphics.Graphics;
+import es.ucm.fdi.moviles.engine.system.Game;
+import es.ucm.fdi.moviles.engine.graphics.Image;
+import es.ucm.fdi.moviles.engine.utils.Rect;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
+import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
 class GameManager {
     private static GameManager ourInstance = null;
@@ -68,6 +71,51 @@ class GameManager {
     public int getBarsWidth(){return barsWidth;}
 
 
+    public void setArrowSprite(Image img)
+    {
+        this.flechas = img;
+        this.posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
+        this.posFlechas2 = posFlechas1-flechas.getHeight();
+    }
+
+    /**
+     * Pinta dos imagenes de flechas completas haciendo que una se ponga
+     * encima de la otra hasta el final de la partida
+     */
+    public void drawArrows()
+    {
+        Graphics g  = game.getGraphics();
+
+        Rect dstRect = new Rect(barsWidth,posFlechas1,
+                3 * barsWidth, flechas.getHeight());
+        g.drawImage(flechas, dstRect, 0.25f);
+
+
+        Rect dstRect2 = new Rect(barsWidth,posFlechas2 ,
+                3 * barsWidth, flechas.getHeight());
+        g.drawImage(flechas, dstRect2, 0.25f);
+    }
+
+    /**
+     * Actualiza las posiciones de las flechas con el uso del deltatime
+     * @param deltaTime usado para actualizar las posiciones de las flechas
+     */
+    public void updateArrows(float deltaTime)
+    {
+        //Flechas
+        int incr = (int)(deltaTime*384);
+        posFlechas1 += incr;
+        posFlechas2 += incr;
+
+
+        //Comprobar si hay que moverla al salirse de la pantalla
+        if(posFlechas1>game.getGraphics().getHeight())
+            posFlechas1=posFlechas2-flechas.getHeight();
+        else if(posFlechas2>game.getGraphics().getHeight())
+            posFlechas2=posFlechas1-flechas.getHeight();
+    }
+
+
     /**
      * Metodo generico para pintar numeros que puede ser llamado desde varios estados
      * @param number numero a pintar
@@ -102,6 +150,10 @@ class GameManager {
 
         scoreSprites.drawCentered(x, y, scale);
     }
+
+    private int posFlechas1;
+    private int posFlechas2;
+    private Image flechas;
 
     private int lateralColor;
     private int backGroundNo;

@@ -2,7 +2,7 @@ package es.ucm.fdi.moviles.pcboot;
 
 import com.example.logic.LoadState;
 
-import es.ucm.fdi.moviles.engine.ResourceMan;
+import es.ucm.fdi.moviles.engine.system.ResourceMan;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
 import es.ucm.fdi.moviles.pcmodule.PCGraphics;
 import es.ucm.fdi.moviles.pcmodule.PCInput;
