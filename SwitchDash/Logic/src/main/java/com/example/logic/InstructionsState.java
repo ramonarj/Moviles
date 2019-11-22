@@ -64,7 +64,11 @@ public class InstructionsState implements GameState {
      * @param deltaTime
      */
     @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime)
+    {
+        //Actualizar las flechas
+        GameManager.getInstance().updateArrows(deltaTime);
+
         alphaTap+=(deltaTime*veloidad);
         if(alphaTap>=1f || alphaTap<=0)
         {
@@ -104,6 +108,9 @@ public class InstructionsState implements GameState {
         Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,srcRect,g);
         backSprite.draw(destRect);
+
+        //Flechas
+        GameManager.getInstance().drawArrows();
 
         //How to play
         destRect = new Rect((int)(width / 3.25),height / 7 ,

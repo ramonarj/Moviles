@@ -62,7 +62,11 @@ public class GameOverState implements GameState {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime)
+    {
+        //Actualizar las flechas
+        GameManager.getInstance().updateArrows(deltaTime);
+
         Input input = game.getInput();
         ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
         for(Input.TouchEvent evt: events)
@@ -93,10 +97,14 @@ public class GameOverState implements GameState {
         Graphics g = game.getGraphics();
         g.clear(lateralColor);
 
+        //Fondo
         Rect destRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
         Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
         Sprite backSprite=new Sprite(backgrounds,srcRect,g);
         backSprite.draw(destRect);
+
+        //Flechas
+        GameManager.getInstance().drawArrows();
 
         //Game Over
         srcRect = new Rect(0,0, gameOver.getWidth(), gameOver.getHeight());

@@ -63,8 +63,9 @@ public abstract class AbstractInput implements Input
             Point logicalPoint = ((AbstractGraphics) game.getGraphics()).physicalToLogical(new Point(evt.x, evt.y));
             evt.x = logicalPoint.getX();
             evt.y = logicalPoint.getY();
-            System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "} con ID=" + evt.id);
+            //System.out.println("Evento de tipo " + evt.type.toString() + " en {" + evt.x + ", " + evt.y + "} con ID=" + evt.id);
 
+            //Solo necesitamos que esta línea esté protegida
             synchronized (this){ events.add(evt);}
         }
     }

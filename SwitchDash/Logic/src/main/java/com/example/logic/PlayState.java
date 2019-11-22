@@ -40,7 +40,6 @@ public class PlayState implements GameState
         //Carga de recursos
         backgrounds = ResourceMan.getImage("Backgrounds");
         balls = ResourceMan.getImage("Balls");
-        flechas = ResourceMan.getImage("Flechas");
         player = ResourceMan.getImage("Players");
         buttons = ResourceMan.getImage("Buttons");
         white = ResourceMan.getImage("White");
@@ -48,11 +47,6 @@ public class PlayState implements GameState
 
         //Inicialización de las variables
         playerColor = 0;
-
-        posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
-        posflechas2 = posFlechas1-flechas.getHeight();
-
-        test = Math.abs(posFlechas1-posflechas2);
 
 
         //Inicializamos las bolas
@@ -81,17 +75,8 @@ public class PlayState implements GameState
         //Input
         checkInput();
 
-        //Flechas
-        int incr = (int)(deltaTime*384);
-        posFlechas1 += incr;
-        posflechas2 += incr;
-
-
-        //Comprobar si hay que moverla al salirse de la pantalla
-        if(posFlechas1>game.getGraphics().getHeight())
-            posFlechas1=posflechas2-flechas.getHeight();
-        else if(posflechas2>game.getGraphics().getHeight())
-            posflechas2=posFlechas1-flechas.getHeight();
+        //Actualizar las flechas
+        GameManager.getInstance().updateArrows(deltaTime);
 
 
         //Recorremos cada una de las pelotas y comprobamos si al estar en contacto con la barra
@@ -138,7 +123,7 @@ public class PlayState implements GameState
             drawBackground();
 
             //Flechas
-            drawArrows();
+            GameManager.getInstance().drawArrows();
 
             //Pelota
             drawBalls();
@@ -254,20 +239,6 @@ public class PlayState implements GameState
         }
     }
 
-    /**
-     * Pinta dos imagenes de flechas completas haciendo que una se ponga
-     * encima de la otra hasta el final de la partida
-     */
-    private void drawArrows() {
-        Rect dstRect = new Rect(barsWidth,posFlechas1,
-                3 * barsWidth, flechas.getHeight());
-        g.drawImage(flechas, dstRect, 0.25f);
-
-
-        Rect dstRect2 = new Rect(barsWidth,posflechas2 ,
-                3 * barsWidth, flechas.getHeight());
-        g.drawImage(flechas, dstRect2, 0.25f);
-    }
 
     /**
      * Escoge la bola que este mas alta dentro de la pantalla
@@ -338,7 +309,6 @@ public class PlayState implements GameState
 
     //Objetos
     private Image balls; //2 filas, 10 columnas
-    private Image flechas;
     private Image player; //2 filas, 1 columna
 
     //Textos
@@ -353,8 +323,6 @@ public class PlayState implements GameState
     //VARIABLES DE JUEGO:
     private int playerColor; //0 = blanco, 1 = negro
     private int score;
-    private int posFlechas1;
-    private int posflechas2;
     private int contBolas;
     private int velBolas;
     private int posBolas[];
