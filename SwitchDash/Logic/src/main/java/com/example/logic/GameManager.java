@@ -33,6 +33,9 @@ class GameManager {
     {
         this.scoreFont = ResourceMan.getImage("ScoreFont");
         this.game = game;
+        this.backgrounds = ResourceMan.getImage("Backgrounds");
+
+        restartGame();
     }
 
     /**
@@ -95,7 +98,7 @@ class GameManager {
     public void updateArrows(float deltaTime)
     {
         //Flechas
-        int incr = (int)(deltaTime*384);
+        int incr = (int)(deltaTime*velFlechas);
         posFlechas += incr;
 
         //Comprobar si hay que moverla al salirse de la pantalla
@@ -148,7 +151,7 @@ class GameManager {
         int charHeight = scoreFont.getHeight() / 7 - 24;
 
         int auxNumber = number;
-        int gap = 125;
+        int gap = (int)((float)80 * scale);
 
         //Pintamos una vez por cada dígito (de derecha a izquierda)
         for(int i=0;i<numDigits;i++)
@@ -181,9 +184,74 @@ class GameManager {
         }
     }
 
-    private int posFlechas;
-    private Image flechas;
+    /**
+     * Pinta del color aleatorio escogido anteriormente el fondo del juego
+     */
+    public void drawBackground()
+    {
+        Graphics g = game.getGraphics();
 
+        //Clear
+        g.clear(lateralColor);
+
+        //Color del centro
+        Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());
+        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
+        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
+        backSprite.draw(backRect);
+    }
+
+    public void addScore(int score)
+    {
+        this.score += score;
+        if(this.score%division==0)
+        {
+            scoreDigits++;
+            division*=10;
+        }
+        System.out.println((scoreDigits));
+    }
+
+    public int getScore(){return this.score;}
+    public int getScoreDigits(){return this.scoreDigits;}
+
+    public void restartGame()
+    {
+        //puntuación
+        this.score =0;
+        this.scoreDigits=1;
+        this.division=10;
+
+        //Velocidades
+        this.velBolas = 430;
+        this.velFlechas = 384;
+    }
+
+    /**
+     * por cada tick,suma 90 de velocidad a todas las bolas del estado
+     */
+    public void increaseVelocity()
+    {
+        velBolas += 90;
+        velFlechas+=90;
+    }
+
+    /**
+     * por cada tick,suma 90 de velocidad a todas las bolas del estado
+     */
+    public int getBallVel(){return velBolas;}
+
+
+    private Image flechas;
+    private Image backgrounds;
+
+    private int velBolas;
+    private int posFlechas;
+    private int velFlechas;
+
+    private int division;
+    private int score;
+    private int scoreDigits;
     private int lateralColor;
     private int backGroundNo;
     private int barsWidth;

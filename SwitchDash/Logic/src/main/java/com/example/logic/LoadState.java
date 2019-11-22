@@ -42,15 +42,10 @@ public class LoadState implements GameState {
     }
 
 
-    //No hace falta
+    //No hacen falta
     @Override
-    public void update(float deltaTime)
-    {
-
-    }
+    public void update(float deltaTime){ }
 
     @Override
-    public void render() {
-
-    }
+    public void render() { }
 }

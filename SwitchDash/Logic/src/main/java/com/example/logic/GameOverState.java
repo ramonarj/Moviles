@@ -18,13 +18,9 @@ public class GameOverState implements GameState {
     //Objeto del juego
     private Game game;
 
-    public GameOverState(Game game,int score,int numDigitos)
+    public GameOverState(Game game)
     {
         this.game = game;
-        this.score=score;
-        this.NumScores=numDigitos;
-        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
-        this.lateralColor=GameManager.getInstance().getLateralColor();
         this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
@@ -39,8 +35,6 @@ public class GameOverState implements GameState {
         buttons = ResourceMan.getImage("Buttons");
         gameOver = ResourceMan.getImage("GameOver");
         playAgain = ResourceMan.getImage("PlayAgain");
-        backgrounds = ResourceMan.getImage("Backgrounds");
-        scoreFont = ResourceMan.getImage("ScoreFont");
 
         barsWidth = g.getWidth() / 5;
 
@@ -105,21 +99,15 @@ public class GameOverState implements GameState {
     @Override
     public void render()
     {
-        //Color de fondo (para las barras laterales)
         Graphics g = game.getGraphics();
-        g.clear(lateralColor);
-
-        //Fondo
-        Rect destRect = new Rect(g.getWidth() / 5,0,3 * g.getWidth() / 5, g.getHeight());
-        Rect srcRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,srcRect,g);
-        backSprite.draw(destRect);
+        //Color de fondo (para las barras laterales)
+        GameManager.getInstance().drawBackground();
 
         //Flechas
         GameManager.getInstance().drawArrows();
 
         //Game Over
-        srcRect = new Rect(0,0, gameOver.getWidth(), gameOver.getHeight());
+        Rect srcRect = new Rect(0,0, gameOver.getWidth(), gameOver.getHeight());
         Sprite gameOverSprite=new Sprite(gameOver,srcRect,g);
         gameOverSprite.drawCentered(g.getWidth() / 2, 364);
 
@@ -135,39 +123,9 @@ public class GameOverState implements GameState {
         instructionsButton.draw();
 
         //Score
-        GameManager.getInstance().drawNumber(score, game.getGraphics().getWidth() / 2, 800, 1.5f, NumScores);
-        
-        drawText();
-    }
+        GameManager.getInstance().drawNumber(GameManager.getInstance().getScore(), game.getGraphics().getWidth() / 2,
+                800, 1.5f, GameManager.getInstance().getScoreDigits());
 
-    /**
-     * Pinta el Score final en una posicion centrada de la pantalla
-     */
-    private void drawScore()
-    {
-        int auxScore = score;
-        int gap = 125;
-
-
-        int initialX = game.getGraphics().getWidth() / 2;
-        int initialY = 800;
-
-        //Pintamos una vez por cada dígito (de derecha a izquierda)
-        for(int i=0;i<NumScores;i++)
-        {
-            //Número que queremos pintar
-            int numeroApintar = auxScore % 10;
-            auxScore /= 10;
-
-            GameManager.getInstance().drawNumber(numeroApintar, initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f,NumScores);
-        }
-    }
-
-    /**
-     * Pinta el texto POINTS centrado en la pantalla
-     */
-    private void drawText()
-    {
         //Score text
         GameManager.getInstance().drawText("POINTS", barsWidth + 3 * barsWidth / 4, 1000, 0.75f);
     }
@@ -176,15 +134,9 @@ public class GameOverState implements GameState {
 
     private Image gameOver;
     private Image playAgain;
-    private int backGroundNo;
-    private int lateralColor;
-    private Image backgrounds;
     private Image buttons;
     private float alphaTap;
     private float velocidad;
-    private int score;
-    private int NumScores;
-    private Image scoreFont;
     private int barsWidth;
 
     private Button soundButton;

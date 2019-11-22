@@ -20,9 +20,6 @@ public class PlayState implements GameState
     public PlayState(Game game)
     {
         this.game = game;
-        this.backGroundNo =GameManager.getInstance().getBackGroundNo();
-        this.lateralColor=GameManager.getInstance().getLateralColor();
-        this.barsWidth = GameManager.getInstance().getBarsWidth();
         this.particleGenerator=new ParticleGenerator(this.game.getGraphics());
         this.whiteAlpha=1;
     }
@@ -38,12 +35,19 @@ public class PlayState implements GameState
         g=game.getGraphics();
 
         //Carga de recursos
-        backgrounds = ResourceMan.getImage("Backgrounds");
         balls = ResourceMan.getImage("Balls");
         player = ResourceMan.getImage("Players");
         buttons = ResourceMan.getImage("Buttons");
         white = ResourceMan.getImage("White");
-        scoreFont = ResourceMan.getImage("ScoreFont");
+
+        int[]coloresFlechas = new int[]{ 0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0,
+                0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b };
+
+        backGroundNo =(int)Math.floor(Math.random() * 9);
+
+        GameManager.getInstance().setBackGroundNo(backGroundNo);
+        GameManager.getInstance().setLateralColor(coloresFlechas[backGroundNo]);
+        GameManager.getInstance().restartGame();
 
         //Inicialización de las variables
         playerColor = 0;
@@ -60,12 +64,7 @@ public class PlayState implements GameState
             posBolas[i] = -((i+1)*395);
             ballColor[i]=setballColor(ballColor[i-1]);
         }
-        velBolas=430;
 
-        //Inicalizamos las variables de la puntiacion
-        score =0;
-        NumScores=1;
-        division=10;
         return  true;
     }
 
@@ -89,24 +88,23 @@ public class PlayState implements GameState
         //Recorremos cada una de las pelotas y comprobamos si al estar en contacto con la barra
         //han podido ser atrapdas o en caso contrario , ha finalizado la partida
         for(int i=0;i<numBolas;i++) {
-            posBolas[i] += (deltaTime * velBolas);
+            posBolas[i] += (deltaTime * GameManager.getInstance().getBallVel());
             if(checkPosition(posBolas[i]))
             {
                 if(match(ballColor[i])) {
-                    particleGenerator.createSimulation(g.getWidth()/2,posBolas[i],ballColor[i]);
+                    particleGenerator.createSimulation(g.getWidth() / 2, posBolas[i], ballColor[i]);
                     posBolas[i] = getMenor() - 395;
-                    ballColor[i] = setballColor(ballColor[takeBallIndex(i-1,numBolas)]);
+                    ballColor[i] = setballColor(ballColor[takeBallIndex(i - 1, numBolas)]);
                     contBolas++;
-                    score++;
-                    addBallsVelocity();
-                    if(score%division==0)
+                    GameManager.getInstance().addScore(1);
+                    if (contBolas == 10)
                     {
-                        NumScores++;
-                        division*=10;
+                        GameManager.getInstance().increaseVelocity();
+                        contBolas = 0;
                     }
                 } else
                 {
-                    game.setGameState(new GameOverState(game, score,NumScores));
+                    game.setGameState(new GameOverState(game));
                     break;
                 }
             }
@@ -123,11 +121,9 @@ public class PlayState implements GameState
     @Override
     public void render()
     {
-        if(whiteAlpha<0) {
-            g.clear(lateralColor);
-
-            //Fondo
-            drawBackground();
+        if(whiteAlpha<0)
+        {
+            GameManager.getInstance().drawBackground();
 
             //Flechas
             GameManager.getInstance().drawArrows();
@@ -142,7 +138,8 @@ public class PlayState implements GameState
             drawPlayer();
 
             //Puntuación
-            drawScore();
+            GameManager.getInstance().drawNumber(GameManager.getInstance().getScore(), 1000,
+                    200, 1f, GameManager.getInstance().getScoreDigits());
         } else drawFlash();
     }
 
@@ -164,16 +161,6 @@ public class PlayState implements GameState
         }
     }
 
-    /**
-     * por cada tick,suma 90 de velocidad a todas las bolas del estado
-     */
-    private void addBallsVelocity()
-    {
-        if(contBolas==10) {
-            velBolas += 90;
-            contBolas=0;
-        }
-    }
 
 
     /**
@@ -213,16 +200,6 @@ public class PlayState implements GameState
         else return balls.getHeight()/2;
     }
 
-
-    /**
-     * Pinta del color aleatorio escogido anteriormente el fondo del juego
-     */
-    private void drawBackground() {
-        Rect backRect = new Rect(barsWidth,0,3 * barsWidth, g.getHeight());
-        Rect dstRect=new Rect(backgrounds.getWidth() / 9 * backGroundNo,0,backgrounds.getWidth() / 9,backgrounds.getHeight());
-        Sprite backSprite=new Sprite(backgrounds,dstRect,g);
-        backSprite.draw(backRect);
-    }
 
     /**
      * Pinta la barra de blanco o negro dependiendo del input del usuario
@@ -277,41 +254,8 @@ public class PlayState implements GameState
         return (ballcolor==0 && playerColor==0) || (ballcolor==balls.getHeight()/2 && playerColor==1);
     }
 
-    /**
-     * Pinta la puntacion actucal calculando tanto la posicion deonde pintar cada uno
-     * de los digitos como el numero que pintare en cada uno de ellos
-     */
-    private void drawScore()
-    {
-        for(int i=0;i<NumScores;i++) {
-
-            int numeroApintar;
-            if(i==0)numeroApintar=score%10;
-            else numeroApintar=(score/(int)(Math.pow(10,i))%10);
-
-            int posicion=7+numeroApintar;
-            int posicionY=3;
-            if(posicion>14 && posicion<=16)
-            {
-                posicion-=15;
-                posicionY=4;
-            }
-            else if(posicion>1 && posicionY==4)
-            {
-                posicion=7;
-                posicionY=3;
-            }
-
-            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15, posicionY * scoreFont.getHeight() / 7, scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-            Sprite scoreSprites = new Sprite(scoreFont, srcRect, g);
-            scoreSprites.drawCentered(g.getWidth() - 50 - (i * 75), 200);
-
-        }
-    }
-
     //IMAGENES Y SUS DIMENSIONES:
     //Fondo
-    private Image backgrounds; //1 fila, 9 columnas
     private Image white;
 
     //Objetos
@@ -321,28 +265,16 @@ public class PlayState implements GameState
     //Textos
     private Image buttons; //1 fila, 10 columnas
 
-    //Fuente
-    private Image scoreFont; //6 filas, 15 columnas
-
-    //Botones
-    private Rect ExitButton;
 
     //VARIABLES DE JUEGO:
     private int playerColor; //0 = blanco, 1 = negro
-    private int score;
     private int contBolas;
-    private int velBolas;
     private int posBolas[];
     private int numBolas;
     private int ballColor[];
-    private int NumScores;
-    private int division;
-    private int lateralColor;
     private int backGroundNo;
-    private int barsWidth;
     private float whiteAlpha;
 
-    private int test;
     private Graphics g;
     private ParticleGenerator particleGenerator;
 }
