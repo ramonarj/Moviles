@@ -115,6 +115,38 @@ class GameManager {
             posFlechas2=posFlechas1-flechas.getHeight();
     }
 
+    //SOLO EN MAYUSCULAS
+    public void drawText(String text, int x, int y, float scale)
+    {
+        int charWidth = scoreFont.getWidth() / 15 - 16;
+        int charHeight = scoreFont.getHeight() / 7 - 24;
+        int gap = (int)((charWidth / 1.2f) * scale);
+
+        int rows = 7;
+        int cols = 15;
+        //Pintamos cada una de las letras
+        for(int i = 0; i< text.length();i++)
+        {
+            //Pasamos a ascii y contamos la a como 0
+            int pos = ((int)text.charAt(i)) - 65;
+
+            int posX, posY;
+            if(pos < cols)
+                posX = pos;
+            else
+                posX = pos % cols;
+
+            posY =  pos / cols;
+
+            System.out.println("PosX: " + posX + "Pos Y: " + posY);
+
+            //Pintamos
+            Rect srcRect = new Rect(posX * scoreFont.getWidth() / cols + 16, posY * scoreFont.getHeight() / rows + 24,
+                    charWidth, charHeight);
+            Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
+            scoreSprites.drawCentered(x + i * gap, y, scale);
+        }
+    }
 
     /**
      * Metodo generico para pintar numeros que puede ser llamado desde varios estados
@@ -123,32 +155,44 @@ class GameManager {
      * @param y posicion y donde pintar
      * @param scale escala del numero a pintar
      */
-    public void drawNumber(int number, int x, int y, float scale)
+    public void drawNumber(int number, int x, int y, float scale, int numDigits)
     {
+
         int charWidth = scoreFont.getWidth() / 15 - 16;
         int charHeight = scoreFont.getHeight() / 7 - 24;
-        int gap = (int)((float)charWidth * 1.5f);
 
-        //Posición en la spritesheet
-        int posicion=7+number;
-        int posicionY=3;
-        if(posicion>14 && posicion<=16)
+        int auxNumber = number;
+        int gap = 125;
+
+        //Pintamos una vez por cada dígito (de derecha a izquierda)
+        for(int i=0;i<numDigits;i++)
         {
-            posicion-=15;
-            posicionY=4;
-        }
-        else if(posicion>1 && posicionY==4)
-        {
-            posicion=7;
-            posicionY=3;
-        }
+            //Número que queremos pintar
+            int numeroApintar = auxNumber % 10;
+            auxNumber /= 10;
 
-        //El 16 y el 24 son la mitad del espacio en blanco que hay en cada caracter (33px en X, 48px en Y)
-        Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15 + 16, posicionY * scoreFont.getHeight() / 7 + 24,
-                charWidth, charHeight);
-        Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
+            //Posición en la spritesheet
+            int posicion=7+numeroApintar;
+            int posicionY=3;
+            if(posicion>14 && posicion<=16)
+            {
+                posicion-=15;
+                posicionY=4;
+            }
+            else if(posicion>1 && posicionY==4)
+            {
+                posicion=7;
+                posicionY=3;
+            }
 
-        scoreSprites.drawCentered(x, y, scale);
+
+            //El 16 y el 24 son la mitad del espacio en blanco que hay en cada caracter (33px en X, 48px en Y)
+            Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15 + 16, posicionY * scoreFont.getHeight() / 7 + 24,
+                    charWidth, charHeight);
+            Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
+
+            scoreSprites.drawCentered(x + gap / 2 *(numDigits- 1) - gap * i, y, scale);
+        }
     }
 
     private int posFlechas1;

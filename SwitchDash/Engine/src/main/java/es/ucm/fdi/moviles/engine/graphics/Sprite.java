@@ -87,4 +87,19 @@ public class Sprite {
 
     public Image getImage(){return this.img_;}
 
+    /**
+     *
+     * @return el ancho del sprite
+     */
+    public int getWidth() {
+        return rect_.getWidth();
+    }
+
+    /**
+     *
+     * @return el alto del sprite
+     */
+    public int getHeight() {
+        return rect_.getHeight();
+    }
 }

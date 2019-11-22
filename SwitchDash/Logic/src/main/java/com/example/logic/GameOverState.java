@@ -134,9 +134,9 @@ public class GameOverState implements GameState {
         //Botón de info
         instructionsButton.draw();
 
-
-        drawScore();
-
+        //Score
+        GameManager.getInstance().drawNumber(score, game.getGraphics().getWidth() / 2, 800, 1.5f, NumScores);
+        
         drawText();
     }
 
@@ -159,7 +159,7 @@ public class GameOverState implements GameState {
             int numeroApintar = auxScore % 10;
             auxScore /= 10;
 
-            GameManager.getInstance().drawNumber(numeroApintar, initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f);
+            GameManager.getInstance().drawNumber(numeroApintar, initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f,NumScores);
         }
     }
 
@@ -168,41 +168,8 @@ public class GameOverState implements GameState {
      */
     private void drawText()
     {
-        //P
-        Rect srcRect = new Rect(11 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        Sprite scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+75,1035);
-
-        //O
-        srcRect = new Rect(10 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+150,1035);
-
-        //I
-        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+225,1035);
-
-        //N
-        srcRect = new Rect(9 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+300,1035);
-
-        //T
-        srcRect = new Rect(4 * scoreFont.getWidth() / 15, 1 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+375,1035);
-
-        //S
-        srcRect = new Rect(14 * scoreFont.getWidth() / 15, 2 * scoreFont.getHeight() / 7,
-                scoreFont.getWidth() / 15, scoreFont.getHeight() / 7);
-        scoreSprites = new Sprite(scoreFont, srcRect, game.getGraphics());
-        scoreSprites.drawCentered((game.getGraphics().getWidth()/4)+450,1035);
+        //Score text
+        GameManager.getInstance().drawText("POINTS", barsWidth + 3 * barsWidth / 4, 1000, 0.75f);
     }
 
 
