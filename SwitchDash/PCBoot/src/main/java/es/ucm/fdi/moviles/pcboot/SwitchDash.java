@@ -25,6 +25,7 @@ public class SwitchDash
         PCInput input = new PCInput();
         ventana.addMouseListener(input);
         ventana.addMouseMotionListener(input);
+        ventana.addKeyListener(input);
 
         //El graphics lo creamos referenciando la ventana
         PCGraphics graphics = new PCGraphics(ventana);

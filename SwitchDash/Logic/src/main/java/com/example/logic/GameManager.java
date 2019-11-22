@@ -1,7 +1,5 @@
 package com.example.logic;
 
-import javax.print.attribute.ResolutionSyntax;
-
 import es.ucm.fdi.moviles.engine.graphics.Graphics;
 import es.ucm.fdi.moviles.engine.system.Game;
 import es.ucm.fdi.moviles.engine.graphics.Image;
@@ -74,8 +72,7 @@ class GameManager {
     public void setArrowSprite(Image img)
     {
         this.flechas = img;
-        this.posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
-        this.posFlechas2 = posFlechas1-flechas.getHeight();
+        this.posFlechas = flechas.getHeight() - game.getGraphics().getHeight();
     }
 
     /**
@@ -86,14 +83,9 @@ class GameManager {
     {
         Graphics g  = game.getGraphics();
 
-        Rect dstRect = new Rect(barsWidth,posFlechas1,
+        Rect dstRect = new Rect(barsWidth,posFlechas,
                 3 * barsWidth, flechas.getHeight());
         g.drawImage(flechas, dstRect, 0.25f);
-
-
-        Rect dstRect2 = new Rect(barsWidth,posFlechas2 ,
-                3 * barsWidth, flechas.getHeight());
-        g.drawImage(flechas, dstRect2, 0.25f);
     }
 
     /**
@@ -104,15 +96,11 @@ class GameManager {
     {
         //Flechas
         int incr = (int)(deltaTime*384);
-        posFlechas1 += incr;
-        posFlechas2 += incr;
-
+        posFlechas += incr;
 
         //Comprobar si hay que moverla al salirse de la pantalla
-        if(posFlechas1>game.getGraphics().getHeight())
-            posFlechas1=posFlechas2-flechas.getHeight();
-        else if(posFlechas2>game.getGraphics().getHeight())
-            posFlechas2=posFlechas1-flechas.getHeight();
+        if(posFlechas>0)
+            posFlechas = -flechas.getHeight()/5;
     }
 
     //SOLO EN MAYUSCULAS
@@ -137,8 +125,6 @@ class GameManager {
                 posX = pos % cols;
 
             posY =  pos / cols;
-
-            System.out.println("PosX: " + posX + "Pos Y: " + posY);
 
             //Pintamos
             Rect srcRect = new Rect(posX * scoreFont.getWidth() / cols + 16, posY * scoreFont.getHeight() / rows + 24,
@@ -195,8 +181,7 @@ class GameManager {
         }
     }
 
-    private int posFlechas1;
-    private int posFlechas2;
+    private int posFlechas;
     private Image flechas;
 
     private int lateralColor;

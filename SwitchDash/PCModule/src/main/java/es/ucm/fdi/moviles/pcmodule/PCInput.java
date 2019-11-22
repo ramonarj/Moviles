@@ -1,6 +1,8 @@
 package es.ucm.fdi.moviles.pcmodule;
 
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -12,9 +14,12 @@ import es.ucm.fdi.moviles.engine.input.AbstractInput;
  * pero también MouseMotionListener (para el movimiento del ratón)
  * El resto de eventos está porque se obliga a sobrecargarlos pero no se usan
  */
-public class PCInput extends AbstractInput implements MouseListener, MouseMotionListener
+public class PCInput extends AbstractInput implements MouseListener, MouseMotionListener, KeyListener
 {
 
+    /**
+     * Constructora por defecto
+     */
     public PCInput()
     {
 
@@ -38,10 +43,30 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
         addEvent(evt);
     }
 
+    /**
+     * Dados un evento recibido de Mouse(motion)Listener y un tipo propio
+     * de la clase input, crea el evento y lo añade a la lista
+     * @param keyEvent
+     * @param type
+     */
+    private void registerEvent(KeyEvent keyEvent, TouchEvent.EventType type)
+    {
+        //Rellenamos el evento
+        TouchEvent evt = new TouchEvent();
+        evt.x = 0;
+        evt.y = 0;
+        evt.id = keyEvent.getID();
+        evt.type = type;
+
+        addEvent(evt);
+    }
+
 
     //MÉTODOS QUE IMPLEMENTAN LA INTERFAZ MOUSE LISTENER
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
+    public void mouseClicked(MouseEvent mouseEvent)
+    {
+        //NADA
     }
 
     @Override
@@ -57,24 +82,48 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     }
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
+    public void mouseEntered(MouseEvent mouseEvent)
+    {
+        //NADA
     }
 
     @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
+    public void mouseExited(MouseEvent mouseEvent)
+    {
+        //NADA
     }
 
-    //MÉTODOS QUE IMPLEMENTAN LA INTERFAZ MOUSE MOTION LISTENER
+    //DE MOUSE MOTION LISTENER
     @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-
+    public void mouseDragged(MouseEvent mouseEvent)
+    {
+        //NADA
     }
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent)
     {
         registerEvent(mouseEvent, TouchEvent.EventType.MOVED);
+    }
+
+    //DE KEYLISTENER
+    @Override
+    public void keyTyped(KeyEvent keyEvent)
+    {
+        //NADA
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent)
+    {
+        //Pulsar el espacio equivale a hacer click
+        if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE)
+            registerEvent(keyEvent, TouchEvent.EventType.PRESSED);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent)
+    {
+        //NADA
     }
 }
