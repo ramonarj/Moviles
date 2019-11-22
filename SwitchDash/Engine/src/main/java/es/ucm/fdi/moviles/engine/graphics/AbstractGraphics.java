@@ -57,14 +57,14 @@ public abstract class AbstractGraphics implements  Graphics {
         int newx1=(int)(windowWidth/2-((logicalWidth*factor)/2));
         int newy1=(int)(windowHeight/2-((logicalHeight*factor)/2));
 
-        Rect newRect=new Rect(0,0,0,0);
-        newRect.x1=(int)(newx1+(destRect.x1*factor));
-        newRect.y1=(int)(newy1+destRect.y1*factor);
-        newRect.x2=(int)(windowWidth/2-((logicalWidth*factor)/2)+destRect.x2*factor);
-        newRect.y2=(int)(windowHeight/2-((logicalHeight*factor)/2)+destRect.y2*factor);
+        //Calculamos la esquina superior izquierda y dimensiones del rectángulo reescalado
+        int x1=(int)(newx1+(destRect.x1()*factor));
+        int y1=(int)(newy1+destRect.y1()*factor);
+        int width=(int)(windowWidth/2-((logicalWidth*factor)/2)+destRect.x2()*factor)- x1;
+        int height=(int)(windowHeight/2-((logicalHeight*factor)/2)+destRect.y2()*factor) - y1;
 
-
-        return newRect;
+        //Lo devolvemos
+        return new Rect(x1, y1, width, height);
     }
 
     /**

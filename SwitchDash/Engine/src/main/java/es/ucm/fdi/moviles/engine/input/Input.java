@@ -3,7 +3,8 @@ package es.ucm.fdi.moviles.engine.input;
 import java.util.List;
 
 /**
- * Gestiona el input
+ * Gestiona la entrada del juego, proporcionando una estructura "TouchEvent" para manejar los eventos
+ * y definiendo un método para devolver los eventos actuales
  */
 public interface Input
 {
@@ -26,6 +27,10 @@ public interface Input
         public int id;
     }
 
-    //Lista de eventos
+    /**
+     * Devuelve la lista de eventos sucedidos desde la última vez que se llamó al
+     * método
+     * @return lista de eventos, que será de tamaño 0 en caso de que no haya habido ninguno
+     */
     List<TouchEvent> getTouchEvents();
 }

@@ -1,7 +1,11 @@
 package es.ucm.fdi.moviles.engine.utils;
 
+/**
+ * Clase auxiliar para representar puntos 2D, con una coordenada X y una coordenada Y
+ */
 public class Point
 {
+    //Coordenadas
     private int x;
     private int y;
 
@@ -17,13 +21,13 @@ public class Point
     }
 
     /**
-     *
+     * Devuelve la coordenada X
      * @return la coordenada X
      */
     public int getX(){return this.x;}
 
     /**
-     *
+     * Devuelve la coordenada X
      * @return la coordenada Y
      */
     public int getY(){return this.y;}

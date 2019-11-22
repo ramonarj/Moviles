@@ -5,12 +5,19 @@ import java.util.Map;
 
 import es.ucm.fdi.moviles.engine.graphics.Image;
 
+/**
+ * Gestor de recursos del juego. Es un singleton que debe ser inicializado y
+ * que permite tanto cargar imágenes a la aplicación desde un estado inicial de carga
+ * como acceder a ellas una vez se esté ejecutando el juego.
+ */
 public class ResourceMan {
+    //Instancia del singleton
     private static ResourceMan ourInstance = null;
 
-
+    //Referencia al juego
     private static Game game;
 
+    //Diccionario de imágenes cada una con su nombre
     static Map<String, Image> images;
 
     /**
@@ -24,9 +31,8 @@ public class ResourceMan {
     }
 
     /**
-     * Crea una instancia del ResourceMan que sera utilizada
-     * en la posteridad
-     * @param g Game proporcionado
+     * Crea la instancia del gestor de recuros
+     * @param g referencia al juego concreto
      */
     public static void initInstance(Game g)
     {
@@ -34,7 +40,7 @@ public class ResourceMan {
     }
 
     /**
-     *
+     * Devuelve la instancia del gestor de recursos
      * @return la instancia del ResourceMan
      */
     static ResourceMan getInstance()
@@ -49,14 +55,13 @@ public class ResourceMan {
      */
     public static void loadImage(String ImagePath, String name)
     {
-
         Image img = game.getGraphics().newImage(ImagePath);
         images.put(name, img);
     }
 
     /**
      * Devuelve una imagen con un nombre concreto del diccionario
-     * @param name nombre de la imagen del diccionario
+     * @param name nombre de la imagen
      * @return
      */
     public static Image getImage(String name)
