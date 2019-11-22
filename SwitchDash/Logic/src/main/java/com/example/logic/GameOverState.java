@@ -28,6 +28,10 @@ public class GameOverState implements GameState {
         this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
+    /**
+     * Inicializa todos los elementos del estado
+     * @return
+     */
     @Override
     public boolean init() {
         Graphics g = game.getGraphics();
@@ -61,6 +65,11 @@ public class GameOverState implements GameState {
         return true;
     }
 
+    /**
+     * Por cada tick , actualiza todos los elementos del estado
+     * y comprueba si hay algun evento por procesar
+     * @param deltaTime time usado para actualizar los elementos del estado
+     */
     @Override
     public void update(float deltaTime) {
         Input input = game.getInput();
@@ -86,6 +95,9 @@ public class GameOverState implements GameState {
         }
     }
 
+    /**
+     * Pinta todos los elementos del estado
+     */
     @Override
     public void render()
     {
@@ -120,6 +132,9 @@ public class GameOverState implements GameState {
         drawText();
     }
 
+    /**
+     * Pinta el Score final en una posicion centrada de la pantalla
+     */
     private void drawScore()
     {
         int auxScore = score;
@@ -139,6 +154,10 @@ public class GameOverState implements GameState {
             GameManager.getInstance().drawNumber(numeroApintar, initialX + gap / 2 *(NumScores- 1) - gap * i, initialY, 1.5f);
         }
     }
+
+    /**
+     * Pinta el texto POINTS centrado en la pantalla
+     */
     private void drawText()
     {
         //P

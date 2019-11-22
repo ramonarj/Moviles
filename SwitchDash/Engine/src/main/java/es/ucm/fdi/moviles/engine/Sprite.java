@@ -27,9 +27,7 @@ public class Sprite {
     }
 
     /**
-     * Draws the sprite in a given destiny rectangle.
-     * Note that if the recatngle given is a different size from the
-     * sprite rectangle, this will cause the sprite to reescalate
+     * Pinta un Sprite en un rectagulo destino dado
      * @param dstRect the rectangle where ew desire to draw the sprite
      */
     public void draw(Rect dstRect)
@@ -43,16 +41,24 @@ public class Sprite {
     }
 
     /**
-     * Draws the sprite centered in the postion given
+     * Pinra un Sprite centrado en una posicion dada
      * @param posX horizontal coordinate
      * @param posY vertical coordinate
     */
-
     public void drawCentered(int posX, int posY)
     {
         Rect dest=new Rect(posX-rect_.getWidth() / 2,posY-rect_.getHeight() / 2,rect_.getWidth(),rect_.getHeight());
         graphics_.drawImage(img_,rect_,dest);
     }
+
+    /**
+     * Pinta un Sprite centrado en una posicion dada y con
+     * una escala y transparencia precisas
+     * @param posX
+     * @param posY
+     * @param scale
+     * @param alpha
+     */
 
     public void drawCentered(int posX, int posY,float scale,float alpha)
     {
@@ -62,6 +68,13 @@ public class Sprite {
         graphics_.drawImage(img_,rect_,dest,alpha);
     }
 
+    /**
+     * Pinta un Sprite centrado en una posicion dada y con
+     * una escala concreta
+     * @param posX
+     * @param posY
+     * @param scale
+     */
 
     public void drawCentered(int posX, int posY, float scale)
     {

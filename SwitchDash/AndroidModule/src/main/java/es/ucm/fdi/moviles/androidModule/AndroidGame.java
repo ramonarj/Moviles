@@ -16,7 +16,11 @@ import es.ucm.fdi.moviles.engine.Input;
 
 public class AndroidGame extends SurfaceView implements Runnable , Game {
 
-
+    /**
+     * Constructora del AndroidGame que recibe la alctividad de Android.
+     * Ademas,crea la instacia de graphics e input
+     * @param Activity actividad de Android
+     */
     public  AndroidGame(AppCompatActivity Activity)
     {
         super(Activity);
@@ -28,6 +32,10 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.input_.init(this);
     }
 
+    /**
+     * Metodo sobrecargado del SurfaceView que implmenta el bucle
+     * principal de la aplicacon
+     */
     @Override
     public void run() {
         long lastFrameTime = System.nanoTime();
@@ -60,6 +68,10 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             ++frames;
         }
     }
+
+    /**
+     * Metodo que espera a que la hebra termine y pone la condicion del run a false
+     */
     public void pause() {
 
         if (running_) {

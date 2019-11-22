@@ -67,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
         */
 
     }
+
+    /**
+     * Llama tanto al resume de la superclase como al
+     * resume del game
+     */
     @Override
     protected void onResume() {
 
@@ -74,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         game.onResume();
     }
 
+    /**
+     * LLama al Pause de la superclase y al pause del Game
+     */
     @Override
     protected void onPause() {
 
@@ -84,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Estlece tanto el tamaño logico de la pantalla como el
+     * tamaño fisico del dispositivo
+     */
     protected void init()
     {
         //Establecemos vision vertical como predeterminado

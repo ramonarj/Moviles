@@ -18,29 +18,63 @@ class GameManager {
     }
 
     /**
-     *
      * @return la instancia del GameManager
      */
     static GameManager getInstance() {
         return ourInstance;
     }
 
+    /**
+     * Carga la imagen de los puntos y se guarda la instancia de Game
+     * @param game instancia que nos guardaremos
+     */
     private GameManager(Game game)
     {
         this.scoreFont = ResourceMan.getImage("ScoreFont");
         this.game = game;
     }
 
+    /**
+     * Establece el color de fondo
+     * @param backGroundNo color de fondo
+     */
     public void setBackGroundNo(int backGroundNo){this.backGroundNo = backGroundNo;}
+
+    /**
+     * Establece el color lateral
+     * @param lateralColor color laterañ
+     */
     public void setLateralColor(int lateralColor){this.lateralColor = lateralColor;}
+
+    /**
+     * Establece la anchura de la barra
+     * @param barsWidth anchura de la barra
+     */
     public void setBarsWidth(int barsWidth){this.barsWidth = barsWidth;}
 
-
+    /**
+     * @return el color de fondo
+     */
     public int getBackGroundNo(){return backGroundNo;}
+
+    /**
+     * @return el color del lateral
+     */
     public int getLateralColor(){return lateralColor;}
+
+    /**
+     * @return el ancho de la barra
+     */
     public int getBarsWidth(){return barsWidth;}
 
 
+    /**
+     * Metodo generico para pintar numeros que puede ser llamado desde varios estados
+     * @param number numero a pintar
+     * @param x posicion x donde pintar
+     * @param y posicion y donde pintar
+     * @param scale escala del numero a pintar
+     */
     public void drawNumber(int number, int x, int y, float scale)
     {
         int charWidth = scoreFont.getWidth() / 15 - 16;
@@ -60,7 +94,6 @@ class GameManager {
             posicion=7;
             posicionY=3;
         }
-
 
         //El 16 y el 24 son la mitad del espacio en blanco que hay en cada caracter (33px en X, 48px en Y)
         Rect srcRect = new Rect(posicion * scoreFont.getWidth() / 15 + 16, posicionY * scoreFont.getHeight() / 7 + 24,

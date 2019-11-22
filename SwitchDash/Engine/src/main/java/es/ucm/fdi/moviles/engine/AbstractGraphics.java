@@ -65,6 +65,12 @@ public abstract class AbstractGraphics implements  Graphics {
         return newRect;
     }
 
+    /**
+     * Reescala un punto en coordenadas fisicas a logicas,
+     * para asbtraer a la logica del tamaño del dispositivo
+     * @param physical
+     * @return
+     */
     public Point physicalToLogical(Point physical)
     {
         float factor = takeScaleFactor();

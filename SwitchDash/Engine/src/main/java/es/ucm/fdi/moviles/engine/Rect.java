@@ -16,7 +16,7 @@ public class Rect {
     private int h;
 
     /**
-     * Constructora que recibe una esquine y unas dimensiones
+     * Constructora que recibe una esquina y unas dimensiones
      * @param x Coordenada x de la esquina superior izquierda
      * @param y Coordenada y de la esquina superior izquierda
      * @param width Anchura del rectángulo

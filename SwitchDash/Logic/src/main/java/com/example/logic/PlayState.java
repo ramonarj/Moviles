@@ -48,10 +48,8 @@ public class PlayState implements GameState
 
         //Inicialización de las variables
         playerColor = 0;
-
         posFlechas1 = game.getGraphics().getHeight()-flechas.getHeight();
         posflechas2 = posFlechas1-flechas.getHeight();
-
         test = Math.abs(posFlechas1-posflechas2);
 
 
@@ -74,6 +72,13 @@ public class PlayState implements GameState
         division=10;
         return  true;
     }
+
+
+    /**
+     * Por cada tick , manejamos los eventos
+     * y actualizamos todos los atributos del estado
+     * @param deltaTime
+     */
 
     @Override
     public void update(float deltaTime)

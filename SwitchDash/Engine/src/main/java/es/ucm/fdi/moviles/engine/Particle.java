@@ -2,6 +2,17 @@ package es.ucm.fdi.moviles.engine;
 
 public class Particle {
 
+    /**
+     * Establece todos los elementos necesarios de una particula
+     * @param posX posicion X
+     * @param posY posicion Y
+     * @param velX velocidad X
+     * @param velY velocidad Y
+     * @param width anchura
+     * @param height altura
+     * @param alpha tranparencia
+     * @param color color de la particula
+     */
     public Particle(int posX,int posY, int velX,int velY,int width, int height,float alpha,int color)
     {
         this.im_=ResourceMan.getImage("Balls");
@@ -18,6 +29,10 @@ public class Particle {
 
     }
 
+    /**
+     * Actualizamos la posicion X e Y de la particula acorde a su velocidad y deltaTime
+     * @param deltaTime deltaTime usado para actualizar posiciones
+     */
     public void update(float deltaTime)
     {
         posX+=velX*deltaTime;
