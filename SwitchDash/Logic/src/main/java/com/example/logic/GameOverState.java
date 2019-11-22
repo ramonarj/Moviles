@@ -46,7 +46,10 @@ public class GameOverState implements GameState {
         //Botón de sonido
         Rect srcRect = new Rect(2* buttonWidth,0,  buttonWidth,buttonHeight);
         Sprite soundSprite=new Sprite(buttons,srcRect,g);
-        soundButton = new Button(soundSprite, barsWidth / 2,200, "Sonido");
+        srcRect = new Rect(3* buttonWidth,0,  buttonWidth,buttonHeight);
+        Sprite soundSprite2=new Sprite(buttons,srcRect,g);
+
+        soundButton = new Button(soundSprite, soundSprite2, barsWidth / 2,200, "Sonido");
 
         //Botón de instrucciones
         srcRect =new Rect(0,0, buttonWidth,buttonHeight);
@@ -68,6 +71,8 @@ public class GameOverState implements GameState {
             if(evt.type == Input.TouchEvent.EventType.PRESSED)
                 if(instructionsButton.isPressed(evt.x, evt.y))
                     game.setGameState(new InstructionsState(game));
+                else if (soundButton.isPressed(evt.x, evt.y))
+                    soundButton.toggleSprite();
                 else
                     game.setGameState(new PlayState(game));
         }
@@ -108,6 +113,7 @@ public class GameOverState implements GameState {
 
         //Botón de info
         instructionsButton.draw();
+
 
         drawScore();
 

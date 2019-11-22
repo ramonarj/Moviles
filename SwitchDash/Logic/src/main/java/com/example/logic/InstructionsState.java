@@ -18,6 +18,7 @@ public class InstructionsState implements GameState {
     //Objeto del juego
     private Game game;
 
+
     public InstructionsState(Game game)
     {
         this.game = game;
@@ -26,6 +27,10 @@ public class InstructionsState implements GameState {
         this.barsWidth = GameManager.getInstance().getBarsWidth();
     }
 
+    /**
+     * Inicializa todas las variables del estado
+     * @return
+     */
     @Override
     public boolean init()
     {
@@ -53,6 +58,11 @@ public class InstructionsState implements GameState {
         return true;
     }
 
+    /**
+     * Por cada tick actualiza los atrbitos necesarios y comprueba si ha habido
+     * algun evento que tengamos que procesar
+     * @param deltaTime
+     */
     @Override
     public void update(float deltaTime) {
         alphaTap+=(deltaTime*veloidad);
@@ -77,6 +87,9 @@ public class InstructionsState implements GameState {
 
     }
 
+    /**
+     * Pinta todos los elementos del estado
+     */
     @Override
     public void render() {
 

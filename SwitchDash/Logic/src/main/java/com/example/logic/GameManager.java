@@ -3,11 +3,19 @@ package com.example.logic;
 class GameManager {
     private static GameManager ourInstance = null;
 
+    /**
+     * crea la instancia del GameManageer que sera posteriormente usada
+     * hasta que acabe el juego
+     */
     public static void initInstance()
     {
         ourInstance = new GameManager();
     }
 
+    /**
+     *
+     * @return la instancia del GameManager
+     */
     static GameManager getInstance() {
         return ourInstance;
     }
@@ -28,4 +36,5 @@ class GameManager {
     private int lateralColor;
     private int backGroundNo;
     private int barsWidth;
+
 }

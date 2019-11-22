@@ -76,7 +76,7 @@ public class ParticleGenerator {
      */
     public void createSimulation(int initialPositionX,int initialPositionY,int color)
     {
-        for(int i=0;i<7;i++)
+        for(int i=0;i<4;i++)
         {
             createParticle(initialPositionX,initialPositionY,color);
         }

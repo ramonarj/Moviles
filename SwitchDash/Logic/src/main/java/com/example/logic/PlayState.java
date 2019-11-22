@@ -27,6 +27,10 @@ public class PlayState implements GameState
         this.whiteAlpha=1;
     }
 
+    /**
+     * Inicializamos todos los atributos del estado tanto las imaganes como las varibles
+     * @return
+     */
     @Override
     public boolean init()
     {
@@ -70,27 +74,6 @@ public class PlayState implements GameState
         division=10;
         return  true;
     }
-
-    private void checkInput()
-    {
-        Input input = game.getInput();
-        ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
-        for(Input.TouchEvent evt: events)
-        {
-            //Cambiamos de color
-            if(evt.type == Input.TouchEvent.EventType.PRESSED)
-                playerColor = 1 - playerColor;
-        }
-    }
-
-    private void addBallsVelocity()
-    {
-        if(contBolas==10) {
-            velBolas += 90;
-            contBolas=0;
-        }
-    }
-
 
     @Override
     public void update(float deltaTime)
@@ -143,15 +126,8 @@ public class PlayState implements GameState
     }
 
     /**
-     * Dado que % en java puede devolver negativo, usaremos este metodo
-     * @param index Indice anterior a la bola que queremos pintar para saber que colo tiene
-     * @param numBolas Numero de bolas que usamos en el bucle de juego
-     * @return el indice en el array de colores de bolas que usaremos para pintar la siguiente bola
+     * Por cada tick , pintamos todos los elementos del estado
      */
-    private int takeBallIndex(int index,int numBolas) {
-        return (((index % numBolas) + numBolas) % numBolas);
-    }
-
     @Override
     public void render()
     {
@@ -167,6 +143,7 @@ public class PlayState implements GameState
             //Pelota
             drawBalls();
 
+            //Particulas
             particleGenerator.Render();
 
             //Jugador
@@ -176,6 +153,47 @@ public class PlayState implements GameState
             drawScore();
         } else drawFlash();
     }
+
+
+    /** METODOS AUXILIRES **/
+
+    /**
+     * por cada tick, comprueba si ha habido algun evento que tengamos que procesar
+     */
+    private void checkInput()
+    {
+        Input input = game.getInput();
+        ArrayList<Input.TouchEvent> events = (ArrayList)input.getTouchEvents();
+        for(Input.TouchEvent evt: events)
+        {
+            //Cambiamos de color
+            if(evt.type == Input.TouchEvent.EventType.PRESSED)
+                playerColor = 1 - playerColor;
+        }
+    }
+
+    /**
+     * por cada tick,suma 90 de velocidad a todas las bolas del estado
+     */
+    private void addBallsVelocity()
+    {
+        if(contBolas==10) {
+            velBolas += 90;
+            contBolas=0;
+        }
+    }
+
+
+    /**
+     * Dado que % en java puede devolver negativo, usaremos este metodo
+     * @param index Indice anterior a la bola que queremos pintar para saber que colo tiene
+     * @param numBolas Numero de bolas que usamos en el bucle de juego
+     * @return el indice en el array de colores de bolas que usaremos para pintar la siguiente bola
+     */
+    private int takeBallIndex(int index,int numBolas) {
+        return (((index % numBolas) + numBolas) % numBolas);
+    }
+
 
     /**
      * Al principio pintaremos una pantalla blanca bajando de alpha hasta que sea 0 y empezamos el render

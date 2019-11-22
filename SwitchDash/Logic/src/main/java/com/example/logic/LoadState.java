@@ -13,6 +13,11 @@ public class LoadState implements GameState {
         this.game = game;
     }
 
+    /**
+     * Cargamos todas las imagenes en el resourceManager una solo vez para
+     * no tener que cargarlas en cada uno de los estados
+     * @return
+     */
     @Override
     public boolean init()
     {

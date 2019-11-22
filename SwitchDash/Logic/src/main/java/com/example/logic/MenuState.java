@@ -22,6 +22,7 @@ public class MenuState implements GameState {
     }
 
     @Override
+    /**Inicializamos todas las varibales necesarias para la ejecucion del estado**/
     public boolean init()
     {
         Graphics g = game.getGraphics();
@@ -77,6 +78,11 @@ public class MenuState implements GameState {
     }
 
 
+    /**
+     * Unicamente comprobamos los eventos de Input para saber si actualizar los botones
+     * o saltar al estado de juego
+     * @param deltaTime
+     */
     @Override
     public void update(float deltaTime)
     {
@@ -107,6 +113,9 @@ public class MenuState implements GameState {
 
     }
 
+    /**
+     * Pintamos todos los elementos del estado
+     */
     @Override
     public void render()
     {

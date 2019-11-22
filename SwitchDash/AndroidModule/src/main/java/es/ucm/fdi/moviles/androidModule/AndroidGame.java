@@ -28,11 +28,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         this.input_.init(this);
     }
 
-    private void init()
-    {
-
-    }
-
     @Override
     public void run() {
         long lastFrameTime = System.nanoTime();
@@ -40,9 +35,7 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
         long informePrevio = lastFrameTime; // Informes de FPS
         int frames = 0;
 
-        init(); //Prueba para cargar una unica imagen
         while (running_) {
-            //render
 
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
@@ -84,22 +77,37 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     } // pause
 
+    /**
+     *
+     * @return la instancia de graphics
+     */
     @Override
     public Graphics getGraphics() {
         return graphic_;
     }
 
+    /**
+     *
+     * @return la instancia de Input
+     */
     @Override
     public Input getInput() {
         return input_;
     }
 
+    /**
+     * Establece un nuevo state y llama a su metodo de init para inicializar atributos
+     * @param state nuevo estado principal del juego
+     */
     @Override
     public void setGameState(GameState state) {
         state_=state;
         state_.init();
     }
 
+    /**
+     * Se llamara una vez al iniciar la app y cada vez que giremos el movil para crear nuestra hebra de juego
+     */
     public void onResume()
     {
         if (!running_) {
@@ -125,6 +133,10 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     }
 
 
+    /**
+     * libera el canvas de una manera u otra dependiendo de la version del sdk
+     * @param canvas
+     */
     private void unLockCanvas(Canvas canvas)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -134,6 +146,9 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     }
 
     @Override
+    /**
+     * Establece el fin del juegp
+     */
     public void GameOver(){
         running_=false;
     }
