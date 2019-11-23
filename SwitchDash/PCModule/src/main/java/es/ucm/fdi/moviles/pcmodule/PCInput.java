@@ -64,12 +64,6 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
 
     //MÉTODOS QUE IMPLEMENTAN LA INTERFAZ MOUSE LISTENER
     @Override
-    public void mouseClicked(MouseEvent mouseEvent)
-    {
-        //NADA
-    }
-
-    @Override
     public void mousePressed(MouseEvent mouseEvent)
     {
         registerEvent(mouseEvent, TouchEvent.EventType.PRESSED);
@@ -82,37 +76,25 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     }
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent)
-    {
-        //NADA
-    }
+    public void mouseClicked(MouseEvent mouseEvent) { }
 
     @Override
-    public void mouseExited(MouseEvent mouseEvent)
-    {
-        //NADA
-    }
+    public void mouseEntered(MouseEvent mouseEvent) { }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) { }
 
     //DE MOUSE MOTION LISTENER
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent)
-    {
-        //NADA
-    }
-
     @Override
     public void mouseMoved(MouseEvent mouseEvent)
     {
         registerEvent(mouseEvent, TouchEvent.EventType.MOVED);
     }
 
-    //DE KEYLISTENER
     @Override
-    public void keyTyped(KeyEvent keyEvent)
-    {
-        //NADA
-    }
+    public void mouseDragged(MouseEvent mouseEvent) { }
 
+    //DE KEYLISTENER
     @Override
     public void keyPressed(KeyEvent keyEvent)
     {
@@ -122,8 +104,8 @@ public class PCInput extends AbstractInput implements MouseListener, MouseMotion
     }
 
     @Override
-    public void keyReleased(KeyEvent keyEvent)
-    {
-        //NADA
-    }
+    public void keyReleased(KeyEvent keyEvent) { }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) { }
 }

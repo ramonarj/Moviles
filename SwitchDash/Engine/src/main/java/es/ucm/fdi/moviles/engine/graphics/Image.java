@@ -10,11 +10,11 @@ public interface Image
      * Devuelve la anchura de la imagen en píxeles
      * @return anchura de la imagen
      */
-    public int getWidth();
+    int getWidth();
 
     /**
      * Devuelve la altura de la imagen en píxeles
      * @return altura de la imagen
      */
-    public int getHeight();
+    int getHeight();
 }

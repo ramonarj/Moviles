@@ -30,7 +30,7 @@ public class Window extends JFrame
      * @return Cierto si tod0 fue bien y falso en otro caso (se escribe una
      * descripción del problema en la salida de error).
      */
-    public boolean init(int width, int height, boolean fullscreen)
+    public boolean init(int width, int height, boolean fullscreen, int numBuffers)
     {
         setSize(width,height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +52,7 @@ public class Window extends JFrame
         int intentos = 100;
         while(intentos-- > 0) {
             try {
-                createBufferStrategy(2);
+                createBufferStrategy(numBuffers);
                 break;
             }
             catch(Exception e) {
@@ -64,13 +64,6 @@ public class Window extends JFrame
             System.err.println("No pude crear la BufferStrategy");
             return false;
         }
-        else {
-            // En "modo debug" podríamos querer escribir esto.
-            System.out.println("Creado BufferStrategy tras " + (100 - intentos) + " intentos.");
-        }
         return true;
     }
-
-
-
 }

@@ -18,22 +18,23 @@ import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Implementa la interfaz Graphics para la plataforma de Android
+ * ayudándose de la clase AbtractGraphics, de la que hereda.
+ */
 public class AndroidGraphics extends AbstractGraphics
 {
     //Actividad de Android
     AppCompatActivity activity;
-    SurfaceView surfaceview_;
     Canvas canvas;
 
     /**
      * Constructora
      * @param activity la actividad en que usaremos los gráficos
-     * @param surfaceview la superficie sobre la que se pintará
      */
-    public AndroidGraphics(AppCompatActivity activity, SurfaceView surfaceview)
+    public AndroidGraphics(AppCompatActivity activity)
     {
         this.activity = activity;
-        this.surfaceview_=surfaceview;
         canvas=null;
     }
 

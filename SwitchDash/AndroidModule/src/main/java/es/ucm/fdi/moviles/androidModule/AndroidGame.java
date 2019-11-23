@@ -1,4 +1,3 @@
-
 package es.ucm.fdi.moviles.androidModule;
 
 import android.graphics.Canvas;
@@ -12,7 +11,11 @@ import es.ucm.fdi.moviles.engine.system.GameState;
 import es.ucm.fdi.moviles.engine.graphics.Graphics;
 import es.ucm.fdi.moviles.engine.input.Input;
 
-
+/**
+ * Clase que implementa la interfaz de juego para la plataforma Android.
+ * Además, hereda de SurfaceView para actuar como ventana e implementa
+ * Runnable para el control del Thread del juego
+ */
 public class AndroidGame extends SurfaceView implements Runnable , Game {
 
     /**
@@ -24,17 +27,34 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     {
         super(Activity);
         this.activity_=Activity;
-        this.graphic_=new AndroidGraphics(activity_,this);
+        this.graphic_=new AndroidGraphics(activity_);
         this.input_=new AndroidInput();
 
         setOnTouchListener(this.input_);
         this.input_.init(this);
     }
 
-    /**
-     * Metodo sobrecargado del SurfaceView que implmenta el bucle
-     * principal de la aplicacon
-     */
+    @Override
+    public Graphics getGraphics() {
+        return graphic_;
+    }
+
+    @Override
+    public Input getInput() {
+        return input_;
+    }
+
+    @Override
+    public void setGameState(GameState state) {
+        state_=state;
+        state_.init();
+    }
+
+    @Override
+    public void GameOver(){
+        running_=false;
+    }
+
     @Override
     public void run() {
         long lastFrameTime = System.nanoTime();
@@ -89,34 +109,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
     } // pause
 
     /**
-     *
-     * @return la instancia de graphics
-     */
-    @Override
-    public Graphics getGraphics() {
-        return graphic_;
-    }
-
-    /**
-     *
-     * @return la instancia de Input
-     */
-    @Override
-    public Input getInput() {
-        return input_;
-    }
-
-    /**
-     * Establece un nuevo state y llama a su metodo de init para inicializar atributos
-     * @param state nuevo estado principal del juego
-     */
-    @Override
-    public void setGameState(GameState state) {
-        state_=state;
-        state_.init();
-    }
-
-    /**
      * Se llamara una vez al iniciar la app y cada vez que giremos el movil para crear nuestra hebra de juego
      */
     public void onResume()
@@ -143,7 +135,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             return getHolder().lockCanvas();
     }
 
-
     /**
      * libera el canvas de una manera u otra dependiendo de la version del sdk
      * @param canvas
@@ -156,13 +147,6 @@ public class AndroidGame extends SurfaceView implements Runnable , Game {
             getHolder().unlockCanvasAndPost(canvas);
     }
 
-    @Override
-    /**
-     * Establece el fin del juegp
-     */
-    public void GameOver(){
-        running_=false;
-    }
 
     private GameState state_;
     private AndroidGraphics graphic_;

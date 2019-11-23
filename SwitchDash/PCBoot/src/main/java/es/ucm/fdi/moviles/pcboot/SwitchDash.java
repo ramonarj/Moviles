@@ -4,8 +4,6 @@ import es.ucm.fdi.moviles.logic.LoadState;
 
 import es.ucm.fdi.moviles.engine.system.ResourceMan;
 import es.ucm.fdi.moviles.pcmodule.PCGame;
-import es.ucm.fdi.moviles.pcmodule.PCGraphics;
-import es.ucm.fdi.moviles.pcmodule.PCInput;
 import es.ucm.fdi.moviles.pcmodule.Window;
 
 /**
@@ -18,22 +16,12 @@ public class SwitchDash
     {
         //1. CREAMOS LA VENTANA
         Window ventana = new Window("Switch Dash");
-        if (!ventana.init(400, 600, false))
+        if (!ventana.init(400, 600, false, 4))
             return;
 
-        //2. CREAMOS LOS SUBSISTEMAS Y SE LOS PASAMOS AL JUEGO
-        PCInput input = new PCInput();
-        ventana.addMouseListener(input);
-        ventana.addMouseMotionListener(input);
-        ventana.addKeyListener(input);
-
-        //El graphics lo creamos referenciando la ventana
-        PCGraphics graphics = new PCGraphics(ventana, 1080, 1920);
-        ventana.addComponentListener(graphics);
-        //Al juego le pasamos los sistemas de input y gráficos además de la lógica
+        //2. CREAMOS EL JUEGO CON LA VENTANA Y UNAS DIMENSIONES LÓGICAS
         PCGame game = new PCGame();
-        game.init(graphics, input, ventana);
-        input.init(game);
+        game.init(ventana, 1080, 1920);
 
         //3. INICIALIZAR EL RESOURCEMANAGER
         ResourceMan.initInstance(game);

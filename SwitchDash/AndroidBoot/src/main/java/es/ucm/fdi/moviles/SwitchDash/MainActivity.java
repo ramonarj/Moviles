@@ -3,28 +3,31 @@ package es.ucm.fdi.moviles.SwitchDash;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import es.ucm.fdi.moviles.logic.LoadState;
-
-import es.ucm.fdi.moviles.androidModule.AndroidGraphics;
-import es.ucm.fdi.moviles.androidModule.AndroidInput;
 import es.ucm.fdi.moviles.androidModule.AndroidGame;
 import es.ucm.fdi.moviles.engine.system.ResourceMan;
 
 
+/**
+ * Clase que arranca el juego en Android y que usa todas las funcionalidades
+ * del ciclo de vida de las aplicaciones en Android heredando de
+ * AppCompatActivity.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    //Callback para cuando se crea
+    /**
+     * Callback llamado cuando se crea la actividad
+     * @param savedInstanceState datos sobre la instancia de la actividad que murió
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Para la pantalla completa y que no se vea el logo ni los botones de abajo
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
        // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
 
         //Constructora padre
         super.onCreate(savedInstanceState);
@@ -43,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(game);
     }
 
+    /**
+     * Callback para el cambio de resolución (girar el móvil)
+     * @param newConfig nueva configuración de pantalla adoptada
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -50,20 +57,6 @@ public class MainActivity extends AppCompatActivity {
         Point size=new Point();
         this.getWindowManager().getDefaultDisplay().getSize(size);
         game.getGraphics().setCanvasSize(size.x ,size.y);
-        // Checks the orientation of the screen
-        /*
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-            //Guardamos las coordenadas fisicas de la ventana
-
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            Point size=new Point();
-            //Guardamos las coordenadas fisicas de la ventana
-            this.getWindowManager().getDefaultDisplay().getSize(size);
-            game.getGraphics().setCanvasSize(size.x ,size.y);
-        }
-        */
-
     }
 
     /**
@@ -87,11 +80,10 @@ public class MainActivity extends AppCompatActivity {
         // de lo que está pasando.
         super.onPause();
         game.pause();
-
     }
 
     /**
-     * Estlece tanto el tamaño logico de la pantalla como el
+     * Establece tanto el tamaño logico de la pantalla como el
      * tamaño fisico del dispositivo
      */
     protected void init()
@@ -103,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
         game.getGraphics().setCanvasSize(size.x ,size.y);
     }
 
-
+    //Referencia al juego
     private AndroidGame game;
-    private AndroidInput input;
-    private AndroidGraphics graphics;
-    private SurfaceView surf;
 }

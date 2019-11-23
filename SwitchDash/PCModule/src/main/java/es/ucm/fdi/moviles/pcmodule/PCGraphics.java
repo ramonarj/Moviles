@@ -11,37 +11,38 @@ import es.ucm.fdi.moviles.engine.graphics.AbstractGraphics;
 import es.ucm.fdi.moviles.engine.graphics.Image;
 import es.ucm.fdi.moviles.engine.utils.Rect;
 
+/**
+ * Implementa la interfaz Graphics para la plataforma de PC
+ * ayudándose de la clase AbtractGraphics, de la que hereda.
+ * Implementa ComponentListener para enterarse de los cambios en
+ * la ventana de la aplicación
+ */
 public class PCGraphics extends AbstractGraphics implements ComponentListener
 {
     //Ventana de la aplicación
-    java.awt.Window window;
+    es.ucm.fdi.moviles.pcmodule.Window window;
     //Gráficos de Java
     java.awt.image.BufferStrategy strategy;
 
-
-    public PCGraphics()
-    {
-        this.window = null;
-        this.strategy = null;
-    }
-
-    public PCGraphics(java.awt.Window window, int logicalWidth, int logicalHeight)
+    /**
+     * Constructora
+     * @param window ventana de la aplicación (debe heredar de JFrame)
+     * @param logicalWidth anchura lógica que tendrá el juego
+     * @param logicalHeight altura lógica que tendrá el juego
+     */
+    public PCGraphics(es.ucm.fdi.moviles.pcmodule.Window window, int logicalWidth, int logicalHeight)
     {
         this.window = window;
         this.strategy = window.getBufferStrategy();
-
+        setLogicalView(logicalWidth, logicalHeight);
     }
 
-    /**
-     * Creates a new image
-     * @return the image created
-     */
     @Override
     public Image newImage(String name)
     {
         name= "Assets/" + name;
         PCImage image = null;
-        //TODO: gestionar errores cargando la imagen con un bucle
+
         try
         {
             java.awt.Image img = javax.imageio.ImageIO.read(new java.io.File(name));
@@ -55,10 +56,6 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
         return image;
     }
 
-    /**
-     * Clears the content of the screen with the provided color
-     * @param color
-     */
     @Override
     public void clear(int color)
     {
@@ -67,20 +64,27 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
         g.fillRect(0,0, getWindowWidth(), getWindowHeight());
     }
 
+    @Override
+    public void setCanvasSize(int width, int height)
+    {
+        windowWidth=width;
+        windowHeight=height;
+    }
+
 
     /**
-     * Method resposible for the painting of an image using Java graphics.
-     * It draws the specified image with the given parameters.
-     * All public "drawImage" methods end up calling this one
-     * @param image image to be drawn (type java.awt.Image)
-     * @param srcRect rectangle of the image (in px) taken
-     * @param destRect rectangle of the graphics (in px) where the portion of the image will show
-     * @param alpha transparence value (0 = fully transparent, 1 = fully opaque)
+     * Método responsable de dibujar una imagen para PC
+     * Todos los métodos públicos "drawImage" terminan llamando a este
+     * @param image imagen que se dibuja(de tipo PCImage)
+     * @param srcRect rectángulo de la imagen que se pintará
+     * @param destRect rectángulo de la pantalla en coordenadas lógicas donde se dibujará
+     * @param alpha valor de la transparencia (0 = totalmente transparene, 1 = totalmente opaco)
      */
     protected void drawImagePrivate(PCImage image, Rect srcRect, Rect destRect, float alpha)
     {
         java.awt.Graphics g = strategy.getDrawGraphics();
-        //No need to use alpha compositor
+
+        //No es necesario usar el compositor
         if(alpha == 1)
         {
             //Pintamos
@@ -112,20 +116,10 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
         }
     }
 
-
-
     @Override
     public void drawImage(Image image, Rect destRect, float alpha) {
         super.drawImage(image, destRect, alpha);
     }
-
-    @Override
-    public void setCanvasSize(int width, int height)
-    {
-        windowWidth=width;
-        windowHeight=height;
-    }
-
 
     @Override
     public void drawRealImage(Image image, Rect destRect)
@@ -159,21 +153,13 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
         setCanvasSize(window.getWidth(), window.getHeight());
     }
 
+    //Callbacks de
     @Override
-    public void componentMoved(ComponentEvent componentEvent)
-    {
-
-    }
+    public void componentMoved(ComponentEvent componentEvent) { }
 
     @Override
-    public void componentShown(ComponentEvent componentEvent)
-    {
-
-    }
+    public void componentShown(ComponentEvent componentEvent) { }
 
     @Override
-    public void componentHidden(ComponentEvent componentEvent)
-    {
-
-    }
+    public void componentHidden(ComponentEvent componentEvent) { }
 }

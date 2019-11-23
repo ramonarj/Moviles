@@ -256,7 +256,6 @@ public class PlayState implements GameState
         return (ballcolor==0 && playerColor==0) || (ballcolor==balls.getHeight()/2 && playerColor==1);
     }
 
-    //IMAGENES Y SUS DIMENSIONES:
     //Fondo
     private Image white;
 

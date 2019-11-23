@@ -1,6 +1,5 @@
 package es.ucm.fdi.moviles.pcmodule;
 
-import java.awt.Window;
 import java.awt.image.BufferStrategy;
 
 import es.ucm.fdi.moviles.engine.system.Game;
@@ -8,6 +7,9 @@ import es.ucm.fdi.moviles.engine.system.GameState;
 import es.ucm.fdi.moviles.engine.graphics.Graphics;
 import es.ucm.fdi.moviles.engine.input.Input;
 
+/**
+ * Clase que implementa la interfaz Game para la plataforma de PC.
+ */
 public class PCGame implements Game {
 
     //Sistema de input
@@ -15,13 +17,21 @@ public class PCGame implements Game {
     //Sistema de gráficos
     PCGraphics graphics;
     //Ventana
-    Window window;
+    es.ucm.fdi.moviles.pcmodule.Window window;
 
     //Estado actual
     GameState state;
 
     boolean running_;
 
+
+    /**
+     * Constructora por defecto
+     */
+    public PCGame()
+    {
+
+    }
 
     @Override
     public void run()
@@ -61,54 +71,46 @@ public class PCGame implements Game {
     }
 
 
-
-
-    public PCGame()
-    {
-
-    }
-
     /**
-     * Creaa la instancia recibiendo como parámetro la lógica del juego
-     * @param graphics El sistema de gráficos que usará el juego
-     * @param input El sistema de entrada que usará el juego
+     * Inicializa el juego para PC, recibiendo la ventana ya creada y unas dimensiones
+     * lógicas para que usen los Gráficos
+     * @param window ventana de la aplicación ya inicializada
+     * @param logicalWidth anchura lógica
+     * @param logicalHeight altura lógica
+     * @return true si tod0 ha salido correcto, false e.0.c
      */
-    public boolean init(PCGraphics graphics, PCInput input, Window window)
+    public boolean init(es.ucm.fdi.moviles.pcmodule.Window window, int logicalWidth, int logicalHeight)
     {
-        this.graphics = graphics;
-        this.input = input;
         this.window = window;
 
+        //Subsistema de input (lo registramos como listener de la ventana)
+        this.input = new PCInput();
+        window.addMouseListener(input);
+        window.addMouseMotionListener(input);
+        window.addKeyListener(input);
+        this.input.init(this);
+
+        //El graphics lo creamos referenciando la ventana
+        this.graphics = new PCGraphics(window, logicalWidth, logicalHeight);
+        window.addComponentListener(graphics);
+
         //Establecemos vision vertical como predeterminado
-        this.graphics.setLogicalView(1080, 1920);
         this.graphics.setCanvasSize(window.getWidth() ,window.getHeight());
         running_ = true;
 
         return true;
     }
 
-    /**
-     * Devuelve el sistema de gráficos del juego
-     * @return
-     */
     @Override
     public Graphics getGraphics() {
         return graphics;
     }
 
-    /**
-     * Devuelve el sistema de entrada del juego
-     * @return
-     */
     @Override
     public Input getInput() {
         return input;
     }
 
-    /**
-     * Establece la lógica a la que llamará el juego
-     * @param state
-     */
     @Override
     public void setGameState(GameState state)
     {

@@ -23,21 +23,13 @@ public class AndroidImage implements Image
         this.sprite = sprite;
     }
 
-    /**
-     * Devuelve la anchura de la imagen
-     * @return anchura de la imagen en píxeles
-     */
+
+    @Override
     public int getWidth()
     {
         return sprite.getWidth();
     }
 
-    /**
-     * Devuelve la altura de la imagen
-     * @return altura de la imagen en píxeles
-     */
-    public int getHeight()
-    {
-        return sprite.getHeight();
-    }
+    @Override
+    public int getHeight() { return sprite.getHeight(); }
 }

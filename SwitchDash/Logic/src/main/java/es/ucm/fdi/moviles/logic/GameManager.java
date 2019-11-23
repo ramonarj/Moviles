@@ -7,6 +7,10 @@ import es.ucm.fdi.moviles.engine.utils.Rect;
 import es.ucm.fdi.moviles.engine.system.ResourceMan;
 import es.ucm.fdi.moviles.engine.graphics.Sprite;
 
+/**
+ * Proporciona utilidades para este juego en concreto,
+ * sobre tod0 funcionalidades útiles en varias escenas distintas
+ */
 class GameManager {
     private static GameManager ourInstance = null;
     /**
@@ -209,7 +213,6 @@ class GameManager {
             scoreDigits++;
             division*=10;
         }
-        System.out.println((scoreDigits));
     }
 
     public int getScore(){return this.score;}
