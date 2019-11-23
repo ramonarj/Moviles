@@ -19,6 +19,15 @@ android {
     }
 }
 
+//Copia las imágenes a la carpeta de Android
+task copyImages (type: Copy) {
+    description 'Copy images from the root to the assets folder'
+    from(rootDir){
+        include 'assets/**/*.png'
+    }
+    into 'src/main'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -29,4 +38,5 @@ dependencies {
     implementation project(path: ':AndroidModule')
     implementation project(path: ':Engine')
     implementation project(path: ':Logic')
+    preBuild.dependsOn copyImages
 }

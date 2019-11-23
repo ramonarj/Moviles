@@ -40,7 +40,7 @@ public class PCGraphics extends AbstractGraphics implements ComponentListener
     @Override
     public Image newImage(String name)
     {
-        name= "Assets/" + name;
+        name= "assets/" + name;
         PCImage image = null;
 
         try
