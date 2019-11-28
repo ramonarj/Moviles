@@ -30,5 +30,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Engine" exported="" />
+    <orderEntry type="module" module-name="Engine" exported="" />
+    <orderEntry type="module" module-name="Engine" exported="" />
+    <orderEntry type="module" module-name="Engine" exported="" />
   </component>
 </module>
