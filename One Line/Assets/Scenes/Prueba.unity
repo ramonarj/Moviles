@@ -1913,6 +1913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 3
   cols: 3
+  startingTile: {fileID: 1525873095}
 --- !u!1 &1895738679
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,6 @@ public class Tile : MonoBehaviour
 
     public void setToggle(bool t)
     {
-        Debug.Log("e");
         toggled = t;
         spriteUntoggled.enabled = !toggled;
         spriteToggled.enabled = toggled;
