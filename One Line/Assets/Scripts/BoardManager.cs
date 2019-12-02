@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+    //PÚBLICO
     [Tooltip("Número de filas del tablero")]
     public int rows;
     [Tooltip("Número de columnas del tablero")]
@@ -11,16 +12,20 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Casilla que empezará marcada")]
     public Tile startingTile;
 
+    //PRIVADO
     //Casilla de arriba a la izquierda
     private Vector3 firstTile;
     //Tile que se está pulsando en el momento
     private Tile pressedTile;
     //Cola de casillas pulsadas
     private Stack<Tile> tilePath;
+    //Número de tiles totales
+    private int tileNo;
 
     void Start()
     {
         firstTile = transform.GetChild(0).transform.position;
+        tileNo = transform.childCount;
 
         startingTile.setToggle(true);
         pressedTile = startingTile;
@@ -49,6 +54,14 @@ public class BoardManager : MonoBehaviour
         return verticalAdy || horizontalAdy;
     }
 
+    private void checkWin()
+    {
+        if(tilePath.Count == tileNo)
+        {
+            Debug.Log("Gané gané");
+        }
+    }
+
     void Update()
     {
         //Pulsación del ratón 
@@ -72,7 +85,7 @@ public class BoardManager : MonoBehaviour
 
                 //Llamar al toggle del hijo
                 Tile tile = transform.GetChild(childIndex).GetComponent<Tile>();
-                if (tile != null && tile != pressedTile && isAdjacent(pressedTile, tile))
+                if (tile != null && tile != pressedTile)
                 {
                     //Desencolamos movimientos hasta que volvemos a ese punto
                     if (tile.isToggled())
@@ -83,13 +96,19 @@ public class BoardManager : MonoBehaviour
                             Tile t = tilePath.Pop();
                             t.setToggle(false);
                         }
+                        pressedTile = tile;
                     }
 
                     //Marcamos un nuevo tile
-                    else
+                    else if (isAdjacent(pressedTile, tile))
+                    {
+                        tilePath.Push(tile);
                         tile.setToggle(true); //Que haga sus cosas
-                    pressedTile = tile;
-                    tilePath.Push(tile);
+                        pressedTile = tile;
+
+                        //Comprobamos si hemos ganado
+                        checkWin();
+                    }           
                 }
             }
         }
