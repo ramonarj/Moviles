@@ -10,15 +10,16 @@ public class Tile : MonoBehaviour
     [Tooltip("La imagen que tendra cuando forme parte del camino")]
     public SpriteRenderer spriteToggled;
 
-    bool toggled = false;
-
-
-    public void setToggle(bool t)
+    /* De momento unicamente solo querremos setTouch y unTouch*/
+    public void setTouch()
     {
-        toggled = t;
-        spriteUntoggled.enabled = !toggled;
-        spriteToggled.enabled = toggled;
+        spriteUntoggled.enabled = false;
+        spriteToggled.enabled = true;
     }
 
-    public bool isToggled() { return toggled; }
+    public void setUnTouch()
+    {
+        spriteUntoggled.enabled = true;
+        spriteToggled.enabled = false;
+    }
 }

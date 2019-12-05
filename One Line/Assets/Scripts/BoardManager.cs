@@ -12,34 +12,89 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Casilla que empezará marcada")]
     public Tile startingTile;
 
-    //PRIVADO
-    //Casilla de arriba a la izquierda
-    private Vector3 firstTile;
-    //Tile que se está pulsando en el momento
-    private Tile pressedTile;
-    //Cola de casillas pulsadas
-    private Stack<Tile> tilePath;
-    //Número de tiles totales
-    private int tileNo;
-
-    void Start()
+    /*Estructura que necesitaremos para tener la correlacion entre el array de booleanos y tiles*/
+    struct tilePosition
     {
-        firstTile = transform.GetChild(0).transform.position;
-        tileNo = transform.childCount;
-
-        startingTile.setToggle(true);
-        pressedTile = startingTile;
-
-        tilePath = new Stack<Tile>();
-        tilePath.Push(pressedTile);
+        public int x_;
+        public int y_;
     }
 
+    //PRIVADO
+    [Tooltip("Casilla de arriba a la izquierda")]
+    private Vector3 firstTile;
+    [Tooltip("Tile que se esta pulsando en el momento")]
+    private Tile pressedTile;
+    [Tooltip("Cola de casillas pulsadas")]
+    private Stack<tilePosition> tilePath;
+    [Tooltip("Numeor de tiles totales")]
+    private int tileNo;
+
+    [Tooltip("Array de booleanos para conocer el estado del tile")]
+    private bool[,] touched;
+
+    [Tooltip("Array de Tiles que componene el nivel")]
+    private Tile[,] tiles;
+
+    
+    /*Inicializamos los atributos necesarios*/
+    void Start()
+    {
+        /*Esquina superior izquierda de la matriz*/
+        firstTile = transform.GetChild(0).transform.position;
+
+        /*Numero de elementos de la matriz*/
+        tileNo = transform.childCount;
+
+        startingTile.setTouch();
+        pressedTile = startingTile;
+
+        /*Inicializamos la pila */
+        tilePath = new Stack<tilePosition>();
+
+        /*Pusheamos la primera posicion del tile inical*/
+        /*Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)*/
+        int x = (int)startingTile.transform.position.x;
+        int y = (int)startingTile.transform.position.y;
+
+        x += cols / 2;
+        y += rows / 2;
+
+        //Índice del hijo pulsado
+        int matrizIndex = rows * y + x;
+        tilePath.Push(new tilePosition { x_=x,y_=y});
+
+        /*Inicializamos el array de booleanos*/
+        touched = new bool[rows,cols];
+        tiles = new Tile[rows, cols];
+
+        /*Ponemos el primer Tile a marcado*/
+        touched[x, y] = true;
+
+        /*Rellenamos el vector de Tiles*/
+        initTiles();
+    }
+    
+    /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
+    private void initTiles()
+    {
+        for(int i=0;i<rows;i++)
+            for(int j=0;j<cols;j++)
+            {
+                Tile aux= this.transform.GetChild(i * rows + j).GetComponent<Tile>();
+                if (aux == pressedTile)
+                    aux.setTouch();
+                
+                tiles[j, i] = aux;
+            }
+    }
+    /*Devuelve true si la posicion esta dentro de los limites,false en caso contrario*/
     private bool insideLimits(float x, float y)
     {
         return x > (float)cols / -2.0f && x < (float)cols / 2.0f &&
             y > (float)rows / -2.0f && y < (float)rows / 2.0f;
     }
 
+    /*Devuelve true si el tile1 es adyacente a tile2 , false en caso contrario*/
     private bool isAdjacent(Tile tile1, Tile tile2)
     {
         //Índices de los tiles, al ser hijos del tablero
@@ -54,6 +109,7 @@ public class BoardManager : MonoBehaviour
         return verticalAdy || horizontalAdy;
     }
 
+    /*Devuelve true si has ganado la partida, false en caso contrario*/
     private void checkWin()
     {
         if(tilePath.Count == tileNo)
@@ -80,21 +136,19 @@ public class BoardManager : MonoBehaviour
                 x += cols / 2;
                 y += rows / 2;
 
-                //Índice del hijo pulsado
-                int childIndex = rows * y + x;
-
                 //Llamar al toggle del hijo
-                Tile tile = transform.GetChild(childIndex).GetComponent<Tile>();
+                Tile tile = tiles[x,y];
                 if (tile != null && tile != pressedTile)
                 {
                     //Desencolamos movimientos hasta que volvemos a ese punto
-                    if (tile.isToggled())
+                    if (touched[x,y])
                     {
                         //Desencolar
-                        while (tilePath.Peek() != tile)
+                        while (tiles[tilePath.Peek().x_,tilePath.Peek().y_] != tile)
                         {
-                            Tile t = tilePath.Pop();
-                            t.setToggle(false);
+                            tilePosition t = tilePath.Pop();
+                            tiles[t.x_, t.y_].setUnTouch();
+                            touched[t.x_, t.y_] = false;
                         }
                         pressedTile = tile;
                     }
@@ -102,10 +156,10 @@ public class BoardManager : MonoBehaviour
                     //Marcamos un nuevo tile
                     else if (isAdjacent(pressedTile, tile))
                     {
-                        tilePath.Push(tile);
-                        tile.setToggle(true); //Que haga sus cosas
+                        tilePath.Push(new tilePosition {x_=x,y_=y});
+                        tiles[tilePath.Peek().x_, tilePath.Peek().y_].setTouch(); //Que haga sus cosas
                         pressedTile = tile;
-
+                        touched[x, y] = true;
                         //Comprobamos si hemos ganado
                         checkWin();
                     }           
