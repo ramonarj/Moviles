@@ -45,7 +45,6 @@ public class BoardManager : MonoBehaviour
         /*Numero de elementos de la matriz*/
         tileNo = transform.childCount;
 
-        startingTile.setTouch();
         pressedTile = startingTile;
 
         /*Inicializamos la pila */
@@ -82,7 +81,7 @@ public class BoardManager : MonoBehaviour
             {
                 Tile aux= this.transform.GetChild(i * rows + j).GetComponent<Tile>();
                 if (aux == pressedTile)
-                    aux.setTouch();
+                    aux.setTouch(Utils.Direction.None);
                 
                 tiles[j, i] = aux;
             }
@@ -156,8 +155,34 @@ public class BoardManager : MonoBehaviour
                     //Marcamos un nuevo tile
                     else if (isAdjacent(pressedTile, tile))
                     {
+                        Utils.Direction oldDir, newDir;
+                        oldDir = newDir = Utils.Direction.None; ;
+                        if (x > tilePath.Peek().x_)
+                        {
+                            oldDir = Utils.Direction.Right;
+                            newDir = Utils.Direction.Left;
+                        }
+
+                        else if (x < tilePath.Peek().x_)
+                        {
+                            oldDir = Utils.Direction.Left;
+                            newDir = Utils.Direction.Right;
+                        }
+
+                        else if (y < tilePath.Peek().y_)
+                        {
+                            oldDir = Utils.Direction.Up;
+                            newDir = Utils.Direction.Down;
+                        }
+
+                        else if (y > tilePath.Peek().y_)
+                        {
+                            oldDir = Utils.Direction.Down;
+                            newDir = Utils.Direction.Up;
+                        }
+                        pressedTile.setTouch(oldDir);
                         tilePath.Push(new tilePosition {x_=x,y_=y});
-                        tiles[tilePath.Peek().x_, tilePath.Peek().y_].setTouch(); //Que haga sus cosas
+                        tiles[tilePath.Peek().x_, tilePath.Peek().y_].setTouch(newDir); //Que haga sus cosas
                         pressedTile = tile;
                         touched[x, y] = true;
                         //Comprobamos si hemos ganado
