@@ -17,27 +17,65 @@ public class Tile : MonoBehaviour
     public SpriteRenderer leftPath;
     public SpriteRenderer rightPath;
 
-    /* De momento unicamente solo querremos setTouch y unTouch*/
-    public void setTouch(Direction d) //d = dirección de la que se viene
+    // Activa el sprite del camino en una dirección
+    public void setPath(Direction d)
     {
         //Sprites del camino (depende de la dirección de la que se venga)
-        switch (d)
+        switch (d.dir)
         {
-            case Direction.Up:
+            case DirectionEnum.Up:
                 upPath.enabled = true;
                 break;
-            case Direction.Down:
+            case DirectionEnum.Down:
                 downPath.enabled = true;
                 break;
-            case Direction.Left:
+            case DirectionEnum.Left:
                 leftPath.enabled = true;
                 break;
-            case Direction.Right:
+            case DirectionEnum.Right:
                 rightPath.enabled = true;
                 break;
             default:
                 break;
         }
+    }
+
+    //Desactiva el sprite del camino de esa dirección
+    public void unsetPath(Direction d)
+    {
+        //Sprites del camino (depende de la dirección de la que se venga)
+        switch (d.dir)
+        {
+            case DirectionEnum.Up:
+                upPath.enabled = false;
+                break;
+            case DirectionEnum.Down:
+                downPath.enabled = false;
+                break;
+            case DirectionEnum.Left:
+                leftPath.enabled = false;
+                break;
+            case DirectionEnum.Right:
+                rightPath.enabled = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    //Desactiva todos los caminos
+    public void unsetAllPaths()
+    {
+        //Sprites del camino
+        upPath.enabled = false;
+        downPath.enabled = false;
+        leftPath.enabled = false;
+        rightPath.enabled = false;
+    }
+
+    /* De momento unicamente solo querremos setTouch y unTouch*/
+    public void setTouch() //d = dirección de la que se viene
+    {
         //Swap
         spriteUntoggled.enabled = false;
         spriteToggled.enabled = true;
@@ -48,11 +86,5 @@ public class Tile : MonoBehaviour
         //Swap
         spriteUntoggled.enabled = true;
         spriteToggled.enabled = false;
-
-        //Sprites del camino
-        upPath.enabled = false;
-        downPath.enabled = false;
-        leftPath.enabled = false;
-        rightPath.enabled = false;
     }
 }
