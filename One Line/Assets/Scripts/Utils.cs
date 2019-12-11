@@ -6,7 +6,7 @@ namespace Utils
 {
     public enum DirectionEnum { Up, Down, Left, Right, None };
 
-
+    // Para las 4 direcciones
     public struct Direction
     {
         public DirectionEnum dir;

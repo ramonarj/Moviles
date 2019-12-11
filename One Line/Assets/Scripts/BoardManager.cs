@@ -150,7 +150,28 @@ public class BoardManager : MonoBehaviour
         pressedTile.setPath(dir.inverse());
     }
 
-    private void handleInput(Vector3 screenPos)
+    private void goBackToTile(int x, int y)
+    {
+        //Desencolar
+        Tile tile = tiles[x, y];
+        tilePosition t = tilePath.Peek();
+        while (tiles[t.x_, t.y_] != tile)
+        {
+            t = tilePath.Pop();
+            touched[t.x_, t.y_] = false;
+            //Desactivar sprites del nuevo tile
+            Utils.Direction dir = getDirFrom(t, tilePath.Peek());
+            tiles[t.x_, t.y_].unsetPath(dir);
+            tiles[t.x_, t.y_].setUnTouch();
+
+            //Desactivar path del nuevo tile
+            t = tilePath.Peek();
+            tiles[t.x_, t.y_].unsetPath(dir.inverse());
+        }
+        pressedTile = tile;
+    }
+
+    private void handlePress(Vector3 screenPos)
     {
         //Coorenadas locales del ratón (el 0,0 está en el medio del tablero)
         Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
@@ -170,28 +191,11 @@ public class BoardManager : MonoBehaviour
             Tile tile = tiles[x, y];
             if (tile != null && tile != pressedTile)
             {
-                //Desencolamos movimientos hasta que volvemos a ese punto
+                //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
                 if (touched[x, y])
-                {
-                    //Desencolar
-                    tilePosition t = tilePath.Peek();
-                    while (tiles[t.x_, t.y_] != tile)
-                    {
-                        t = tilePath.Pop();
-                        touched[t.x_, t.y_] = false;
-                        //Desactivar sprites del nuevo tile
-                        Utils.Direction dir = getDirFrom(t, tilePath.Peek());
-                        tiles[t.x_, t.y_].unsetPath(dir);
-                        tiles[t.x_, t.y_].setUnTouch();
+                    goBackToTile(x, y);
 
-                        //Desactivar path del nuevo tile
-                        t = tilePath.Peek();
-                        tiles[t.x_, t.y_].unsetPath(dir.inverse());
-                    }
-                    pressedTile = tile;
-                }
-
-                //Marcamos un nuevo tile
+                //2. Si no, marcamos el nuevo tile con todo lo que conlleva
                 else if (isAdjacent(tilePath.Peek(), new tilePosition(x, y)))
                     pressTile(x, y);
             }
@@ -209,14 +213,14 @@ public class BoardManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             if(touch.phase != TouchPhase.Ended)
-                handleInput(touch);
+                handlePress(touch.position);
             else
                 checkWin();
         }
 #else
         //Pulsación del ratón 
         if (Input.GetMouseButton(0))
-            handleInput(Input.mousePosition);
+            handlePress(Input.mousePosition);
         //Comprobamos si hemos ganado
         else if (Input.GetMouseButtonUp(0))
             checkWin();
