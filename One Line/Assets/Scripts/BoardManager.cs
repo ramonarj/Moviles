@@ -11,6 +11,8 @@ public class BoardManager : MonoBehaviour
     public int cols;
     [Tooltip("Casilla que empezará marcada")]
     public Tile startingTile;
+    [Tooltip("Iimagen que rodea el raton")]
+    public SpriteRenderer fondoRaton_;
 
     /*Estructura que necesitaremos para tener la correlacion entre el array de booleanos y tiles*/
     struct tilePosition
@@ -51,8 +53,10 @@ public class BoardManager : MonoBehaviour
 
     [Tooltip("Array de Tiles que componene el nivel")]
     private Tile[,] tiles;
+    [Tooltip("Gameobject adjuntado al fondo del raton")]
+    private GameObject ratonFondo_;
 
-    
+
     /*Inicializamos los atributos necesarios*/
     void Start()
     {
@@ -171,14 +175,21 @@ public class BoardManager : MonoBehaviour
         pressedTile = tile;
     }
 
+    private void releaseRatonFondo()
+    {
+        Destroy(ratonFondo_.gameObject);
+        ratonFondo_ = null;
+    }
+
     private void handlePress(Vector3 screenPos)
     {
         //Coorenadas locales del ratón (el 0,0 está en el medio del tablero)
         Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
-
+        if (ratonFondo_ != null) ratonFondo_.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
         //Comprobamos que no se sale de los límites
         if (insideLimits(mousePos.x, mousePos.y))
         {
+            if(ratonFondo_==null) ratonFondo_ = Instantiate(fondoRaton_, new Vector3(mousePos.x, mousePos.y, 10), Quaternion.identity).gameObject;
             //Redondeamos para obtener el centro del tile donde se ha pulsado
             int x = Mathf.RoundToInt(mousePos.x);
             int y = -Mathf.RoundToInt(mousePos.y);
@@ -223,7 +234,10 @@ public class BoardManager : MonoBehaviour
             handlePress(Input.mousePosition);
         //Comprobamos si hemos ganado
         else if (Input.GetMouseButtonUp(0))
+        {
             checkWin();
+            releaseRatonFondo();
+        }
 #endif
     }
 }
