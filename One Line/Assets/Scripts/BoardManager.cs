@@ -9,10 +9,10 @@ public class BoardManager : MonoBehaviour
     public int rows;
     [Tooltip("Número de columnas del tablero")]
     public int cols;
-    [Tooltip("Casilla que empezará marcada")]
-    public Tile startingTile;
     [Tooltip("Iimagen que rodea el raton")]
     public SpriteRenderer fondoRaton_;
+    [Tooltip("El prefab del Tile")]
+    public GameObject tilePrefab;
 
     /*Estructura que necesitaremos para tener la correlacion entre el array de booleanos y tiles*/
     struct tilePosition
@@ -61,40 +61,51 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         /*Inicializamos el array de booleanos, tiles y el path*/
-        touched = new bool[rows, cols];
-        tiles = new Tile[rows, cols];
+        touched = new bool[cols, rows];
+        tiles = new Tile[cols, rows];
         tilePath = new Stack<tilePosition>();
 
+        /*Creamos el vector de Tiles*/
+        initTiles();
+
         /*Inicialización de variables auxiliares*/
-        firstTile = transform.GetChild(0).transform.position;
+        firstTile = tiles[0,0].transform.position;
         tileNo = transform.childCount;
-        pressedTile = startingTile;
+        pressedTile = tiles[0, 0];
         pressedTile.setTouch();
 
         /*Pusheamos la primera posicion del tile inical*/
         /*Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)*/
-        int x = (int)startingTile.transform.position.x;
-        int y = (int)startingTile.transform.position.y;
+        int x = (int)pressedTile.transform.position.x;
+        int y = -(int)pressedTile.transform.position.y;
 
         x += cols / 2;
-        y += rows / 2;
+        y +=rows / 2;
         tilePath.Push(new tilePosition(x, y));
+        Debug.Log(x + ", " + y);
 
         /*Ponemos el primer Tile a marcado*/
         touched[x, y] = true;
 
-        /*Rellenamos el vector de Tiles*/
-        initTiles();
-
+        //Círculo desactivado
         ratonFondo_ = null;
     }
     
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles()
     {
-        for (int i=0;i<rows;i++)
-            for(int j=0;j<cols;j++)
-                tiles[j, i] = transform.GetChild(i * rows + j).GetComponent<Tile>();
+        float rowOff = 0; if (rows % 2 == 0) rowOff = -0.5f;
+        float colOff = 0; if (cols % 2 == 0) colOff = 0.5f;
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                GameObject o = Instantiate(tilePrefab, transform);
+                o.transform.position = new Vector3(j - (int)cols / 2, -(i - (int)rows / 2)); //+colOff, +rowOff
+                //TODO: moverlo
+                tiles[j, i] = o.GetComponent<Tile>();
+            }
+        }
     }
     /*Devuelve true si la posicion esta dentro de los limites,false en caso contrario*/
     private bool insideLimits(float x, float y)
