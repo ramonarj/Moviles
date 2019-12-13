@@ -85,6 +85,8 @@ public class BoardManager : MonoBehaviour
 
         /*Rellenamos el vector de Tiles*/
         initTiles();
+
+        ratonFondo_ = null;
     }
     
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
@@ -175,69 +177,104 @@ public class BoardManager : MonoBehaviour
         pressedTile = tile;
     }
 
-    private void releaseRatonFondo()
-    {
-        Destroy(ratonFondo_.gameObject);
-        ratonFondo_ = null;
-    }
-
     private void handlePress(Vector3 screenPos)
     {
-        //Coorenadas locales del ratón (el 0,0 está en el medio del tablero)
-        Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
-        if (ratonFondo_ != null) ratonFondo_.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
-        //Comprobamos que no se sale de los límites
-        if (insideLimits(mousePos.x, mousePos.y))
+        //Hemos hecho click anteriormente dentro del tablero
+        if (ratonFondo_ != null)
         {
-            if(ratonFondo_==null) ratonFondo_ = Instantiate(fondoRaton_, new Vector3(mousePos.x, mousePos.y, 10), Quaternion.identity).gameObject;
-            //Redondeamos para obtener el centro del tile donde se ha pulsado
-            int x = Mathf.RoundToInt(mousePos.x);
-            int y = -Mathf.RoundToInt(mousePos.y);
+            //Coorenadas locales del ratón (el 0,0 está en el medio del tablero)
+            Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
 
-            //Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)
-            x += cols / 2;
-            y += rows / 2;
+            //Actualizamos el círculo
+            ratonFondo_.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
 
-            //Tile que hemos pulsado
-            Tile tile = tiles[x, y];
-            if (tile != null && tile != pressedTile)
+            //Si estamos dentro de los límites, vemos si podemos pulsar algo
+            if (insideLimits(mousePos.x, mousePos.y))
             {
-                //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
-                if (touched[x, y])
-                    goBackToTile(x, y);
+                //Redondeamos para obtener el centro del tile donde se ha pulsado
+                int x = Mathf.RoundToInt(mousePos.x);
+                int y = -Mathf.RoundToInt(mousePos.y);
 
-                //2. Si no, marcamos el nuevo tile con todo lo que conlleva
-                else if (isAdjacent(tilePath.Peek(), new tilePosition(x, y)))
-                    pressTile(x, y);
+                //Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)
+                x += cols / 2;
+                y += rows / 2;
+
+                //Tile que hemos pulsado
+                Tile tile = tiles[x, y];
+                if (tile != null && tile != pressedTile)
+                {
+                    //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
+                    if (touched[x, y])
+                        goBackToTile(x, y);
+
+                    //2. Si no, marcamos el nuevo tile con todo lo que conlleva
+                    else if (isAdjacent(tilePath.Peek(), new tilePosition(x, y)))
+                        pressTile(x, y);
+                }
             }
         }
     }
 
 
+    private void handlePressDown(Vector3 screenPos)
+    {
+        //Si pulsamos dentro del tablero, se crea el sprite del círculo y pasamos a poder hacer caminos
+        Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
+        if (insideLimits(mousePos.x, mousePos.y))
+            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(mousePos.x, mousePos.y, 10), Quaternion.identity).gameObject;
+    }
+
+    private void handleRelease()
+    {
+        //Eliminamos el circulo del fondo
+        if(ratonFondo_ != null)
+        {
+            Destroy(ratonFondo_);
+            ratonFondo_ = null;
+        }
+
+        //Comprobamos si hemos ganado
+        if (tilePath.Count == tileNo)
+        {
+            Debug.Log("Gané gané");
+            //GameManager.instance.levelCompleted();
+        }
+    }
+
 
     void Update()
     {
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-        //TODO: comprobar que funcione y multitouch
+        //TODO: multitouch
         //Pulsación del dedo
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if(touch.phase != TouchPhase.Ended)
-                handlePress(touch.position);
-            else
-                checkWin();
+            switch(touch.phase)
+            {
+                case TouchPhase.Began:
+                    handlePressDown(touch.position);
+                    break;
+                case TouchPhase.Moved:
+                    handlePress(touch.position);
+                    break;
+                case TouchPhase.Ended:
+                    handleRelease();
+                    break;
+                default:
+                    break;   
+            }
         }
 #else
-        //Pulsación del ratón 
-        if (Input.GetMouseButton(0))
+        //Lo acabamos de pulsar
+        if (Input.GetMouseButtonDown(0))
+            handlePressDown(Input.mousePosition);
+        //Lo estamos pulsando
+        else if (Input.GetMouseButton(0))
             handlePress(Input.mousePosition);
-        //Comprobamos si hemos ganado
+        //Lo acabamos de soltar
         else if (Input.GetMouseButtonUp(0))
-        {
-            checkWin();
-            releaseRatonFondo();
-        }
+            handleRelease();
 #endif
     }
 }
