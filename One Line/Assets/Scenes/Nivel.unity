@@ -686,7 +686,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0975, y: 0.2484967}
   m_AnchorMax: {x: 0.20875001, y: 0.5991142}
-  m_AnchoredPosition: {x: -3.5999756, y: 0.099975586}
+  m_AnchoredPosition: {x: -3.5998535, y: 0.099975586}
   m_SizeDelta: {x: 7, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1341112460
@@ -1345,6 +1345,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
         type: 3}
+      propertyPath: tilePrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
       propertyPath: startingTile
       value: 
       objectReference: {fileID: 0}
@@ -1368,7 +1373,19 @@ PrefabInstance:
     - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
         type: 3}
       propertyPath: cols
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 5606751859495026462, guid: 7dc014e7f7ad2444d9987bd92a3d7f96,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 7550830179614547939, guid: 813c123c1d23036458df4df9c176c1ee,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b6348ba2cd694d4eb87b545a6b02dbb, type: 3}

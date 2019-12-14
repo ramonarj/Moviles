@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum REF_SYSTEM { GLOBAL, LOCAL };
     //PÚBLICO
     [Tooltip("Número de filas del tablero")]
     public int rows;
@@ -13,7 +12,7 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Iimagen que rodea el raton")]
     public SpriteRenderer fondoRaton_;
     [Tooltip("El prefab del Tile")]
-    public GameObject tilePrefab;
+    public List<GameObject> tilePrefabs;
 
     /*Estructura que necesitaremos para tener la correlacion entre el array de booleanos y tiles*/
     struct tilePosition
@@ -39,24 +38,20 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    //PRIVADO
-    [Tooltip("Casilla de arriba a la izquierda")]
-    private Vector3 firstTile;
-    [Tooltip("Tile que se esta pulsando en el momento")]
-    private Tile pressedTile;
-    [Tooltip("Cola de casillas pulsadas")]
+    //Cola de casillas pulsadas
     private Stack<tilePosition> tilePath;
-    [Tooltip("Numeor de tiles totales")]
+    //Numeor de tiles totales
     private int tileNo;
 
-    [Tooltip("Array de booleanos para conocer el estado del tile")]
+    //Array de booleanos para conocer el estado del tile
     private bool[,] touched;
 
-    [Tooltip("Array de Tiles que componene el nivel")]
+    //Array de Tiles que componene el nivel
     private Tile[,] tiles;
-    [Tooltip("Gameobject adjuntado al fondo del raton")]
+    //Gameobject adjuntado al fondo del raton
     private GameObject ratonFondo_;
 
+    public enum REF_SYSTEM { GLOBAL, LOCAL };
 
     /*Inicializamos los atributos necesarios*/
     void Start()
@@ -66,30 +61,27 @@ public class BoardManager : MonoBehaviour
         tiles = new Tile[cols, rows];
         tilePath = new Stack<tilePosition>();
 
-        /*Creamos el vector de Tiles*/
+        /*Instanciamos los Tiles*/
         initTiles();
-
-        /*Inicialización de variables auxiliares*/
-        firstTile = tiles[0, 0].transform.position;
-        tileNo = transform.childCount;
 
         //Casilla por la que empezamos
         tilePosition starting = new tilePosition(0, 0);
+        touched[starting.x_, starting.y_] = true;
+        tiles[starting.x_, starting.y_].setTouch();
         tilePath.Push(starting);
 
-        /*La marcamos y la activamos*/
-        touched[starting.x_, starting.y_] = true;
-
-        pressedTile = tiles[starting.x_, starting.y_];
-        pressedTile.setTouch();
-
-        //Círculo desactivado
+        /*Inicialización de variables auxiliares*/
+        tileNo = transform.childCount;
         ratonFondo_ = null;
     }
 
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles()
     {
+        //El color del tile es aleatorio de entre los disponibles
+        System.Random rnd = new System.Random();
+        int randomTileNo = rnd.Next(0, tilePrefabs.Count);
+
         //Ponemos el tablero abajo a la izquierda
         transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, 0);
 
@@ -100,10 +92,14 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < cols; j++)
             {
-                GameObject o = Instantiate(tilePrefab, transform);
+                //Creamos el objeto
+                GameObject o = Instantiate(tilePrefabs[randomTileNo], transform);
                 o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff); //+colOff, +rowOff
-                //TODO: moverlo
-                tiles[j, i] = o.GetComponent<Tile>();
+
+                //Nos guardamos el tile en la matriz y lo ponemos gris
+                Tile tile = o.GetComponent<Tile>();
+                tiles[j, i] = tile;
+                tile.setUnTouch();
             }
         }
     }
@@ -158,16 +154,14 @@ public class BoardManager : MonoBehaviour
         tiles[x, y].setTouch();
 
         //Dirección del anterior tile a este
-        tilePosition t = new tilePosition(x, y);
-        Utils.Direction dir = getDirFrom(tilePath.Peek(), t);
-        pressedTile.setPath(dir);
+        tilePosition prev = tilePath.Peek();
+        tilePosition next = new tilePosition(x, y);
+        Utils.Direction dir = getDirFrom(prev, next);
+        tiles[prev.x_, prev.y_].setPath(dir);
 
-        //Lo metemos en el path y actualizamos el tile pulsado
-        tilePath.Push(new tilePosition(x, y));
-        pressedTile = tiles[x, y];
-
-        //La dirección del nuevo tile es la inversa que la del otro
-        pressedTile.setPath(dir.inverse());
+        //Lo metemos en el path y pintamos el otro sprite de dirección
+        tilePath.Push(next);
+        tiles[next.x_, next.y_].setPath(dir.inverse());
     }
 
     //Vuelve al tile con la posición dada
@@ -189,7 +183,6 @@ public class BoardManager : MonoBehaviour
             t = tilePath.Peek();
             tiles[t.x_, t.y_].unsetPath(dir.inverse());
         }
-        pressedTile = tile;
     }
 
     //Transforma unas coordenadas de pantalla en globales/locales
@@ -228,14 +221,15 @@ public class BoardManager : MonoBehaviour
 
                 //Tile que hemos pulsado
                 Tile tile = tiles[x, y];
-                if (tile != null && tile != pressedTile)
+                tilePosition tilePos = new tilePosition(x, y);
+                if (tile != null && tilePath.Peek() != tilePos)
                 {
                     //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
                     if (touched[x, y])
-                        goBackToTile(new tilePosition(x, y));
+                        goBackToTile(tilePos);
 
                     //2. Si no, marcamos el nuevo tile con todo lo que conlleva
-                    else if (isAdjacent(tilePath.Peek(), new tilePosition(x, y)))
+                    else if (isAdjacent(tilePath.Peek(), tilePos))
                         pressTile(x, y);
                 }
             }
