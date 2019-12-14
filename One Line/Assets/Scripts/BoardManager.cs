@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+    public enum REF_SYSTEM { GLOBAL, LOCAL };
     //PÚBLICO
     [Tooltip("Número de filas del tablero")]
     public int rows;
@@ -69,31 +70,30 @@ public class BoardManager : MonoBehaviour
         initTiles();
 
         /*Inicialización de variables auxiliares*/
-        firstTile = tiles[0,0].transform.position;
+        firstTile = tiles[0, 0].transform.position;
         tileNo = transform.childCount;
-        pressedTile = tiles[0, 0];
+
+        //Casilla por la que empezamos
+        tilePosition starting = new tilePosition(0, 0);
+        tilePath.Push(starting);
+
+        /*La marcamos y la activamos*/
+        touched[starting.x_, starting.y_] = true;
+
+        pressedTile = tiles[starting.x_, starting.y_];
         pressedTile.setTouch();
-
-        /*Pusheamos la primera posicion del tile inical*/
-        /*Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)*/
-        int x = (int)pressedTile.transform.position.x;
-        int y = -(int)pressedTile.transform.position.y;
-
-        x += cols / 2;
-        y +=rows / 2;
-        tilePath.Push(new tilePosition(x, y));
-        Debug.Log(x + ", " + y);
-
-        /*Ponemos el primer Tile a marcado*/
-        touched[x, y] = true;
 
         //Círculo desactivado
         ratonFondo_ = null;
     }
-    
+
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles()
     {
+        //Ponemos el tablero abajo a la izquierda
+        transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, 0);
+
+        //Offset para los tamaños pares
         float rowOff = 0; if (rows % 2 == 0) rowOff = -0.5f;
         float colOff = 0; if (cols % 2 == 0) colOff = 0.5f;
         for (int i = 0; i < rows; i++)
@@ -101,17 +101,18 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < cols; j++)
             {
                 GameObject o = Instantiate(tilePrefab, transform);
-                o.transform.position = new Vector3(j - (int)cols / 2, -(i - (int)rows / 2)); //+colOff, +rowOff
+                o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff); //+colOff, +rowOff
                 //TODO: moverlo
                 tiles[j, i] = o.GetComponent<Tile>();
             }
         }
     }
+
     /*Devuelve true si la posicion esta dentro de los limites,false en caso contrario*/
     private bool insideLimits(float x, float y)
     {
-        return x > (float)cols / -2.0f && x < (float)cols / 2.0f &&
-            y > (float)rows / -2.0f && y < (float)rows / 2.0f;
+        return x > 0 && x < cols &&
+            y > 0 && y < rows;
     }
 
     /*Devuelve true si el tile1 es adyacente a tile2 , false en caso contrario*/
@@ -127,13 +128,14 @@ public class BoardManager : MonoBehaviour
     /*Devuelve true si has ganado la partida, false en caso contrario*/
     private void checkWin()
     {
-        if(tilePath.Count == tileNo)
+        if (tilePath.Count == tileNo)
         {
             Debug.Log("Gané gané");
             //GameManager.instance.levelCompleted();
         }
     }
 
+    //Obtiene la dirección necesaria para ir de un tile a otro
     private Utils.Direction getDirFrom(tilePosition from, tilePosition to)
     {
         if (from.x_ < to.x_)
@@ -148,6 +150,7 @@ public class BoardManager : MonoBehaviour
             return new Utils.Direction(Utils.DirectionEnum.None);
     }
 
+    //Presiona un tile
     private void pressTile(int x, int y)
     {
         //Marcamos en el array
@@ -167,10 +170,11 @@ public class BoardManager : MonoBehaviour
         pressedTile.setPath(dir.inverse());
     }
 
-    private void goBackToTile(int x, int y)
+    //Vuelve al tile con la posición dada
+    private void goBackToTile(tilePosition tilePos)
     {
         //Desencolar
-        Tile tile = tiles[x, y];
+        Tile tile = tiles[tilePos.x_, tilePos.y_];
         tilePosition t = tilePath.Peek();
         while (tiles[t.x_, t.y_] != tile)
         {
@@ -188,27 +192,39 @@ public class BoardManager : MonoBehaviour
         pressedTile = tile;
     }
 
+    //Transforma unas coordenadas de pantalla en globales/locales
+    private Vector3 getPosition(Vector3 screenPos, REF_SYSTEM refSys)
+    {
+        //1. Pasamos de coordenadas de pantalla a coordenadas del mundo
+        Vector3 worldPos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
+        if (refSys == REF_SYSTEM.GLOBAL)
+            return worldPos;
+        //2. Pasamos de coordenadas globales a coorenadas locales 
+        else
+            return transform.InverseTransformPoint(worldPos);
+    }
+
     private void handlePress(Vector3 screenPos)
     {
         //Hemos hecho click anteriormente dentro del tablero
         if (ratonFondo_ != null)
         {
-            //Coorenadas locales del ratón (el 0,0 está en el medio del tablero)
-            Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
-
             //Actualizamos el círculo
-            ratonFondo_.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+            Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
+            ratonFondo_.transform.position = new Vector3(worldPos.x, worldPos.y, 10.0f);
 
-            //Si estamos dentro de los límites, vemos si podemos pulsar algo
+            //Coordenadas locales del click
+            Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL);
+
+            //3. Si estamos dentro de los límites, vemos si podemos pulsar algo
             if (insideLimits(mousePos.x, mousePos.y))
             {
-                //Redondeamos para obtener el centro del tile donde se ha pulsado
-                int x = Mathf.RoundToInt(mousePos.x);
-                int y = -Mathf.RoundToInt(mousePos.y);
-
                 //Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)
-                x += cols / 2;
-                y += rows / 2;
+                int x = Mathf.RoundToInt(mousePos.x - 0.5f);
+                int y = Mathf.RoundToInt(mousePos.y - 0.5f);
+
+                //Temporal
+                y = rows - y - 1;
 
                 //Tile que hemos pulsado
                 Tile tile = tiles[x, y];
@@ -216,7 +232,7 @@ public class BoardManager : MonoBehaviour
                 {
                     //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
                     if (touched[x, y])
-                        goBackToTile(x, y);
+                        goBackToTile(new tilePosition(x, y));
 
                     //2. Si no, marcamos el nuevo tile con todo lo que conlleva
                     else if (isAdjacent(tilePath.Peek(), new tilePosition(x, y)))
@@ -230,15 +246,16 @@ public class BoardManager : MonoBehaviour
     private void handlePressDown(Vector3 screenPos)
     {
         //Si pulsamos dentro del tablero, se crea el sprite del círculo y pasamos a poder hacer caminos
-        Vector3 mousePos = FindObjectOfType<Camera>().ScreenToWorldPoint(screenPos);
-        if (insideLimits(mousePos.x, mousePos.y))
-            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(mousePos.x, mousePos.y, 10), Quaternion.identity).gameObject;
+        Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL);
+        Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
+        if (insideLimits(localPos.x, localPos.y))
+            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(worldPos.x, worldPos.y, 10.0f), Quaternion.identity).gameObject;
     }
 
     private void handleRelease()
     {
         //Eliminamos el circulo del fondo
-        if(ratonFondo_ != null)
+        if (ratonFondo_ != null)
         {
             Destroy(ratonFondo_);
             ratonFondo_ = null;
