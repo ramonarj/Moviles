@@ -1346,7 +1346,7 @@ PrefabInstance:
     - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
         type: 3}
       propertyPath: tilePrefabs.Array.size
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
         type: 3}
@@ -1379,13 +1379,43 @@ PrefabInstance:
         type: 3}
       propertyPath: tilePrefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 5606751859495026462, guid: 7dc014e7f7ad2444d9987bd92a3d7f96,
+      objectReference: {fileID: 4663745642680385067, guid: 37642c8944fb5d24f813b15824e3d8f2,
         type: 3}
     - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
         type: 3}
       propertyPath: tilePrefabs.Array.data[1]
       value: 
+      objectReference: {fileID: 4956723862429033716, guid: 73f06e0f00f928f49b0eed881f5a60d0,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 3436931589511718759, guid: 28d1599ee17bcc5478b9238a329ac3c4,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 8686613347451905420, guid: 2c6de8a57fb678c40ac6f20dcf108a94,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 5606751859495026462, guid: 7dc014e7f7ad2444d9987bd92a3d7f96,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[5]
+      value: 
       objectReference: {fileID: 7550830179614547939, guid: 813c123c1d23036458df4df9c176c1ee,
+        type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: tilePrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 4817954213707268766, guid: cbc19cd76403cdb41b8ebf8baff20567,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b6348ba2cd694d4eb87b545a6b02dbb, type: 3}
