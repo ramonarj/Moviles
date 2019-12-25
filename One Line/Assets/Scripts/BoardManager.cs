@@ -5,41 +5,19 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     //PÚBLICO
-    [Tooltip("Número de filas del tablero")]
-    public int rows;
-    [Tooltip("Número de columnas del tablero")]
-    public int cols;
+    [Tooltip("Nivel a testear")]
+    public int level;
     [Tooltip("Iimagen que rodea el raton")]
     public SpriteRenderer fondoRaton_;
     [Tooltip("El prefab del Tile")]
     public List<GameObject> tilePrefabs;
 
-    /*Estructura que necesitaremos para tener la correlacion entre el array de booleanos y tiles*/
-    struct tilePosition
-    {
-        public int x_;
-        public int y_;
-
-        //Constructora
-        public tilePosition(int x, int y)
-        {
-            x_ = x;
-            y_ = y;
-        }
-
-        //Operadores de igualdad y desigualdad
-        public static bool operator ==(tilePosition lhs, tilePosition rhs)
-        {
-            return (lhs.x_ == rhs.x_ && lhs.y_ == rhs.y_);
-        }
-        public static bool operator !=(tilePosition lhs, tilePosition rhs)
-        {
-            return !(lhs == rhs);
-        }
-    }
+    //Filas y columnas del tablero
+    private int rows;
+    private int cols;
 
     //Cola de casillas pulsadas
-    private Stack<tilePosition> tilePath;
+    private Stack<Utils.tilePosition> tilePath;
     //Numeor de tiles totales
     private int tileNo;
 
@@ -56,19 +34,18 @@ public class BoardManager : MonoBehaviour
     /*Inicializamos los atributos necesarios*/
     void Start()
     {
+        //Guardamos los datos del nivel, inicializamos filas y columnas
+        LevelData data = GameManager.instance.getLevelData(level);
+        rows = data.layout.Count;
+        cols = data.layout[0].Length;
+
         /*Inicializamos el array de booleanos, tiles y el path*/
         touched = new bool[cols, rows];
         tiles = new Tile[cols, rows];
-        tilePath = new Stack<tilePosition>();
+        tilePath = new Stack<Utils.tilePosition>();
 
         /*Instanciamos los Tiles*/
-        initTiles();
-
-        //Casilla por la que empezamos
-        tilePosition starting = new tilePosition(0, 0);
-        touched[starting.x_, starting.y_] = true;
-        tiles[starting.x_, starting.y_].setTouch();
-        tilePath.Push(starting);
+        initTiles(data.layout);
 
         /*Inicialización de variables auxiliares*/
         tileNo = transform.childCount;
@@ -76,7 +53,7 @@ public class BoardManager : MonoBehaviour
     }
 
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
-    private void initTiles()
+    private void initTiles(List<string> layout)
     {
         //El color del tile es aleatorio de entre los disponibles
         System.Random rnd = new System.Random();
@@ -90,18 +67,33 @@ public class BoardManager : MonoBehaviour
         float colOff = 0; if (cols % 2 == 0) colOff = 0.5f;
         for (int i = 0; i < rows; i++)
         {
+            string rowLayout = layout[i];
             for (int j = 0; j < cols; j++)
             {
-                //Creamos el objeto
-                GameObject o = Instantiate(tilePrefabs[randomTileNo], transform);
-                o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff); //+colOff, +rowOff
+                if(rowLayout[j] != '0')
+                {
+                    //Creamos el objeto
+                    GameObject o = Instantiate(tilePrefabs[randomTileNo], transform);
+                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff); //+colOff, +rowOff
 
-                //Nos guardamos el tile en la matriz y lo ponemos gris
-                Tile tile = o.GetComponent<Tile>();
-                tiles[j, i] = tile;
-                tile.setUnTouch();
+                    //Nos guardamos el tile en la matriz y lo ponemos gris
+                    Tile tile = o.GetComponent<Tile>();
+                    tiles[j, i] = tile;
+                    if(rowLayout[j] == '2')
+                    {
+                        //Casilla por la que empezamos
+                        Utils.tilePosition starting = new Utils.tilePosition(j, i);
+                        touched[starting.x, starting.y] = true;
+                        tiles[starting.x, starting.y].setTouch();
+                        tilePath.Push(starting);
+                    }
+                    else
+                        tile.setUnTouch();
+                }
             }
         }
+
+
     }
 
     /*Devuelve true si la posicion esta dentro de los limites,false en caso contrario*/
@@ -112,35 +104,25 @@ public class BoardManager : MonoBehaviour
     }
 
     /*Devuelve true si el tile1 es adyacente a tile2 , false en caso contrario*/
-    private bool isAdjacent(tilePosition tile1, tilePosition tile2)
+    private bool isAdjacent(Utils.tilePosition tile1, Utils.tilePosition tile2)
     {
         //Comprobamos que sean adyacentes
-        int verticalDist = Mathf.Abs(tile1.y_ - tile2.y_);
-        int horizontalDist = Mathf.Abs(tile1.x_ - tile2.x_);
+        int verticalDist = Mathf.Abs(tile1.y - tile2.y);
+        int horizontalDist = Mathf.Abs(tile1.x - tile2.x);
 
         return (verticalDist + horizontalDist == 1);
     }
 
-    /*Devuelve true si has ganado la partida, false en caso contrario*/
-    private void checkWin()
-    {
-        if (tilePath.Count == tileNo)
-        {
-            Debug.Log("Gané gané");
-            //GameManager.instance.levelCompleted();
-        }
-    }
-
     //Obtiene la dirección necesaria para ir de un tile a otro
-    private Utils.Direction getDirFrom(tilePosition from, tilePosition to)
+    private Utils.Direction getDirFrom(Utils.tilePosition from, Utils.tilePosition to)
     {
-        if (from.x_ < to.x_)
+        if (from.x < to.x)
             return new Utils.Direction(Utils.DirectionEnum.Right);
-        else if (from.x_ > to.x_)
+        else if (from.x > to.x)
             return new Utils.Direction(Utils.DirectionEnum.Left);
-        else if (from.y_ > to.y_)
+        else if (from.y > to.y)
             return new Utils.Direction(Utils.DirectionEnum.Up);
-        else if (from.y_ < to.y_)
+        else if (from.y < to.y)
             return new Utils.Direction(Utils.DirectionEnum.Down);
         else
             return new Utils.Direction(Utils.DirectionEnum.None);
@@ -154,34 +136,34 @@ public class BoardManager : MonoBehaviour
         tiles[x, y].setTouch();
 
         //Dirección del anterior tile a este
-        tilePosition prev = tilePath.Peek();
-        tilePosition next = new tilePosition(x, y);
+        Utils.tilePosition prev = tilePath.Peek();
+        Utils.tilePosition next = new Utils.tilePosition(x, y);
         Utils.Direction dir = getDirFrom(prev, next);
-        tiles[prev.x_, prev.y_].setPath(dir);
+        tiles[prev.x, prev.y].setPath(dir);
 
         //Lo metemos en el path y pintamos el otro sprite de dirección
         tilePath.Push(next);
-        tiles[next.x_, next.y_].setPath(dir.inverse());
+        tiles[next.x, next.y].setPath(dir.inverse());
     }
 
     //Vuelve al tile con la posición dada
-    private void goBackToTile(tilePosition tilePos)
+    private void goBackToTile(Utils.tilePosition tilePos)
     {
         //Desencolar
-        Tile tile = tiles[tilePos.x_, tilePos.y_];
-        tilePosition t = tilePath.Peek();
-        while (tiles[t.x_, t.y_] != tile)
+        Tile tile = tiles[tilePos.x, tilePos.y];
+        Utils.tilePosition t = tilePath.Peek();
+        while (tiles[t.x, t.y] != tile)
         {
             t = tilePath.Pop();
-            touched[t.x_, t.y_] = false;
+            touched[t.x, t.y] = false;
             //Desactivar sprites del nuevo tile
             Utils.Direction dir = getDirFrom(t, tilePath.Peek());
-            tiles[t.x_, t.y_].unsetPath(dir);
-            tiles[t.x_, t.y_].setUnTouch();
+            tiles[t.x, t.y].unsetPath(dir);
+            tiles[t.x, t.y].setUnTouch();
 
             //Desactivar path del nuevo tile
             t = tilePath.Peek();
-            tiles[t.x_, t.y_].unsetPath(dir.inverse());
+            tiles[t.x, t.y].unsetPath(dir.inverse());
         }
     }
 
@@ -221,7 +203,7 @@ public class BoardManager : MonoBehaviour
 
                 //Tile que hemos pulsado
                 Tile tile = tiles[x, y];
-                tilePosition tilePos = new tilePosition(x, y);
+                Utils.tilePosition tilePos = new Utils.tilePosition(x, y);
                 if (tile != null && tilePath.Peek() != tilePos)
                 {
                     //1. Si ya estaba pulsado, desencolamos movimientos hasta que llegamos a ese tile
@@ -257,10 +239,7 @@ public class BoardManager : MonoBehaviour
 
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
-        {
-            Debug.Log("Gané gané");
-            //GameManager.instance.levelCompleted();
-        }
+            GameManager.instance.levelCompleted(level);
     }
 
 

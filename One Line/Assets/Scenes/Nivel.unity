@@ -433,7 +433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.15383093}
-  m_AnchoredPosition: {x: 0, y: -0.60009766}
+  m_AnchoredPosition: {x: 0, y: -0.6001587}
   m_SizeDelta: {x: 0, y: -1.1999512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &681836751
@@ -637,6 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de6b24d19247954199c34f7478affc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelsFile: '"/Levels/Prueba.json"'
 --- !u!4 &961910745
 Transform:
   m_ObjectHideFlags: 0
@@ -1417,5 +1418,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4817954213707268766, guid: cbc19cd76403cdb41b8ebf8baff20567,
         type: 3}
+    - target: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+        type: 3}
+      propertyPath: level
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b6348ba2cd694d4eb87b545a6b02dbb, type: 3}
