@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -62,5 +63,30 @@ public class GameManager : MonoBehaviour
             levelprogress[difficulty] = number + 1; //y por un ++
 
         Debug.Log("Has completado el nivel " + (number+1) + " de la dificultad " + (difficulty+1));
+    }
+
+    //Nos lleva a la pantalla de selección
+    public void GoToSeleccion(int difficulty)
+    {
+        SceneManager.LoadScene("Seleccion", LoadSceneMode.Single);
+    }
+
+    //Nos lleva a la pantalla de nivel
+    public void GoToLevel(int levelNo)
+    {
+        //TODO: comprobar que toca jugar ese nivel
+        SceneManager.LoadScene("Nivel", LoadSceneMode.Single);
+    }
+
+    //Nos lleva a la pantalla de  menú
+    public void GoToMenu()
+    {
+        SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+    }
+
+
+    public int getLevelProgress(int difficulty)
+    {
+        return levelprogress[difficulty];
     }
 }
