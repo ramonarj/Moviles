@@ -11,6 +11,8 @@ public class BoardManager : MonoBehaviour
     public SpriteRenderer fondoRaton_;
     [Tooltip("El prefab del Tile")]
     public List<GameObject> tilePrefabs;
+    [Tooltip("Lo que aparece al ganar")]
+    public GameObject WinPanel;
 
     //Filas y columnas del tablero
     private int rows;
@@ -18,6 +20,8 @@ public class BoardManager : MonoBehaviour
 
     //Cola de casillas pulsadas
     private Stack<Utils.tilePosition> tilePath;
+    //Tile por el que se empieza
+    private Utils.tilePosition startingTile;
     //Numeor de tiles totales
     private int tileNo;
 
@@ -82,10 +86,10 @@ public class BoardManager : MonoBehaviour
                     if(rowLayout[j] == '2')
                     {
                         //Casilla por la que empezamos
-                        Utils.tilePosition starting = new Utils.tilePosition(j, i);
-                        touched[starting.x, starting.y] = true;
-                        tiles[starting.x, starting.y].setTouch();
-                        tilePath.Push(starting);
+                        startingTile = new Utils.tilePosition(j, i);
+                        touched[startingTile.x, startingTile.y] = true;
+                        tiles[startingTile.x, startingTile.y].setTouch();
+                        tilePath.Push(startingTile);
                     }
                     else
                         tile.setUnTouch();
@@ -239,9 +243,17 @@ public class BoardManager : MonoBehaviour
 
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
+        {
             GameManager.instance.levelCompleted(level);
+            WinPanel.SetActive(true);
+        }     
     }
 
+    //Reinicia el nivel
+    public void restartLevel()
+    {
+        goBackToTile(startingTile);
+    }
 
     void Update()
     {

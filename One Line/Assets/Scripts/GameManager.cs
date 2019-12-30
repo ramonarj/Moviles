@@ -84,6 +84,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Menu", LoadSceneMode.Single);
     }
 
+    //Sale de la aplicación
+    public void QuitApp()
+    {
+        Application.Quit();
+    }
+
 
     public int getLevelProgress(int difficulty)
     {
