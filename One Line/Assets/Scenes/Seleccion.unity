@@ -457,18 +457,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294c7a75c4f89145af617163a380f1a, type: 3}
---- !u!114 &1832084272 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1832084271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de6b24d19247954199c34f7478affc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &6700850831136363628
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -690,8 +678,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1832084272}
-        m_MethodName: GoToMenu
+      - m_Target: {fileID: 8277094833096644968, guid: 6a4c9d1e03b5c4c428ca7ecb512b2a49,
+          type: 3}
+        m_MethodName: OnClickedHome
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

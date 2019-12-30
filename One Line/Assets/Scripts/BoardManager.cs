@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+    //Instancia del singleton
+    public static BoardManager instance;
+
     //PÚBLICO
-    [Tooltip("Nivel a testear")]
-    public int level;
     [Tooltip("Iimagen que rodea el raton")]
     public SpriteRenderer fondoRaton_;
     [Tooltip("El prefab del Tile")]
@@ -35,10 +36,21 @@ public class BoardManager : MonoBehaviour
 
     public enum REF_SYSTEM { GLOBAL, LOCAL };
 
+    //Para el singleton
+    void Awake()
+    {
+        // Singleton
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this.gameObject);
+    }
+
     /*Inicializamos los atributos necesarios*/
     void Start()
     {
         //Guardamos los datos del nivel, inicializamos filas y columnas
+        int level = GameManager.instance.getActualLevel();
         LevelData data = GameManager.instance.getLevelData(level);
         rows = data.layout.Count;
         cols = data.layout[0].Length;
@@ -244,7 +256,7 @@ public class BoardManager : MonoBehaviour
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
         {
-            GameManager.instance.levelCompleted(level);
+            GameManager.instance.levelCompleted();
             WinPanel.SetActive(true);
         }     
     }
@@ -255,8 +267,17 @@ public class BoardManager : MonoBehaviour
         goBackToTile(startingTile);
     }
 
+    public void showHint()
+    {
+        //TODO: hacerlo
+        Debug.Log("Enseñando pista...");
+    }
+
     void Update()
     {
+        //Si ya hemos completado el nivel no gestionamos nada de esto
+        if (!WinPanel.active)
+        {
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
         //TODO: multitouch
         //Pulsación del dedo
@@ -279,15 +300,16 @@ public class BoardManager : MonoBehaviour
             }
         }
 #else
-        //Lo acabamos de pulsar
-        if (Input.GetMouseButtonDown(0))
-            handlePressDown(Input.mousePosition);
-        //Lo estamos pulsando
-        else if (Input.GetMouseButton(0))
-            handlePress(Input.mousePosition);
-        //Lo acabamos de soltar
-        else if (Input.GetMouseButtonUp(0))
-            handleRelease();
+            //Lo acabamos de pulsar
+            if (Input.GetMouseButtonDown(0))
+                handlePressDown(Input.mousePosition);
+            //Lo estamos pulsando
+            else if (Input.GetMouseButton(0))
+                handlePress(Input.mousePosition);
+            //Lo acabamos de soltar
+            else if (Input.GetMouseButtonUp(0))
+                handleRelease();
 #endif
+        }
     }
 }

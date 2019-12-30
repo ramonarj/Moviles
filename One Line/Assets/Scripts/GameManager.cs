@@ -20,8 +20,11 @@ public class GameManager : MonoBehaviour
     //Número de niveles que nos hemos pasado en cada nivel de dificultad (5 enteros de 1-100)
     private List<int> levelprogress;
 
-    //Lista de niveles, con su número, disposición y forma de ganar
+    //Datos de todos los niveles
     private LevelDataList levelDataList;
+
+    //Nivel seleccionado para jugar
+    private int actualLevel;
 
     void Awake()
     {
@@ -31,9 +34,12 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
-        //Output the Game data path to the console
+        //Leemos los niveles
         string inputJson = File.ReadAllText(Application.dataPath + "/Levels/Prueba.json");
         levelDataList = LevelDataList.CreateFromJSON(inputJson);
+        actualLevel = 1;
+
+        Object.DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -51,16 +57,23 @@ public class GameManager : MonoBehaviour
         return levelDataList[index - 1];
     }
 
-    public void levelCompleted(int levelNo)
+    public int getActualLevel()
+    {
+        return actualLevel;
+    }
+
+
+    //Hemos completado el nivel que estábamos jugado
+    public void levelCompleted()
     {
         //Vemos de qué dificultad y nivel se trata
-        levelNo -= 1; //Empieza en 0 para el GameManager
+        int levelNo = actualLevel - 1; //Empieza en 0 para el GameManager
         int difficulty = levelNo / 100;
         int number = levelNo % 100;
 
         //Nos tocaba pasarnos ese nivel
-        if (levelprogress[difficulty] <= number) //Habría que cambiarlo por un ==
-            levelprogress[difficulty] = number + 1; //y por un ++
+        if (levelprogress[difficulty] == number) //Habría que cambiarlo por un ==
+            levelprogress[difficulty]++; //y por un ++
 
         Debug.Log("Has completado el nivel " + (number+1) + " de la dificultad " + (difficulty+1));
     }
@@ -75,6 +88,14 @@ public class GameManager : MonoBehaviour
     public void GoToLevel(int levelNo)
     {
         //TODO: comprobar que toca jugar ese nivel
+        actualLevel = levelNo;
+        SceneManager.LoadScene("Nivel", LoadSceneMode.Single);
+    }
+
+    //Jugamos el siguiente nivel
+    public void NextLevel()
+    {
+        actualLevel++;
         SceneManager.LoadScene("Nivel", LoadSceneMode.Single);
     }
 
@@ -87,12 +108,19 @@ public class GameManager : MonoBehaviour
     //Sale de la aplicación
     public void QuitApp()
     {
+        Debug.Log("Quitting...");
         Application.Quit();
     }
 
+    public void addCoins(int n)
+    {
+        //TODO: actualizar el GUI
+        Debug.Log("+" + n + " monedas");
+        coinNo += n;
+    }
 
     public int getLevelProgress(int difficulty)
     {
-        return levelprogress[difficulty];
+        return levelprogress[difficulty - 1];
     }
 }
