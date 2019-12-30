@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    //Prefab del GO con el componente con AudioSource
+    public GameObject reproductor;
+
     //[Tooltip("Ruta del archivo donde están los niveles")]
     //public string levelsFile;
 
@@ -25,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     //Nivel seleccionado para jugar
     private int actualLevel;
+
+    //Audio source que se crea solo para reproducir sonidos
+    private GameObject source;
 
     void Awake()
     {
@@ -89,20 +95,20 @@ public class GameManager : MonoBehaviour
     {
         //TODO: comprobar que toca jugar ese nivel
         actualLevel = levelNo;
-        SceneManager.LoadScene("Nivel", LoadSceneMode.Single);
+        GoToScene("Nivel");
     }
 
     //Jugamos el siguiente nivel
     public void NextLevel()
     {
         actualLevel++;
-        SceneManager.LoadScene("Nivel", LoadSceneMode.Single);
+        GoToScene("Nivel");
     }
 
     //Nos lleva a la pantalla de  menú
     public void GoToMenu()
     {
-        SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+        GoToScene("Menu");
     }
 
     //Sale de la aplicación
@@ -122,5 +128,18 @@ public class GameManager : MonoBehaviour
     public int getLevelProgress(int difficulty)
     {
         return levelprogress[difficulty - 1];
+    }
+
+    public void playSound(AudioClip clip)
+    {
+        source = Instantiate(reproductor);
+        source.GetComponent<AudioSource>().PlayOneShot(clip);
+        Destroy(source, clip.length);
+    }
+
+    //Corutina para ir a una escena esperando antes que termine cualquier sonido que estuviéramos reproduciendo
+    private void GoToScene(string scene)
+    {
+        SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
 }

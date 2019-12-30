@@ -47,4 +47,9 @@ public class Callbacks : MonoBehaviour
     {
         BoardManager.instance.restartLevel();
     }
+
+    public void OnSoundPlayed(AudioClip clip)
+    {
+        GameManager.instance.playSound(clip);
+    }
 }
