@@ -87,11 +87,9 @@ public class GameManager : MonoBehaviour
     //Hemos completado el nivel que estábamos jugado
     public void levelCompleted()
     {
-        //Nos tocaba pasarnos ese nivel
-        if (levelprogress[actualDifficulty - 1] == actualLevel - 1) //Habría que cambiarlo por un ==
-            levelprogress[actualDifficulty - 1]++; //y por un ++
-
-        Debug.Log("Has completado el nivel " + actualLevel + " de la dificultad " + actualDifficulty);
+        //Si nos tocaba pasarnos ese nivel, actualizamos la lista
+        if (levelprogress[actualDifficulty - 1] == actualLevel - 1)
+            levelprogress[actualDifficulty - 1]++;
     }
 
     //Nos lleva a la pantalla de selección (seleccionando dificultad

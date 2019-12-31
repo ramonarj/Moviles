@@ -22,7 +22,6 @@ public class LevelManager : MonoBehaviour
         //Número de nivel hasta el que queremos bloquear
         int difficulty = GameManager.instance.getActualDifficulty();
         int maxLevel = GameManager.instance.getLevelProgress(difficulty);
-        Debug.Log(maxLevel);
 
         Transform rect = GetComponent<Transform>();
         int rows = NUM_LEVELS / NUM_COLS;
