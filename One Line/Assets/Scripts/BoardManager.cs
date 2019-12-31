@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardManager : MonoBehaviour
 {
     //Instancia del singleton
     public static BoardManager instance;
 
-    //PÚBLICO
-    [Tooltip("Iimagen que rodea el raton")]
-    public SpriteRenderer fondoRaton_;
+    //EDITOR
+    //Prefabs para las pieles
     [Tooltip("El prefab del Tile")]
     public List<GameObject> tilePrefabs;
+    [Tooltip("Imágenes que rodean el raton")]
+    public List<GameObject> mousePrefabs;
+
+    //Panel
     [Tooltip("Panel que aparece al ganar")]
     public GameObject WinPanel;
 
+    //Sonidos
     [Tooltip("Sonido al conectar tiles")]
     public AudioClip connectSound;
     [Tooltip("Sonido al completar el nivel")]
@@ -22,9 +27,13 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Sonido al reiniciar nivel")]
     public AudioClip restartSound;
 
+    //PRIVADO
     //Filas y columnas del tablero
     private int rows;
     private int cols;
+
+    //Piel que se usará
+    int skinNo;
 
     //Cola de casillas pulsadas
     private Stack<Utils.tilePosition> tilePath;
@@ -57,7 +66,9 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Guardamos los datos del nivel, inicializamos filas y columnas
-        int level = GameManager.instance.getActualLevel();
+        int difficulty = GameManager.instance.getActualDifficulty();
+        int level = GameManager.instance.getActualLevel() + (difficulty - 1) * 100; //Hay que obtener el nivel de 1-500, no de 1-100
+        Debug.Log(level);
         LevelData data = GameManager.instance.getLevelData(level);
         rows = data.layout.Count;
         cols = data.layout[0].Length;
@@ -80,7 +91,7 @@ public class BoardManager : MonoBehaviour
     {
         //El color del tile es aleatorio de entre los disponibles
         System.Random rnd = new System.Random();
-        int randomTileNo = rnd.Next(0, tilePrefabs.Count);
+        skinNo = rnd.Next(0, tilePrefabs.Count);
 
         //Ponemos el tablero abajo a la izquierda
         transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, -1f);
@@ -96,7 +107,7 @@ public class BoardManager : MonoBehaviour
                 if(rowLayout[j] != '0')
                 {
                     //Creamos el objeto
-                    GameObject o = Instantiate(tilePrefabs[randomTileNo], transform);
+                    GameObject o = Instantiate(tilePrefabs[skinNo], transform);
                     o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f); //+colOff, +rowOff
 
                     //Nos guardamos el tile en la matriz y lo ponemos gris
@@ -253,7 +264,7 @@ public class BoardManager : MonoBehaviour
         Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL);
         Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
         if (insideLimits(localPos.x, localPos.y))
-            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(worldPos.x, worldPos.y, -2f), Quaternion.identity).gameObject;
+            ratonFondo_ = Instantiate(mousePrefabs[skinNo], new Vector3(worldPos.x, worldPos.y, -2f), Quaternion.identity).gameObject;
     }
 
     private void handleRelease()
@@ -268,8 +279,13 @@ public class BoardManager : MonoBehaviour
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
         {
+            //Avisamos al GM
             GameManager.instance.levelCompleted();
             GameManager.instance.playSound(winSound);
+
+            //Activamos el panel
+            WinPanel.transform.GetChild(0).GetComponent<Text>().text = GameManager.instance.getActualDifficultyName();
+            WinPanel.transform.GetChild(1).GetComponent<Text>().text = GameManager.instance.getActualLevel().ToString();
             WinPanel.SetActive(true);
         }     
     }

@@ -11,11 +11,11 @@ public class GameManager : MonoBehaviour
     //Prefab del GO con el componente con AudioSource
     public GameObject reproductor;
 
-    //[Tooltip("Ruta del archivo donde están los niveles")]
-    //public string levelsFile;
+    //Nombres de las dificultades
+    public List<string> difficulties;
 
-    //Número de dificultades que hay
-    public int DIFFICULTIES_NO;
+    [Tooltip("Ruta del archivo donde están los niveles")]
+    public string levelsFile;
 
     //Número de monedas
     private int coinNo;
@@ -27,7 +27,8 @@ public class GameManager : MonoBehaviour
     private LevelDataList levelDataList;
 
     //Nivel seleccionado para jugar
-    private int actualLevel;
+    private int actualLevel; // 1-100
+    private int actualDifficulty; //1-5
 
     //Audio source que se crea solo para reproducir sonidos
     private GameObject source;
@@ -41,9 +42,12 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
 
         //Leemos los niveles
-        string inputJson = File.ReadAllText(Application.dataPath + "/Levels/Prueba.json");
+        string inputJson = File.ReadAllText(Application.dataPath + levelsFile);
         levelDataList = LevelDataList.CreateFromJSON(inputJson);
+
+        //Para hacer pruebas
         actualLevel = 1;
+        actualDifficulty = 1;
 
         Object.DontDestroyOnLoad(gameObject);
     }
@@ -53,14 +57,15 @@ public class GameManager : MonoBehaviour
         coinNo = 0;
         levelprogress = new List<int>();
 
-        for (int i = 0; i < DIFFICULTIES_NO; i++)
+        for (int i = 0; i < difficulties.Count; i++)
             levelprogress.Add(0);
     }
 
     //Devuelve los datos del nivel especificado
     public LevelData getLevelData(int index)
     {
-        return levelDataList[index - 1];
+        //Hay que cubrirse las espaldas por si no están todos los niveles del 0 al "index"
+        return levelDataList.levels.Find(x => x.index == index);
     }
 
     public int getActualLevel()
@@ -68,24 +73,36 @@ public class GameManager : MonoBehaviour
         return actualLevel;
     }
 
+    public int getActualDifficulty()
+    {
+        return actualDifficulty;
+    }
+
+    public string getActualDifficultyName()
+    {
+        return difficulties[actualDifficulty - 1];
+    }
+
 
     //Hemos completado el nivel que estábamos jugado
     public void levelCompleted()
     {
-        //Vemos de qué dificultad y nivel se trata
-        int levelNo = actualLevel - 1; //Empieza en 0 para el GameManager
-        int difficulty = levelNo / 100;
-        int number = levelNo % 100;
-
         //Nos tocaba pasarnos ese nivel
-        if (levelprogress[difficulty] == number) //Habría que cambiarlo por un ==
-            levelprogress[difficulty]++; //y por un ++
+        if (levelprogress[actualDifficulty - 1] == actualLevel - 1) //Habría que cambiarlo por un ==
+            levelprogress[actualDifficulty - 1]++; //y por un ++
 
-        Debug.Log("Has completado el nivel " + (number+1) + " de la dificultad " + (difficulty+1));
+        Debug.Log("Has completado el nivel " + actualLevel + " de la dificultad " + actualDifficulty);
     }
 
-    //Nos lleva a la pantalla de selección
+    //Nos lleva a la pantalla de selección (seleccionando dificultad
     public void GoToSeleccion(int difficulty)
+    {
+        actualDifficulty = difficulty;
+        SceneManager.LoadScene("Seleccion", LoadSceneMode.Single);
+    }
+
+    //Nos lleva a la pantalla de selección (sin cambiar la dificultad)
+    public void GoToSeleccion()
     {
         SceneManager.LoadScene("Seleccion", LoadSceneMode.Single);
     }

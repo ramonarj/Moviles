@@ -45,5 +45,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reproductor: {fileID: 1969376571356245269, guid: 33e0f3f23cb82e344a92e96b8d0a84a0,
     type: 3}
-  DIFFICULTIES_NO: 5
-  SIMULTANEOUS_SOUNDS_NO: 2
+  difficulties:
+  - BEGINNER
+  - REGULAR
+  - ADVANCED
+  - EXPERT
+  - MASTER
+  levelsFile: /Levels/Prueba.json

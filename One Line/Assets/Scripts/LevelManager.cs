@@ -20,7 +20,9 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         //Número de nivel hasta el que queremos bloquear
-        int levelNo = GameManager.instance.getLevelProgress(1);
+        int difficulty = GameManager.instance.getActualDifficulty();
+        int maxLevel = GameManager.instance.getLevelProgress(difficulty);
+        Debug.Log(maxLevel);
 
         Transform rect = GetComponent<Transform>();
         int rows = NUM_LEVELS / NUM_COLS;
@@ -43,8 +45,8 @@ public class LevelManager : MonoBehaviour
                 //Lo colocamos y lo ponemos oculto/nos
                 o.transform.position = new Vector3(MARGIN + j * GAP, 1000 - MARGIN - i * GAP); //Posicion
                 //TODO: poner los números con 3 dígitos (001, 002, 003... , 010, .. 100)
-                if (count <= levelNo)
-                    o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString(); //Número que le corresponde
+                if (count <= maxLevel)
+                    o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString("000"); //Número que le corresponde
                 else
                     o.transform.GetChild(2).gameObject.SetActive(true); //Candado
 
