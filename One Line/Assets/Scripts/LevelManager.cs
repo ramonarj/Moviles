@@ -10,7 +10,8 @@ public class LevelManager : MonoBehaviour
     const int NUM_COLS = 5;
 
     //Margenes
-    const int MARGIN = 200;
+    const int MARGIN = 115;
+    const int GAP = 125;
 
     [Tooltip("El prefab del Nivel")]
     public GameObject levelPrefab;
@@ -40,7 +41,8 @@ public class LevelManager : MonoBehaviour
                 o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.GoToLevel(c));
 
                 //Lo colocamos y lo ponemos oculto/nos
-                o.transform.position = new Vector3(MARGIN + j * 175, 1600 - MARGIN - i * 175); //Posicion
+                o.transform.position = new Vector3(MARGIN + j * GAP, 1000 - MARGIN - i * GAP); //Posicion
+                //TODO: poner los números con 3 dígitos (001, 002, 003... , 010, .. 100)
                 if (count <= levelNo)
                     o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString(); //Número que le corresponde
                 else

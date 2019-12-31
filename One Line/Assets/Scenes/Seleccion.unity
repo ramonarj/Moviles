@@ -304,10 +304,10 @@ RectTransform:
   m_Father: {fileID: 6700850832576903394}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.43451566}
-  m_AnchorMax: {x: 0.5, y: 0.43451566}
-  m_AnchoredPosition: {x: -0.000005722, y: -9.2}
-  m_SizeDelta: {x: 800, y: 1002.6}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -82}
+  m_SizeDelta: {x: 720, y: 813}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1130606420
 MonoBehaviour:
@@ -507,10 +507,10 @@ RectTransform:
   m_Father: {fileID: 6700850832576903394}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.49743652}
-  m_SizeDelta: {x: 0, y: -0.8000488}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 720, y: 1280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6700850831136363631
 GameObject:
@@ -577,8 +577,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.7250004, y: -791.6}
-  m_SizeDelta: {x: 672, y: 2585.8}
+  m_AnchoredPosition: {x: 0, y: -850.1}
+  m_SizeDelta: {x: 720, y: 2513.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6700850831929859876
 GameObject:
@@ -712,15 +712,15 @@ RectTransform:
   m_GameObject: {fileID: 6700850831929859876}
   m_LocalRotation: {x: -0, y: -0, z: 0.00094637915, w: -0.9999996}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2500004, y: 1.2500004, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6700850832576903394}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.108}
-  m_AnchorMin: {x: 0.01875, y: 0.88759387}
-  m_AnchorMax: {x: 0.16875, y: 1}
-  m_AnchoredPosition: {x: -4.0599976, y: -5.9020996}
-  m_SizeDelta: {x: -24, y: -50.021362}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -288, y: 570}
+  m_SizeDelta: {x: 96, y: 96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &6700850832576903394
 RectTransform:
@@ -780,7 +780,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 720, y: 1280}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3

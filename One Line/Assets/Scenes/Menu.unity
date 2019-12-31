@@ -461,10 +461,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3291278179209863727, guid: 0d44c552ab7ed184394ed46a3dcf15df,
+    - target: {fileID: 6639369472088046451, guid: 0d44c552ab7ed184394ed46a3dcf15df,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1176763899}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d44c552ab7ed184394ed46a3dcf15df, type: 3}
