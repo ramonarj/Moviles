@@ -12,8 +12,15 @@ public class BoardManager : MonoBehaviour
     public SpriteRenderer fondoRaton_;
     [Tooltip("El prefab del Tile")]
     public List<GameObject> tilePrefabs;
-    [Tooltip("Lo que aparece al ganar")]
+    [Tooltip("Panel que aparece al ganar")]
     public GameObject WinPanel;
+
+    [Tooltip("Sonido al conectar tiles")]
+    public AudioClip connectSound;
+    [Tooltip("Sonido al completar el nivel")]
+    public AudioClip winSound;
+    [Tooltip("Sonido al reiniciar nivel")]
+    public AudioClip restartSound;
 
     //Filas y columnas del tablero
     private int rows;
@@ -76,7 +83,7 @@ public class BoardManager : MonoBehaviour
         int randomTileNo = rnd.Next(0, tilePrefabs.Count);
 
         //Ponemos el tablero abajo a la izquierda
-        transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, 0);
+        transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, -1f);
 
         //Offset para los tamaños pares
         float rowOff = 0; if (rows % 2 == 0) rowOff = -0.5f;
@@ -90,7 +97,7 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[randomTileNo], transform);
-                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff); //+colOff, +rowOff
+                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f); //+colOff, +rowOff
 
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
@@ -202,7 +209,7 @@ public class BoardManager : MonoBehaviour
         {
             //Actualizamos el círculo
             Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
-            ratonFondo_.transform.position = new Vector3(worldPos.x, worldPos.y, 10.0f);
+            ratonFondo_.transform.position = new Vector3(worldPos.x, worldPos.y, -2f);
 
             //Coordenadas locales del click
             Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL);
@@ -229,6 +236,11 @@ public class BoardManager : MonoBehaviour
                     //2. Si no, marcamos el nuevo tile con todo lo que conlleva
                     else if (isAdjacent(tilePath.Peek(), tilePos))
                         pressTile(x, y);
+                    else
+                        return;
+
+                    //Sonido
+                    GameManager.instance.playSound(connectSound);
                 }
             }
         }
@@ -241,7 +253,7 @@ public class BoardManager : MonoBehaviour
         Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL);
         Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
         if (insideLimits(localPos.x, localPos.y))
-            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(worldPos.x, worldPos.y, 10.0f), Quaternion.identity).gameObject;
+            ratonFondo_ = Instantiate(fondoRaton_, new Vector3(worldPos.x, worldPos.y, -2f), Quaternion.identity).gameObject;
     }
 
     private void handleRelease()
@@ -257,6 +269,7 @@ public class BoardManager : MonoBehaviour
         if (tilePath.Count == tileNo)
         {
             GameManager.instance.levelCompleted();
+            GameManager.instance.playSound(winSound);
             WinPanel.SetActive(true);
         }     
     }
@@ -265,6 +278,7 @@ public class BoardManager : MonoBehaviour
     public void restartLevel()
     {
         goBackToTile(startingTile);
+        GameManager.instance.playSound(restartSound);
     }
 
     public void showHint()

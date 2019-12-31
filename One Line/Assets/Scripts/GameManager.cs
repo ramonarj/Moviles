@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     //public string levelsFile;
 
     //Número de dificultades que hay
-    private const int DIFFICULTIES_NO = 5;
+    public int DIFFICULTIES_NO;
 
     //Número de monedas
     private int coinNo;
@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
         return levelprogress[difficulty - 1];
     }
 
+    //Instancia un clon del reproductor para que reproduzca el clip en cuestión
     public void playSound(AudioClip clip)
     {
         source = Instantiate(reproductor);

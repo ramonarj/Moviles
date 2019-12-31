@@ -54,3 +54,6 @@ MonoBehaviour:
   - {fileID: 7550830179614547939, guid: 813c123c1d23036458df4df9c176c1ee, type: 3}
   - {fileID: 4817954213707268766, guid: cbc19cd76403cdb41b8ebf8baff20567, type: 3}
   WinPanel: {fileID: 0}
+  connectSound: {fileID: 8300000, guid: f116c6b00855db147b364aa08bafd324, type: 3}
+  winSound: {fileID: 8300000, guid: 4d7f2149c7d9fa945a9fd174ac2c5877, type: 3}
+  restartSound: {fileID: 8300000, guid: 29e68698006cfa742a93370efec4b578, type: 3}
