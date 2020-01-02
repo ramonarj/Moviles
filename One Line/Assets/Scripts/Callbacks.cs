@@ -18,6 +18,7 @@ public class Callbacks : MonoBehaviour
     public void OnClickedNextLevel()
     {
         GameManager.instance.NextLevel();
+        AdsManager.instance.ShowAd();
     }
 
     //Pulsación en home (en el pop-up al completar un nivel)
@@ -39,9 +40,9 @@ public class Callbacks : MonoBehaviour
     }
 
     //Pulsación en el botón de los anuncios
-    public void OnClickedViewAd(int coinNo)
+    public void OnClickedViewAd()
     {
-        GameManager.instance.addCoins(coinNo);
+        AdsManager.instance.ShowRewardedAd();
     }
 
     //Pulsación en la pista (dentro del nivel)

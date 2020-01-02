@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     public string levelsFile;
 
     //Número de monedas
-    private int coinNo;
+    private int coinNo=0;
 
     //Número de niveles que nos hemos pasado en cada nivel de dificultad (5 enteros de 1-100)
     private List<int> levelprogress;
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < difficulties.Count; i++)
             levelprogress.Add(0);
+
     }
 
     //Devuelve los datos del nivel especificado
@@ -81,6 +83,11 @@ public class GameManager : MonoBehaviour
     public string getActualDifficultyName()
     {
         return difficulties[actualDifficulty - 1];
+    }
+
+    public int getCoins()
+    {
+        return coinNo;
     }
 
 
@@ -118,6 +125,7 @@ public class GameManager : MonoBehaviour
     {
         actualLevel++;
         GoToScene("Nivel");
+        SaveDataManager.instance.save(levelprogress, coinNo, 0, 0);
     }
 
     //Nos lleva a la pantalla de  menú
@@ -135,9 +143,10 @@ public class GameManager : MonoBehaviour
 
     public void addCoins(int n)
     {
-        //TODO: actualizar el GUI
-        Debug.Log("+" + n + " monedas");
+        //Cogemos el texto de las monedas
         coinNo += n;
+        Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
+        conisTetx.text = System.Convert.ToString(coinNo);
     }
 
     public int getLevelProgress(int difficulty)

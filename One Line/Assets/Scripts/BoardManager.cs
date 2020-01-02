@@ -70,6 +70,9 @@ public class BoardManager : MonoBehaviour
     {
         //Actualizamos el GUI con la información del nivel
         levelText.text = GameManager.instance.getActualDifficultyName() + " " + GameManager.instance.getActualLevel().ToString();
+        //Ponemos las monedas que teniamos en el anitguo nivel
+        Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
+        conisTetx.text = System.Convert.ToString(GameManager.instance.getCoins());
 
         //Leemos los datos del nivel, inicializamos filas y columnas
         int difficulty = GameManager.instance.getActualDifficulty();

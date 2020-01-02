@@ -281,6 +281,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 3}
+      propertyPath: reproductor
+      value: 
+      objectReference: {fileID: 1969376571356245269, guid: 33e0f3f23cb82e344a92e96b8d0a84a0,
+        type: 3}
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -336,12 +342,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
-        type: 3}
-      propertyPath: reproductor
-      value: 
-      objectReference: {fileID: 1969376571356245269, guid: 33e0f3f23cb82e344a92e96b8d0a84a0,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294c7a75c4f89145af617163a380f1a, type: 3}
 --- !u!1001 &6639369472085748763
@@ -351,11 +351,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6639369472088046462, guid: 0d44c552ab7ed184394ed46a3dcf15df,
-        type: 3}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
     - target: {fileID: 6639369472088046450, guid: 0d44c552ab7ed184394ed46a3dcf15df,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -466,5 +461,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1176763899}
+    - target: {fileID: 6639369472088046462, guid: 0d44c552ab7ed184394ed46a3dcf15df,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d44c552ab7ed184394ed46a3dcf15df, type: 3}
