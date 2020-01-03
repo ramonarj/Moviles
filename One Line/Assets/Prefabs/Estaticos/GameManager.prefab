@@ -53,7 +53,7 @@ MonoBehaviour:
   - ADVANCED
   - EXPERT
   - MASTER
-  levelsFile: /Levels/Prueba.json
+  levelsFile: /Levels/Levels.json
 --- !u!114 &-6480010999134524623
 MonoBehaviour:
   m_ObjectHideFlags: 0
