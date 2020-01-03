@@ -276,6 +276,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6480010999134524623, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 3}
+      propertyPath: coinsRewarded
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5795790179147614275, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_Name
@@ -287,6 +292,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1969376571356245269, guid: 33e0f3f23cb82e344a92e96b8d0a84a0,
         type: 3}
+    - target: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 3}
+      propertyPath: levelsFile
+      value: /Levels/Levels.json
+      objectReference: {fileID: 0}
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_LocalPosition.x

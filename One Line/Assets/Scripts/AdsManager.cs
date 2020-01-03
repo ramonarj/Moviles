@@ -14,7 +14,7 @@ public class AdsManager : MonoBehaviour
     //Numero de veces que ha querido ver un anuncio
     private int rewardCout = 0;
 
-    public int coinsRewarded = 0;
+    public int coinsRewarded = 20;
 
     //Ids de los tipos de anuncios
     string placementIdVideo = "video";

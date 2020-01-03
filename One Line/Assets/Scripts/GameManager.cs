@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private LevelDataList levelDataList;
 
     //Nivel seleccionado para jugar
-    private int actualLevel; // 1-100
+    private int actualLevel; // 1-100 
     private int actualDifficulty; //1-5
 
     //Audio source que se crea solo para reproducir sonidos
