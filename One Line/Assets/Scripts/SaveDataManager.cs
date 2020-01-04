@@ -63,7 +63,6 @@ public class SaveDataManager : MonoBehaviour
         //Rellenamos el json y lo guardamos
         string jsonData = JsonUtility.ToJson(game, true);
         File.WriteAllText(jsonSavePath, jsonData);
-        
     }
 
     //Devuelve el objeto creado leyendo el Json especificado
