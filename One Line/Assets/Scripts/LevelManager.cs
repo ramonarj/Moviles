@@ -6,12 +6,17 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     //Número de niveles de cada dificultad
-    const int NUM_LEVELS = 100;
-    const int NUM_COLS = 5;
+    [Tooltip("El número de niveles seleccionables")]
+    public int NUM_LEVELS;
+    [Tooltip("El número de columnas a mostrar")]
+    public int NUM_COLS;
+
+    //Resolución por defecto del juego
+    const float DEFAULT_RES = 16f / 9f;
 
     //Margenes
-    const int MARGIN = 115;
-    const int GAP = 125;
+    int MARGIN;
+    int GAP;
 
     [Tooltip("El prefab del Nivel")]
     public GameObject levelPrefab;
@@ -24,23 +29,29 @@ public class LevelManager : MonoBehaviour
         int difficulty = GameManager.instance.getActualDifficulty();
         int maxLevel = GameManager.instance.getLevelProgress(difficulty);
 
-        Transform rect = GetComponent<Transform>();
         int rows = NUM_LEVELS / NUM_COLS;
         int count = 0;
 
+        float actualRes = (float)Screen.height / (float)Screen.width;
+
+        //Márgenes
+        MARGIN = Screen.width / 5;
+        GAP = Screen.width / (NUM_COLS + 1);
+
         //Creamos los sprites de los niveles
-        for(int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < NUM_COLS; j++)
             {
                 //Creamos el objeto
                 GameObject o = Instantiate(levelPrefab, transform);
+                o.transform.localScale = new Vector3(DEFAULT_RES / actualRes, DEFAULT_RES / actualRes);
 
                 //Nombre y posición
                 int c = count + 1; //NECESARIO PORQUE SI LE PASAS COUNT AL CALLBACK SE QUEDA CON EL VALOR DEL FINAL (100), 
                                     //Y SE INTENTA JUGAR AL NIVEL 101
                 o.name = c.ToString();
-                o.transform.position = new Vector3(MARGIN + j * GAP, 1000 - MARGIN - i * GAP); //Posicion
+                o.transform.position = new Vector3(MARGIN + j * GAP, (4f * Screen.height / 5f) - MARGIN - i * GAP); //Posicion
 
                 //Depende de si está desbloqueado o no
                 if (count <= maxLevel)
