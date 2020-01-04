@@ -19,8 +19,6 @@ public class BoardManager : MonoBehaviour
     //GameObjects 
     [Tooltip("Panel que aparece al ganar")]
     public GameObject WinPanel;
-    [Tooltip("Texto con la información del nivel")]
-    public Text levelText;
 
     //Sonidos
     [Tooltip("Sonido al conectar tiles")]
@@ -72,17 +70,6 @@ public class BoardManager : MonoBehaviour
     /*Inicializamos los atributos necesarios*/
     void Start()
     {
-        //Actualizamos el GUI con la información del nivel
-        levelText.text = GameManager.instance.getActualDifficultyName() + " " + GameManager.instance.getActualLevel().ToString();
-        //Ponemos las monedas que teniamos en el anitguo nivel
-        if (GameObject.Find("Numero") != null)
-        {
-            Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
-            conisTetx.text = System.Convert.ToString(GameManager.instance.getCoins());
-        }
-        else
-            Debug.Log("No se ha encontrado el número en el canvas");
-
         //Leemos los datos del nivel, inicializamos filas y columnas
         int difficulty = GameManager.instance.getActualDifficulty();
         int level = GameManager.instance.getActualLevel() + (difficulty - 1) * 100; //Hay que obtener el nivel de 1-500, no de 1-100

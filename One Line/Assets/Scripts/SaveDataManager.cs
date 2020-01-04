@@ -38,7 +38,6 @@ public class SaveDataManager : MonoBehaviour
     /*Serializamos la clase*/
     public void save(List<int> levels_,int coins_,int premium_,int challenge_)
     {
-        Debug.Log(jsonSavePath);
         levels = levels_;
         coins = coins_;
         premium = premium_;

@@ -37,28 +37,28 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         if (instance != null && instance != this)
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         else
+        {
             instance = this;
 
-        //Leemos los niveles
-        string inputJson = File.ReadAllText(Application.dataPath + levelsFile);
-        levelDataList = LevelDataList.CreateFromJSON(inputJson);
+            //Leemos los niveles
+            string inputJson = File.ReadAllText(Application.dataPath + levelsFile);
+            levelDataList = LevelDataList.CreateFromJSON(inputJson);
 
-        //Para hacer pruebas
-        actualLevel = 1;
-        actualDifficulty = 1;
+            //Para hacer pruebas
+            actualLevel = 1;
+            actualDifficulty = 1;
 
-        //Start
-        coinNo = 0;
-        levelprogress = new List<int>();
-        for (int i = 0; i < difficulties.Count; i++)
-            levelprogress.Add(0);
+            //Start
+            coinNo = 0;
+            levelprogress = new List<int>();
+            for (int i = 0; i < difficulties.Count; i++)
+                levelprogress.Add(0);
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        Object.DontDestroyOnLoad(gameObject);
-
-        Debug.Log("e");
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            Object.DontDestroyOnLoad(gameObject);
+        }
     }
 
     void Start()
@@ -187,24 +187,38 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(scene);
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //Este método se llama siempre que se carga una escena nueva y sirve sobre todo para inicializar GO de la escena (como los textos)
+    //en función de variables del código
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        GameObject monedas = GameObject.Find("Numero");
+        GameObject dificultad = GameObject.Find("Dificultad");
         switch (scene.name)
         {
+                //Pantalla de carga
             case "Loading":
                 StartCoroutine(GoToSceneDelay("Menu", 1f));
                 break;
+                //Menu
             case "Menu":
-                Debug.Log(coinNo);
                 GameObject gamemodes = GameObject.Find("Gamemodes");
                 if (gamemodes != null)
-                {
-
                     for (int i = 0; i < gamemodes.transform.childCount - 1; i++)
-                    {
                         gamemodes.transform.GetChild(i).GetChild(1).GetComponent<Text>().text = levelprogress[i].ToString() + "/100";
-                    }
-                }
+                if(monedas != null)
+                    monedas.GetComponent<Text>().text = coinNo.ToString();
+                break;
+                //Selección de nivel
+            case "Seleccion": 
+                if (dificultad != null)
+                    dificultad.GetComponent<Text>().text = difficulties[actualDifficulty - 1];
+                break;
+                //Nivel
+            case "Nivel":
+                if (dificultad != null)
+                    dificultad.GetComponent<Text>().text = difficulties[actualDifficulty - 1] + " " + actualLevel.ToString();
+                if (monedas != null)
+                    monedas.GetComponent<Text>().text = coinNo.ToString();
                 break;
             default:
                 break;
