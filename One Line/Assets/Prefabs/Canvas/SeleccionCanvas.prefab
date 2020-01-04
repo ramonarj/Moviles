@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 5254753895303794124}
   - component: {fileID: 5254753895303794125}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: SeleccionCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -343,6 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPrefab: {fileID: 5088148282661372464, guid: 8d69243bfcece43479d18cc464192575,
     type: 3}
+  clickSound: {fileID: 8300000, guid: 7d532daa1294cfc4ca17ec7302450b89, type: 3}
 --- !u!1 &5254753896466868740
 GameObject:
   m_ObjectHideFlags: 0

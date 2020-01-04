@@ -115,10 +115,16 @@ public class GameManager : MonoBehaviour
     //Nos lleva a la pantalla de nivel
     public void GoToLevel(int levelNo)
     {
-        //TODO: comprobar que toca jugar ese nivel
-        actualLevel = levelNo;
-        GoToScene("Nivel");
+        //Nivel máximo al que podemos jugar
+        int maxLevel = levelprogress[actualDifficulty - 1];
+        //Comprobamos que está desbloqueado
+        if (maxLevel >= levelNo - 1)
+        {
+            actualLevel = levelNo;
+            GoToScene("Nivel");
+        }
     }
+
 
     //Jugamos el siguiente nivel
     public void NextLevel()

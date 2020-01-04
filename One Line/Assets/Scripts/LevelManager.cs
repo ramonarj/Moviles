@@ -15,7 +15,8 @@ public class LevelManager : MonoBehaviour
 
     [Tooltip("El prefab del Nivel")]
     public GameObject levelPrefab;
-
+    [Tooltip("Sonido al pulsar el nivel")]
+    public AudioClip clickSound;
 
     void Start()
     {
@@ -35,19 +36,23 @@ public class LevelManager : MonoBehaviour
                 //Creamos el objeto
                 GameObject o = Instantiate(levelPrefab, transform);
 
-                //Nombre y callback
+                //Nombre y posición
                 int c = count + 1; //NECESARIO PORQUE SI LE PASAS COUNT AL CALLBACK SE QUEDA CON EL VALOR DEL FINAL (100), 
                                     //Y SE INTENTA JUGAR AL NIVEL 101
                 o.name = c.ToString();
-                o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.GoToLevel(c));
-
-                //Lo colocamos y lo ponemos oculto/nos
                 o.transform.position = new Vector3(MARGIN + j * GAP, 1000 - MARGIN - i * GAP); //Posicion
-                //TODO: poner los números con 3 dígitos (001, 002, 003... , 010, .. 100)
+
+                //Depende de si está desbloqueado o no
                 if (count <= maxLevel)
-                    o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString("000"); //Número que le corresponde
+                {
+                    //Número que le corresponde
+                    o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString("000"); 
+                    //Callbacks
+                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.GoToLevel(c)); 
+                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.playSound(clickSound));
+                }
                 else
-                    o.transform.GetChild(2).gameObject.SetActive(true); //Candado
+                    o.transform.GetChild(2).gameObject.SetActive(true); //Activamos el candado
 
                 count++;
             }
