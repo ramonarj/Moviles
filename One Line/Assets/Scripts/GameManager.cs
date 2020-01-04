@@ -149,6 +149,14 @@ public class GameManager : MonoBehaviour
         conisTetx.text = System.Convert.ToString(coinNo);
     }
 
+    public void decreaseCoins(int n)
+    {
+        //Cogemos el texto de las monedas
+        coinNo -= n;
+        Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
+        conisTetx.text = System.Convert.ToString(coinNo);
+    }
+
     public int getLevelProgress(int difficulty)
     {
         return levelprogress[difficulty - 1];

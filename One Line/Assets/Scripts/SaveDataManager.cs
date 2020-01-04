@@ -65,7 +65,7 @@ public class SaveDataManager : MonoBehaviour
     }
     public string createSalt()
     {
-        const string glyphs = "abcdefghijklmnopqrstuvwxyz0123456789";
+        const string glyphs = " ";
         int charAmount = Random.Range(2, 10);
         string salt = "";
         for (int i = 0; i < charAmount; i++)

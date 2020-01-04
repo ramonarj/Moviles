@@ -16,6 +16,10 @@ public class Tile : MonoBehaviour
     public SpriteRenderer downPath;
     public SpriteRenderer leftPath;
     public SpriteRenderer rightPath;
+    public SpriteRenderer upHint;
+    public SpriteRenderer downHint;
+    public SpriteRenderer leftHint;
+    public SpriteRenderer rightHint;
 
     // Activa el sprite del camino en una dirección
     public void setPath(Direction d)
@@ -34,6 +38,29 @@ public class Tile : MonoBehaviour
                 break;
             case DirectionEnum.Right:
                 rightPath.enabled = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Activa el sprite de la pista en una dirección
+    public void setHint(Direction d)
+    {
+        //Sprites del camino (depende de la dirección de la que se venga)
+        switch (d.dir)
+        {
+            case DirectionEnum.Up:
+                upHint.enabled = true;
+                break;
+            case DirectionEnum.Down:
+                downHint.enabled = true;
+                break;
+            case DirectionEnum.Left:
+                leftHint.enabled = true;
+                break;
+            case DirectionEnum.Right:
+                rightHint.enabled = true;
                 break;
             default:
                 break;

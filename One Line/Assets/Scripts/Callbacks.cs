@@ -46,9 +46,13 @@ public class Callbacks : MonoBehaviour
     }
 
     //Pulsación en la pista (dentro del nivel)
-    public void OnClickedViewHint()
+    public void OnClickedViewHint(int coins)
     {
-        BoardManager.instance.showHint();
+        if (GameManager.instance.getCoins() > coins)
+        {
+            BoardManager.instance.showHint();
+            GameManager.instance.decreaseCoins(coins);
+        }
     }
 
     //Pulsación en el botón de reiniciar nivel

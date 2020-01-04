@@ -52,6 +52,10 @@ public class BoardManager : MonoBehaviour
     private Tile[,] tiles;
     //Gameobject adjuntado al fondo del raton
     private GameObject ratonFondo_;
+    //El camino para acabar el nivel actual
+    private List<tilePosition> levelPath;
+    //Ultima posicion de la ultima pista mostrada
+    private int lastPos;
 
     public enum REF_SYSTEM { GLOBAL, LOCAL };
 
@@ -83,7 +87,8 @@ public class BoardManager : MonoBehaviour
         int difficulty = GameManager.instance.getActualDifficulty();
         int level = GameManager.instance.getActualLevel() + (difficulty - 1) * 100; //Hay que obtener el nivel de 1-500, no de 1-100
         LevelData data = GameManager.instance.getLevelData(level);
-        if(data == null) //Si no se ha conseguido cargar el nivel
+        levelPath = data.path;
+        if (data == null) //Si no se ha conseguido cargar el nivel
         {
             Debug.Log("No se pudo cargar el nivel");
             GameManager.instance.GoToMenu();
@@ -104,6 +109,11 @@ public class BoardManager : MonoBehaviour
         /*Inicialización de variables auxiliares*/
         tileNo = transform.childCount;
         ratonFondo_ = null;
+
+        /*Ultima pista puesta*/
+        lastPos = 0;
+
+    
     }
 
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
@@ -176,6 +186,21 @@ public class BoardManager : MonoBehaviour
             return new Direction(DirectionEnum.Up);
         else if (from.y < to.y)
             return new Direction(DirectionEnum.Down);
+        else
+            return new Direction(DirectionEnum.None);
+    }
+
+    //Obtiene la dirección necesaria para ir de un tile a otro
+    private Direction getDirFromHint(tilePosition from, tilePosition to)
+    {
+        if (from.x < to.x)
+            return new Direction(DirectionEnum.Down);
+        else if (from.x > to.x)
+            return new Direction(DirectionEnum.Up);
+        else if (from.y > to.y)
+            return new Direction(DirectionEnum.Left);
+        else if (from.y < to.y)
+            return new Direction(DirectionEnum.Right);
         else
             return new Direction(DirectionEnum.None);
     }
@@ -277,7 +302,6 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-
     private void handlePressDown(Vector3 screenPos)
     {
         //Si pulsamos dentro del tablero, se crea el sprite del círculo y pasamos a poder hacer caminos
@@ -319,8 +343,20 @@ public class BoardManager : MonoBehaviour
 
     public void showHint()
     {
-        //TODO: hacerlo
-        Debug.Log("Enseñando pista...");
+        //Primero volvemos a la posicion de salida
+        goBackToTile(startingTile);
+        //Mostramos los 5 siguientes tiles que no hayamos mostrado del camino
+        int i = 0;
+        while(i+1+lastPos < levelPath.Count && i<5)
+        {
+            Direction dir = getDirFromHint(levelPath[i+lastPos], levelPath[i + 1+ lastPos]);
+            int x = levelPath[i + lastPos].x;
+            int y = levelPath[i + lastPos].y;
+            //Mostramos el camino de la pista
+            tiles[y, x].setHint(dir);
+            i++;
+        }
+        lastPos = i;
     }
 
     void Update()
