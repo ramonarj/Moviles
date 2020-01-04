@@ -51,7 +51,7 @@ public class Callbacks : MonoBehaviour
         if (GameManager.instance.getCoins() > coins)
         {
             BoardManager.instance.showHint();
-            GameManager.instance.decreaseCoins(coins);
+            GameManager.instance.addCoins(-coins);
         }
     }
 

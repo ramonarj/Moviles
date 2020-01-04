@@ -36,11 +36,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton
-        if (instance == null)
-            instance = this;
-        else
+        if (instance != null && instance != this)
             Destroy(this.gameObject);
+        else
+            instance = this;
 
         //Leemos los niveles
         string inputJson = File.ReadAllText(Application.dataPath + levelsFile);
@@ -50,16 +49,20 @@ public class GameManager : MonoBehaviour
         actualLevel = 1;
         actualDifficulty = 1;
 
+        //Start
+        coinNo = 0;
+        levelprogress = new List<int>();
+        for (int i = 0; i < difficulties.Count; i++)
+            levelprogress.Add(0);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
         Object.DontDestroyOnLoad(gameObject);
+
+        Debug.Log("e");
     }
 
     void Start()
     {
-        coinNo = 0;
-        levelprogress = new List<int>();
-
-        for (int i = 0; i < difficulties.Count; i++)
-            levelprogress.Add(0);
 
     }
 
@@ -151,16 +154,12 @@ public class GameManager : MonoBehaviour
     {
         //Cogemos el texto de las monedas
         coinNo += n;
-        Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
-        conisTetx.text = System.Convert.ToString(coinNo);
-    }
-
-    public void decreaseCoins(int n)
-    {
-        //Cogemos el texto de las monedas
-        coinNo -= n;
-        Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
-        conisTetx.text = System.Convert.ToString(coinNo);
+        GameObject numero = GameObject.Find("Numero");
+        if (numero != null)
+        {
+            Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
+            conisTetx.text = System.Convert.ToString(coinNo);
+        }
     }
 
     public int getLevelProgress(int difficulty)
@@ -179,6 +178,36 @@ public class GameManager : MonoBehaviour
     //Corutina para ir a una escena esperando antes que termine cualquier sonido que estuviéramos reproduciendo
     private void GoToScene(string scene)
     {
-        SceneManager.LoadScene(scene, LoadSceneMode.Single);
+        SceneManager.LoadScene(scene);
+    }
+
+    IEnumerator GoToSceneDelay(string scene, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(scene);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        switch (scene.name)
+        {
+            case "Loading":
+                StartCoroutine(GoToSceneDelay("Menu", 1f));
+                break;
+            case "Menu":
+                Debug.Log(coinNo);
+                GameObject gamemodes = GameObject.Find("Gamemodes");
+                if (gamemodes != null)
+                {
+
+                    for (int i = 0; i < gamemodes.transform.childCount - 1; i++)
+                    {
+                        gamemodes.transform.GetChild(i).GetChild(1).GetComponent<Text>().text = levelprogress[i].ToString() + "/100";
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
