@@ -356,7 +356,7 @@ public class BoardManager : MonoBehaviour
             tiles[y, x].setHint(dir);
             i++;
         }
-        lastPos = i;
+        lastPos += i;
     }
 
     void Update()

@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
 
     //Audio source que se crea solo para reproducir sonidos
     private GameObject source;
+    //Cogemos el nombre del Script reproductor
+    public string getString() { return reproductor.GetComponent<Reproductor>().getReproductorName(); }
+    public int getNumber() { return levelprogress.Count; }
 
     void Awake()
     {
@@ -61,8 +64,24 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < difficulties.Count; i++)
             levelprogress.Add(0);
 
+        //Intentamos cargar el archivo de progreso, y si lo hemos conseguido, comprobamos el hash
+        if (SaveDataManager.instance.load())
+            if (compareHashes(SaveDataManager.instance.getGame()))
+            {
+                Debug.Log("LETS GOOO PAPYU");
+            }
+            else Debug.Log("ME CAGUEN TODO");
+
     }
 
+    private bool compareHashes(GameSaving game)
+    {
+        string levelsConcatenate = SaveDataManager.instance.concatenateLevels(game.levels);
+        string String = SaveDataManager.instance.getString(getString(), getNumber());
+        string hash = SaveDataManager.instance.createHash(levelsConcatenate+ game.coins+game.premium+String+game.challenge);
+        return (hash == game.hash);
+
+    }
     //Devuelve los datos del nivel especificado
     public LevelData getLevelData(int index)
     {

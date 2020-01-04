@@ -48,7 +48,7 @@ public class Callbacks : MonoBehaviour
     //Pulsación en la pista (dentro del nivel)
     public void OnClickedViewHint(int coins)
     {
-        if (GameManager.instance.getCoins() > coins)
+        if (GameManager.instance.getCoins() >= coins)
         {
             BoardManager.instance.showHint();
             GameManager.instance.decreaseCoins(coins);

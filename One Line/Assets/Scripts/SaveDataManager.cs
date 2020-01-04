@@ -6,18 +6,27 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Text;
 
+public class GameSaving
+    {
+    /*Atributos que serializaremos*/
+    [SerializeField] public List<int> levels;
+    [SerializeField] public int coins;
+    [SerializeField] public int premium;
+    [SerializeField] public int challenge;
+    [SerializeField] public string hash;
+
+}
+
 [System.Serializable]
 public class SaveDataManager : MonoBehaviour
 {
     public static SaveDataManager instance;
     private string jsonSavePath;
+    private const string abc= "abcdefghijklmñnopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ1234567890_ - +,#$%&/()=¿?¡!|,.;:{}[]";
 
-    /*Atributos que serializaremos*/
-    [SerializeField] private List<int>levels;
-    [SerializeField] private int coins;
-    [SerializeField] private int premium;
-    [SerializeField] private int challenge;
-    [SerializeField] private string hash;
+    GameSaving game;
+
+    public GameSaving getGame() { return game; }
 
     void Awake()
     {
@@ -35,24 +44,42 @@ public class SaveDataManager : MonoBehaviour
         jsonSavePath = Application.persistentDataPath + "/save.json";   
     }
 
+    private void OnEnable()
+    {
+        game = new GameSaving();
+    }
+
     /*Serializamos la clase*/
     public void save(List<int> levels_,int coins_,int premium_,int challenge_)
     {
         Debug.Log(jsonSavePath);
-        levels = levels_;
-        coins = coins_;
-        premium = premium_;
-        challenge = challenge_;
+        game.levels = levels_;
+        game.coins = coins_;
+        game.premium = premium_;
+        game.challenge = challenge_;
 
         //Cremos el hash concantenando el contenido de la clase y anadiedo una sal al final
-        hash = createHash(System.Convert.ToString(concatenateLevels(levels) + coins + premium + challenge+createSalt()));
+        game.hash = createHash(System.Convert.ToString(concatenateLevels(levels_) + coins_ + premium_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_));
         //Rellenamos el json y lo guardamos
-        string jsonData = JsonUtility.ToJson(this, true);
+        string jsonData = JsonUtility.ToJson(game, true);
         File.WriteAllText(jsonSavePath, jsonData);
         
     }
 
-    public static string createHash(string str)
+    //Devuelve el objeto creado leyendo el Json especificado
+    public bool load()
+    {
+        Debug.Log(jsonSavePath);
+        if (jsonSavePath != null)
+        {
+            game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(jsonSavePath));
+            Debug.Log(game.hash);
+            return true;
+        }
+        else return false;
+    }
+
+    public string createHash(string str)
     {
         System.Security.Cryptography.SHA256Managed crypt = new System.Security.Cryptography.SHA256Managed();
         System.Text.StringBuilder hash = new System.Text.StringBuilder();
@@ -63,19 +90,58 @@ public class SaveDataManager : MonoBehaviour
         }
         return hash.ToString().ToLower();
     }
-    public string createSalt()
+
+    public string getString(string var1, int var2)
     {
-        const string glyphs = " ";
-        int charAmount = Random.Range(2, 10);
-        string salt = "";
-        for (int i = 0; i < charAmount; i++)
+        string String = "";
+        if (var2 > 0 && var2 < abc.Length)
         {
-            salt += glyphs[Random.Range(0, glyphs.Length)];
+            for (int i = 0; i < var1.Length; i++)
+            {
+                int posCaracter = getPosABC(var1[i]);
+                if (posCaracter != -1) 
+                {
+                    int pos = posCaracter + var2;
+                    while (pos >= abc.Length)
+                    {
+                        pos = pos - abc.Length;
+                    }
+                    String += abc[pos];
+                }
+                else String += var1[i];
+            }
         }
-        return salt;
+        return String;
     }
 
-    private string concatenateLevels(List<int>levelss)
+    string getAnotherString(string var1 , int var2)
+    {
+        string String = "";
+        if (var2 > 0 && var2 < abc.Length)
+        {
+            for (int i = 0; i < var1.Length; i++)
+            {
+                int posCaracter = getPosABC(var1[i]);
+                if (posCaracter != -1) 
+                {
+                    int pos = posCaracter - var2;
+                    while (pos < 0)
+                    {
+                        pos = pos + abc.Length;
+                    }
+                    String += abc[pos];
+                }
+                else
+                {
+                    String += var1[i];
+                }
+            }
+
+        }
+        return String;
+    }
+
+    public string concatenateLevels(List<int>levelss)
     {
         string s = "";
         for (int i=0;i<levelss.Count;i++)
@@ -83,5 +149,14 @@ public class SaveDataManager : MonoBehaviour
             s += levelss[i];
         }
         return s;
+    }
+
+    private int getPosABC(char caracter)
+    {
+        for (int i = 0; i < abc.Length; i++)
+        {
+            if (caracter == abc[i]) return i;
+        }
+        return -1;
     }
 }
