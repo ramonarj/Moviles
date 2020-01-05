@@ -326,6 +326,7 @@ public class BoardManager : MonoBehaviour
             else
             {
                 GameObject.Find("Canvas").transform.Find("WinChallenge").gameObject.SetActive(true);
+                GameManager.instance.addChallengeCount();
             }
         }     
     }

@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     //Nivel seleccionado para jugar
     private int actualLevel; // 1-100 
     private int actualDifficulty; //1-5
+    private int challengeCount;
 
     //Audio source que se crea solo para reproducir sonidos
     private GameObject source;
@@ -77,12 +78,14 @@ public class GameManager : MonoBehaviour
             {
                 levelprogress = SaveDataManager.instance.getGame().levels;
                 coinNo = SaveDataManager.instance.getGame().coins;
+                challengeCount = SaveDataManager.instance.getGame().challenge;
                 Debug.Log("Juego cargado correctamente");
             }
             else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
 
         //Empezamos con challenge a false
         challenge = false;
+
     }
     private bool compareHashes(GameSaving game)
     {
@@ -130,6 +133,7 @@ public class GameManager : MonoBehaviour
         return levelprogress[difficulty - 1];
     }
 
+    public void setChallenge(bool challenge_) { challenge = challenge_; }
     //Hemos completado el nivel que estábamos jugado
     public void levelCompleted()
     {
@@ -170,14 +174,14 @@ public class GameManager : MonoBehaviour
     {
         actualLevel++;
         GoToScene("Nivel");
-        SaveDataManager.instance.save(levelprogress, coinNo, 0, 0);
+        SaveDataManager.instance.save(levelprogress, coinNo, 0, challengeCount);
     }
 
     public void playChallenge()
     {
         //Cogemos un nivel y dificultad aleatorios
-        actualDifficulty = Random.Range(0, difficulties.Count);
-        actualLevel = Random.Range(1,100);
+        actualDifficulty = Random.Range(1, 1);
+        actualLevel = Random.Range(1,10);
         //Ponemos el modo challenge a true
         challenge = !challenge;
         //Vamos a la escena del nivel , cuyo canvas cambiaremos 
@@ -197,6 +201,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Quitting...");
         Application.Quit();
+    }
+
+    public void addChallengeCount()
+    {
+        challengeCount++;
     }
 
     public void addCoins(int n)
@@ -222,6 +231,25 @@ public class GameManager : MonoBehaviour
     public void ShowChallengePanel()
     {
         GameObject.Find("Canvas").transform.Find("PopUpPanel").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Present").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Challenge").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("BigGift").gameObject.SetActive(false);
+    }
+
+    public void ShowGiftPanel()
+    {
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Present").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Challenge").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("BigGift").gameObject.SetActive(false);
+    }
+
+    public void ShowGift()
+    {
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Present").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Challenge").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("BigGift").gameObject.SetActive(true);
     }
 
     public void challengeMode()
@@ -262,11 +290,17 @@ public class GameManager : MonoBehaviour
                 //Menu
             case "Menu":
                 GameObject gamemodes = GameObject.Find("Gamemodes");
+
                 if (gamemodes != null)
+                {
                     for (int i = 0; i < gamemodes.transform.childCount - 1; i++)
                         gamemodes.transform.GetChild(i).GetChild(1).GetComponent<Text>().text = levelprogress[i].ToString() + "/100";
+                    gamemodes.transform.GetChild(gamemodes.transform.childCount - 1).GetChild(2).GetComponent<Text>().text = challengeCount.ToString();
+                }
                 if(monedas != null)
                     monedas.GetComponent<Text>().text = coinNo.ToString();
+
+             
                 break;
                 //Selección de nivel
             case "Seleccion": 

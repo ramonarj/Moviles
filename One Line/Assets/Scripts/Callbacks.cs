@@ -25,6 +25,7 @@ public class Callbacks : MonoBehaviour
     public void OnClickedHome()
     {
         GameManager.instance.GoToMenu();
+        GameManager.instance.setChallenge(false);
     }
 
     //Pulsación de un modo de juego (1-5)
@@ -40,9 +41,9 @@ public class Callbacks : MonoBehaviour
     }
 
     //Pulsación en el botón de los anuncios
-    public void OnClickedViewAd()
+    public void OnClickedViewAd(int coins)
     {
-        AdsManager.instance.ShowRewardedAd();
+        AdsManager.instance.ShowRewardedAd(coins);
     }
 
     //Pulsación en la pista (dentro del nivel)
@@ -67,11 +68,49 @@ public class Callbacks : MonoBehaviour
         GameManager.instance.ShowChallengePanel();
     }
 
+    //Pulsacion sobre el regalo
+    public void onClickGift()
+    {
+        GameManager.instance.ShowGiftPanel();
+    }
+
+
+    //Pulsacion sobre el regalo
+    public void onClickSmallGift()
+    {
+        GameManager.instance.ShowGift();
+    }
+
     //Pulsacion de comprar el modo challenge 
     public void OnClickpayChallenge()
     {
+        if (GameManager.instance.getCoins() >= 25)
+        {
+            GameManager.instance.playChallenge();
+        }
+    }
+
+    //Pulsacion de ir al modo challenge con anuncio
+    public void OnClicknoPayChallenge()
+    {
         GameManager.instance.playChallenge();
     }
+
+    //Anade una cantidad determinada de monedas
+    public void addCoinsChallenge(int coins)
+    {
+        if (GameManager.instance.getChallenge())
+        {
+            GameManager.instance.addCoins(coins);
+        }
+    }
+
+    //Anade una cantidad determinada de monedas
+    public void addCoins(int coins)
+    {
+        GameManager.instance.addCoins(coins);
+    }
+
 
     //Reproducción de un clip al pulsar
     public void OnSoundPlayed(AudioClip clip)
@@ -85,5 +124,6 @@ public class Callbacks : MonoBehaviour
         if (!GameManager.instance.getChallenge())
             GameManager.instance.GoToSeleccion();
         else GameManager.instance.GoToMenu();
+        GameManager.instance.setChallenge(false);
     }
 }

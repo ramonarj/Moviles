@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour
 
         int rows = NUM_LEVELS / NUM_COLS;
         int count = 0;
-
+    
         float actualRes = (float)Screen.height / (float)Screen.width;
 
         //Márgenes

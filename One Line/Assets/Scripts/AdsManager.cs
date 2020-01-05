@@ -41,8 +41,9 @@ public class AdsManager : MonoBehaviour
     }
 
     /*Anuncios con recompensa*/
-    public void ShowRewardedAd()
+    public void ShowRewardedAd(int coins)
     {
+        coinsRewarded = coins;
         StartCoroutine(WaitForAd(true));
     }
 
