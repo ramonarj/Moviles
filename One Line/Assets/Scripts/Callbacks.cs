@@ -61,6 +61,18 @@ public class Callbacks : MonoBehaviour
         BoardManager.instance.restartLevel();
     }
 
+    //Pulsacion en el boton de challenge
+    public void OnClickChallenge()
+    {
+        GameManager.instance.ShowChallengePanel();
+    }
+
+    //Pulsacion de comprar el modo challenge 
+    public void OnClickpayChallenge()
+    {
+        GameManager.instance.playChallenge();
+    }
+
     //Reproducción de un clip al pulsar
     public void OnSoundPlayed(AudioClip clip)
     {
@@ -70,6 +82,8 @@ public class Callbacks : MonoBehaviour
     //Pulsación en el botón de volver (dentro del nivel)
     public void OnClickedBack()
     {
-        GameManager.instance.GoToSeleccion();
+        if (!GameManager.instance.getChallenge())
+            GameManager.instance.GoToSeleccion();
+        else GameManager.instance.GoToMenu();
     }
 }

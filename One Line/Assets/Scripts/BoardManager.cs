@@ -57,6 +57,9 @@ public class BoardManager : MonoBehaviour
 
     public enum REF_SYSTEM { GLOBAL, LOCAL };
 
+    //Tiempo del challenge
+    private float timeLeft = 30.0f;
+
     //Para el singleton
     void Awake()
     {
@@ -102,7 +105,6 @@ public class BoardManager : MonoBehaviour
 
     
     }
-
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles(List<string> layout)
     {
@@ -310,14 +312,21 @@ public class BoardManager : MonoBehaviour
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
         {
-            //Avisamos al GM
-            GameManager.instance.levelCompleted();
-            GameManager.instance.playSound(winSound);
+            if (!GameManager.instance.getChallenge())
+            {
+                //Avisamos al GM
+                GameManager.instance.levelCompleted();
+                GameManager.instance.playSound(winSound);
 
-            //Activamos el panel
-            WinPanel.transform.GetChild(0).GetComponent<Text>().text = GameManager.instance.getActualDifficultyName();
-            WinPanel.transform.GetChild(1).GetComponent<Text>().text = GameManager.instance.getActualLevel().ToString();
-            WinPanel.SetActive(true);
+                //Activamos el panel
+                WinPanel.transform.GetChild(0).GetComponent<Text>().text = GameManager.instance.getActualDifficultyName();
+                WinPanel.transform.GetChild(1).GetComponent<Text>().text = GameManager.instance.getActualLevel().ToString();
+                WinPanel.SetActive(true);
+            }
+            else
+            {
+                GameObject.Find("Canvas").transform.Find("WinChallenge").gameObject.SetActive(true);
+            }
         }     
     }
 
@@ -383,6 +392,22 @@ public class BoardManager : MonoBehaviour
             else if (Input.GetMouseButtonUp(0))
                 handleRelease();
 #endif
+        }
+
+        //Para el contador del challenge
+        if (GameManager.instance.getChallenge())
+        {
+            timeLeft -= Time.deltaTime;
+
+            //Vemos si ha pasado el tiempo o si has ganado 
+            if (timeLeft <= 0)
+            {
+                //Hemos perdido
+                return;
+            }
+
+            //Actualizamos el contador
+            GameObject.Find("Canvas").transform.Find("Contador").GetComponent<Text>().text = "00:" + (int)timeLeft;
         }
     }
 }

@@ -37,6 +37,10 @@ public class GameManager : MonoBehaviour
     public string getString() { return reproductor.GetComponent<Reproductor>().getReproductorName(); }
     public int getNumber() { return levelprogress.Count; }
 
+    //Conocer si nos encontramos en modo challenge
+    private bool challenge;
+
+
     void Awake()
     {
         if (instance != null && instance != this)
@@ -71,12 +75,15 @@ public class GameManager : MonoBehaviour
         if (SaveDataManager.instance.load())
             if (compareHashes(SaveDataManager.instance.getGame()))
             {
-                Debug.Log("LETS GOOO PAPYU");
+                levelprogress = SaveDataManager.instance.getGame().levels;
+                coinNo = SaveDataManager.instance.getGame().coins;
+                Debug.Log("Juego cargado correctamente");
             }
-            else Debug.Log("ME CAGUEN TODO");
+            else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
 
+        //Empezamos con challenge a false
+        challenge = false;
     }
-
     private bool compareHashes(GameSaving game)
     {
         string levelsConcatenate = SaveDataManager.instance.concatenateLevels(game.levels);
@@ -92,6 +99,7 @@ public class GameManager : MonoBehaviour
         return levelDataList.levels.Find(x => x.index == index);
     }
 
+    /*GETTERS*/
     public int getActualLevel()
     {
         return actualLevel;
@@ -112,6 +120,15 @@ public class GameManager : MonoBehaviour
         return coinNo;
     }
 
+    public bool getChallenge()
+    {
+        return challenge;
+    }
+
+    public int getLevelProgress(int difficulty)
+    {
+        return levelprogress[difficulty - 1];
+    }
 
     //Hemos completado el nivel que estábamos jugado
     public void levelCompleted()
@@ -132,6 +149,7 @@ public class GameManager : MonoBehaviour
     public void GoToSeleccion()
     {
         SceneManager.LoadScene("Seleccion", LoadSceneMode.Single);
+        challenge = false;
     }
 
     //Nos lleva a la pantalla de nivel
@@ -147,13 +165,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     //Jugamos el siguiente nivel
     public void NextLevel()
     {
         actualLevel++;
         GoToScene("Nivel");
         SaveDataManager.instance.save(levelprogress, coinNo, 0, 0);
+    }
+
+    public void playChallenge()
+    {
+        //Cogemos un nivel y dificultad aleatorios
+        actualDifficulty = Random.Range(0, difficulties.Count);
+        actualLevel = Random.Range(1,100);
+        //Ponemos el modo challenge a true
+        challenge = !challenge;
+        //Vamos a la escena del nivel , cuyo canvas cambiaremos 
+        //depenediendo del booleano challenge
+        GoToScene("Nivel");
+
     }
 
     //Nos lleva a la pantalla de  menú
@@ -181,17 +211,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int getLevelProgress(int difficulty)
-    {
-        return levelprogress[difficulty - 1];
-    }
-
     //Instancia un clon del reproductor para que reproduzca el clip en cuestión
     public void playSound(AudioClip clip)
     {
         source = Instantiate(reproductor);
         source.GetComponent<AudioSource>().PlayOneShot(clip);
         Destroy(source, clip.length);
+    }
+
+    public void ShowChallengePanel()
+    {
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").gameObject.SetActive(true);
+    }
+
+    public void challengeMode()
+    {
+        //Escogemos una dificultad aleatoria
+        actualDifficulty = Random.Range(0, difficulties.Count);
+        //Escogemos un nivel aleatorio
+        actualLevel = Random.Range(1, 100);
+        //Y volvemos a recargar la escena para cargar el nivel seleccionado
+        GoToScene("Nivel");
     }
 
     //Corutina para ir a una escena esperando antes que termine cualquier sonido que estuviéramos reproduciendo
@@ -212,6 +252,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject monedas = GameObject.Find("Numero");
         GameObject dificultad = GameObject.Find("Dificultad");
+
         switch (scene.name)
         {
                 //Pantalla de carga
@@ -234,10 +275,32 @@ public class GameManager : MonoBehaviour
                 break;
                 //Nivel
             case "Nivel":
-                if (dificultad != null)
+                if (dificultad != null && !challenge)
                     dificultad.GetComponent<Text>().text = difficulties[actualDifficulty - 1] + " " + actualLevel.ToString();
-                if (monedas != null)
+                if (monedas != null && !challenge)
                     monedas.GetComponent<Text>().text = coinNo.ToString();
+                else
+                {
+                    dificultad.GetComponent<Text>().text = "CHALLENGE";
+
+                    //Elementos que desactivamos del canvas
+                    GameObject monedasCanvas = GameObject.Find("Monedas");
+                    monedasCanvas.SetActive(false);
+
+                    GameObject ReiniciarCanvas = GameObject.Find("Reiniciar");
+                    ReiniciarCanvas.SetActive(false);
+
+                    GameObject anunciosCanvas = GameObject.Find("Anuncio");
+                    anunciosCanvas.SetActive(false);
+
+                    GameObject pistaCanvas = GameObject.Find("Pista");
+                    pistaCanvas.SetActive(false);
+
+                    //Hacemos visible el contador
+                    GameObject.Find("Canvas").transform.Find("Contador").gameObject.SetActive(true);
+
+
+                }
                 break;
             default:
                 break;
