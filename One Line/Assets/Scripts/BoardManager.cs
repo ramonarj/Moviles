@@ -67,6 +67,9 @@ public class BoardManager : MonoBehaviour
     //Minutos y segundos
     private float minutos, segundos;
 
+    private float tileScale;
+    private float tileSize;
+
     //Para el singleton
     void Awake()
     {
@@ -115,15 +118,19 @@ public class BoardManager : MonoBehaviour
     private void initTiles(List<string> layout)
     {
         bool bigBoard = GameManager.instance.getActualDifficulty() > 2;//Para reescalar los tiles
-        float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
+        tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
+        float tileGap = tileSize / 10f;
 
         //Vemos cuanto espacio hay disponible quitando los 2 canvas
         RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
         RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
-        float availableHeight = Screen.currentResolution.height - upRect.rect.height + downRect.rect.height;
-        float tileScale = availableHeight / (tileSize * 100f * 8f);
-        Debug.Log(availableHeight);
-        Debug.Log((tileSize * 100f * 8f));
+        float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
+
+        float requerido;
+        if(bigBoard) requerido = tileSize * 100f * 12f + tileGap*100*11f;
+        else requerido = tileSize * 100f * 8f + tileGap * 100 * 7f;
+
+        tileScale = availableHeight / requerido;
         tileSize *= tileScale;
 
         //El color del tile es aleatorio de entre los disponibles
@@ -131,11 +138,14 @@ public class BoardManager : MonoBehaviour
         skinNo = rnd.Next(0, tilePrefabs.Count);
 
         //Ponemos el tablero abajo a la izquierda
-        transform.position = new Vector3((float)-cols / 2, (float)-rows / 2, -1f);
+        Vector3 initialPos = new Vector3(- tileSize * (float)cols / 2f, - tileSize * (float)rows / 2f);
+        transform.position = initialPos;
 
         //Offset para los tamaños pares
-        float rowOff = 0; if (rows % 2 == 0) rowOff = -0.5f;
-        float colOff = 0; if (cols % 2 == 0) colOff = 0.5f;
+        float rowOff = 0; if (rows % 2 == 0) rowOff = -tileSize /2f;
+        float colOff = 0; if (cols % 2 == 0) colOff = tileSize / 2f;
+
+        transform.Translate(new Vector3(-colOff, rowOff, 0));
         for (int i = 0; i < rows; i++)
         {
             string rowLayout = layout[i];
@@ -145,7 +155,7 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
-                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f);
+                    o.transform.localPosition = new Vector3(tileSize / 2 + j *tileSize, tileSize / 2 + i*tileSize, -1f);
                     //o.transform.Translate(new Vector3((tileSize * j / 10.0f, -(tileSize * i / 10.0f)); //Dejamos un espacio entre tiles
                     o.transform.localScale = new Vector3(tileScale, tileScale);
                     //TODO:escala
@@ -193,9 +203,9 @@ public class BoardManager : MonoBehaviour
             return new Direction(DirectionEnum.Right);
         else if (from.x > to.x)
             return new Direction(DirectionEnum.Left);
-        else if (from.y > to.y)
-            return new Direction(DirectionEnum.Up);
         else if (from.y < to.y)
+            return new Direction(DirectionEnum.Up);
+        else if (from.y > to.y)
             return new Direction(DirectionEnum.Down);
         else
             return new Direction(DirectionEnum.None);
@@ -204,9 +214,9 @@ public class BoardManager : MonoBehaviour
     //Obtiene la dirección necesaria para ir de un tile a otro
     private Direction getDirFromHint(tilePosition from, tilePosition to)
     {
-        if (from.x < to.x)
+        if (from.x > to.x)
             return new Direction(DirectionEnum.Down);
-        else if (from.x > to.x)
+        else if (from.x < to.x)
             return new Direction(DirectionEnum.Up);
         else if (from.y > to.y)
             return new Direction(DirectionEnum.Left);
@@ -279,7 +289,8 @@ public class BoardManager : MonoBehaviour
             ratonFondo_.transform.position = new Vector3(worldPos.x, worldPos.y, -2f);
 
             //Coordenadas locales del click
-            Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL);
+            Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL) / tileScale;
+            Debug.Log(mousePos);
 
             //3. Si estamos dentro de los límites, vemos si podemos pulsar algo
             if (insideLimits(mousePos.x, mousePos.y))
@@ -287,9 +298,6 @@ public class BoardManager : MonoBehaviour
                 //Pasamos a índices de la matriz (x = nºcolumna, y=nºfila)
                 int x = Mathf.RoundToInt(mousePos.x - 0.5f);
                 int y = Mathf.RoundToInt(mousePos.y - 0.5f);
-
-                //Temporal
-                y = rows - y - 1;
 
                 //Tile que hemos pulsado
                 Tile tile = tiles[x, y];
