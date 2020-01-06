@@ -2051,7 +2051,12 @@ PrefabInstance:
     - target: {fileID: 2293388992530683292, guid: ea1b4d75353f90645be6958e4f9082c3,
         type: 3}
       propertyPath: m_MatchWidthOrHeight
-      value: 0.5
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293388992530683292, guid: ea1b4d75353f90645be6958e4f9082c3,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2293388992530683293, guid: ea1b4d75353f90645be6958e4f9082c3,
         type: 3}
@@ -2312,7 +2317,7 @@ PrefabInstance:
     - target: {fileID: 2293388991835993740, guid: ea1b4d75353f90645be6958e4f9082c3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.2999878
+      value: 0.30004883
       objectReference: {fileID: 0}
     - target: {fileID: 2293388991835993740, guid: ea1b4d75353f90645be6958e4f9082c3,
         type: 3}

@@ -123,19 +123,21 @@ public class BoardManager : MonoBehaviour
         float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
         float tileGap = tileSize / 10f;
 
-        //Vemos cuanto espacio hay disponible quitando los 2 canvas
+        //Vemos cuanto espacio de pantalla hay disponible quitando los 2 canvas
         RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
         RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
         float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
         float availableSpace = Mathf.Min(availableHeight, Screen.width);
-
+        Debug.Log(availableSpace);
         //Tamaño que requeriría el tablero si no lo escaláramos
-        float requerido;
-        if(bigBoard) requerido = tileSize * PIXELS_PER_UNIT * 10f + tileGap* PIXELS_PER_UNIT * 9f;
-        else requerido = tileSize * PIXELS_PER_UNIT * 8f + tileGap * PIXELS_PER_UNIT * 7f;
+        float unityAvailable = 10 * availableSpace / Screen.height; //10 porque son las unidades de unity que caben (regla de 3)
+        Debug.Log(unityAvailable);
+        float actualTileSize;
+        if(bigBoard) actualTileSize = unityAvailable / 8f; //TODO:constantes
+        else actualTileSize = unityAvailable / 6f;
 
         //Tamaño que tendrán los tiles
-        tileScale = availableSpace / requerido;
+        tileScale = actualTileSize / tileSize;
         tileSize *= tileScale;
 
         //El color del tile es aleatorio de entre los disponibles
