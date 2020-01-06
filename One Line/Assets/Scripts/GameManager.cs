@@ -15,8 +15,8 @@ public class GameManager : MonoBehaviour
     //Nombres de las dificultades
     public List<string> difficulties;
 
-    [Tooltip("Ruta del archivo donde están los niveles")]
-    public string levelsFile;
+    [Tooltip("NÚMERO DE NIVELES POR DIFICULTAD")]
+    public int LEVELS_PER_DIFFICULTY;
 
     //Número de monedas
     private int coinNo=0;
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     private List<int> levelprogress;
 
     //Datos de todos los niveles
-    private LevelDataList levelDataList;
+    private List<LevelDataList> levelDataLists;
 
     //Nivel seleccionado para jugar
     private int actualLevel; // 1-100 
@@ -51,16 +51,22 @@ public class GameManager : MonoBehaviour
             instance = this;
 
             //Leemos los niveles (usammos WWw)
-            string filePath = Application.streamingAssetsPath + "/" + levelsFile;
+            levelDataLists = new List<LevelDataList>();
 
-            //Funciona en PC y en Android (no hace falta poner macros)
-            UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Get(filePath);
-            www.SendWebRequest();
-            while (!www.isDone) { }
-            string inputJson = www.downloadHandler.text;
+            //Hay un archivo por cada dificultad
+            for(int i= 0; i < difficulties.Count; i++)
+            {
+                string filePath = Application.streamingAssetsPath + "/" + difficulties[i] + ".json";
 
-            //Una vez tenemos la cadena con el json, leemos
-            levelDataList = LevelDataList.CreateFromJSON(inputJson);
+                //Funciona en PC y en Android (no hace falta poner macros)
+                UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Get(filePath);
+                www.SendWebRequest();
+                while (!www.isDone) { }
+                string inputJson = www.downloadHandler.text;
+
+                //Una vez tenemos la cadena con el json, leemos los niveles
+                levelDataLists.Add(LevelDataList.CreateFromJSON(inputJson));
+            }
 
             //Para cubrirnos las espaldas
             actualLevel = 1;
@@ -106,8 +112,10 @@ public class GameManager : MonoBehaviour
     //Devuelve los datos del nivel especificado
     public LevelData getLevelData(int index)
     {
+        //Van del 0-500 repartidos en 5 dificultades
+        int trueIndex = index + (actualDifficulty - 1) * 100;
         //Hay que cubrirse las espaldas por si no están todos los niveles del 0 al "index"
-        return levelDataList.levels.Find(x => x.index == index);
+        return levelDataLists[actualDifficulty - 1].levels.Find(x => x.index == trueIndex);
     }
 
     /*GETTERS*/
@@ -263,9 +271,9 @@ public class GameManager : MonoBehaviour
     public void challengeMode()
     {
         //Escogemos una dificultad aleatoria
-        actualDifficulty = Random.Range(0, difficulties.Count);
+        actualDifficulty = Random.Range(3, difficulties.Count);
         //Escogemos un nivel aleatorio
-        actualLevel = Random.Range(1, 100);
+        actualLevel = Random.Range(1, LEVELS_PER_DIFFICULTY);
         //Y volvemos a recargar la escena para cargar el nivel seleccionado
         GoToScene("Nivel");
     }

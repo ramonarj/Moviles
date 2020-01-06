@@ -27,6 +27,10 @@ public class BoardManager : MonoBehaviour
     public AudioClip winSound;
     [Tooltip("Sonido al reiniciar nivel")]
     public AudioClip restartSound;
+    [Tooltip("Sonido al obtener una pista")]
+    public AudioClip hintSound;
+    [Tooltip("Sonido al no obtener una pista por falta de dinero")]
+    public AudioClip brokeSound;
 
     //PRIVADO
     //Filas y columnas del tablero
@@ -74,8 +78,7 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Leemos los datos del nivel, inicializamos filas y columnas
-        int difficulty = GameManager.instance.getActualDifficulty();
-        int level = GameManager.instance.getActualLevel() + (difficulty - 1) * 100; //Hay que obtener el nivel de 1-500, no de 1-100
+        int level = GameManager.instance.getActualLevel(); 
         LevelData data = GameManager.instance.getLevelData(level);
         levelPath = data.path;
         if (data == null) //Si no se ha conseguido cargar el nivel
@@ -338,22 +341,31 @@ public class BoardManager : MonoBehaviour
         GameManager.instance.playSound(restartSound);
     }
 
-    public void showHint()
+    public void showHint(bool allowed)
     {
-        //Primero volvemos a la posicion de salida
-        goBackToTile(startingTile);
-        //Mostramos los 5 siguientes tiles que no hayamos mostrado del camino
-        int i = 0;
-        while(i+1+lastPos < levelPath.Count && i<5)
+        if (allowed)
         {
-            Direction dir = getDirFromHint(levelPath[i+lastPos], levelPath[i + 1+ lastPos]);
-            int x = levelPath[i + lastPos].x;
-            int y = levelPath[i + lastPos].y;
-            //Mostramos el camino de la pista
-            tiles[y, x].setHint(dir);
-            i++;
+            //Primero volvemos a la posicion de salida
+            goBackToTile(startingTile);
+            //Mostramos los 5 siguientes tiles que no hayamos mostrado del camino
+            int i = 0;
+            while (i + 1 + lastPos < levelPath.Count && i < 5)
+            {
+                Direction dir = getDirFromHint(levelPath[i + lastPos], levelPath[i + 1 + lastPos]);
+                int x = levelPath[i + lastPos].x;
+                int y = levelPath[i + lastPos].y;
+                //Mostramos el camino de la pista
+                tiles[y, x].setHint(dir);
+                i++;
+            }
+            lastPos += i;
+
+            //Sonido
+            GameManager.instance.playSound(hintSound);
         }
-        lastPos += i;
+        else
+            //Sonido
+            GameManager.instance.playSound(brokeSound);
     }
 
     void Update()

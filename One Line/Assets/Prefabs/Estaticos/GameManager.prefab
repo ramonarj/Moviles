@@ -53,7 +53,7 @@ MonoBehaviour:
   - ADVANCED
   - EXPERT
   - MASTER
-  levelsFile: Levels.json
+  LEVELS_PER_DIFFICULTY: 100
 --- !u!114 &-6480010999134524623
 MonoBehaviour:
   m_ObjectHideFlags: 0

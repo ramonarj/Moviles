@@ -51,9 +51,11 @@ public class Callbacks : MonoBehaviour
     {
         if (GameManager.instance.getCoins() >= coins)
         {
-            BoardManager.instance.showHint();
+            BoardManager.instance.showHint(true);
             GameManager.instance.addCoins(-coins);
         }
+        else
+            BoardManager.instance.showHint(false);
     }
 
     //Pulsación en el botón de reiniciar nivel
