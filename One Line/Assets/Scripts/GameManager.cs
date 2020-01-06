@@ -195,9 +195,10 @@ public class GameManager : MonoBehaviour
 
     public void playChallenge()
     {
-        //Cogemos un nivel y dificultad aleatorios
-        actualDifficulty = Random.Range(1, 1);
-        actualLevel = Random.Range(1,10);
+        //Escogemos una dificultad aleatoria
+        actualDifficulty = Random.Range(3, difficulties.Count);
+        //Escogemos un nivel aleatorio
+        actualLevel = Random.Range(1, LEVELS_PER_DIFFICULTY);
         //Ponemos el modo challenge a true
         challenge = !challenge;
         //Vamos a la escena del nivel , cuyo canvas cambiaremos 
@@ -266,16 +267,6 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Present").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("Challenge").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("BigGift").gameObject.SetActive(true);
-    }
-
-    public void challengeMode()
-    {
-        //Escogemos una dificultad aleatoria
-        actualDifficulty = Random.Range(3, difficulties.Count);
-        //Escogemos un nivel aleatorio
-        actualLevel = Random.Range(1, LEVELS_PER_DIFFICULTY);
-        //Y volvemos a recargar la escena para cargar el nivel seleccionado
-        GoToScene("Nivel");
     }
 
     //Corutina para ir a una escena esperando antes que termine cualquier sonido que estuviéramos reproduciendo

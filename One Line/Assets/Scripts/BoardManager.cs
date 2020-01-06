@@ -111,6 +111,18 @@ public class BoardManager : MonoBehaviour
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles(List<string> layout)
     {
+        bool bigBoard = GameManager.instance.getActualDifficulty() > 2;//Para reescalar los tiles
+        float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
+
+        //Vemos cuanto espacio hay disponible quitando los 2 canvas
+        RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
+        RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
+        float availableHeight = Screen.currentResolution.height - upRect.rect.height + downRect.rect.height;
+        float tileScale = availableHeight / (tileSize * 100f * 8f);
+        Debug.Log(availableHeight);
+        Debug.Log((tileSize * 100f * 8f));
+        tileSize *= tileScale;
+
         //El color del tile es aleatorio de entre los disponibles
         System.Random rnd = new System.Random();
         skinNo = rnd.Next(0, tilePrefabs.Count);
@@ -130,7 +142,11 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
-                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f); //+colOff, +rowOff
+                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f);
+                    //o.transform.Translate(new Vector3((tileSize * j / 10.0f, -(tileSize * i / 10.0f)); //Dejamos un espacio entre tiles
+                    o.transform.localScale = new Vector3(tileScale, tileScale);
+                    //TODO:escala
+
 
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
