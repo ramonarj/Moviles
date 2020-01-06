@@ -67,8 +67,10 @@ public class BoardManager : MonoBehaviour
     //Minutos y segundos
     private float minutos, segundos;
 
+    //Se usa para las pulsaciones
     private float tileScale;
-    private float tileSize;
+
+    private const int PIXELS_PER_UNIT = 100;
 
     //Para el singleton
     void Awake()
@@ -118,20 +120,19 @@ public class BoardManager : MonoBehaviour
     private void initTiles(List<string> layout)
     {
         bool bigBoard = GameManager.instance.getActualDifficulty() > 2;//Para reescalar los tiles
-        tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
+        float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
         float tileGap = tileSize / 10f;
 
         //Vemos cuanto espacio hay disponible quitando los 2 canvas
         RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
         RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
         float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
-        float availableWidth = Screen.width;
-        float availableSpace = Mathf.Min(availableHeight, availableWidth);
+        float availableSpace = Mathf.Min(availableHeight, Screen.width);
 
         //Tamaño que requeriría el tablero si no lo escaláramos
         float requerido;
-        if(bigBoard) requerido = tileSize * 100f * 10f + tileGap*100*9f;
-        else requerido = tileSize * 100f * 8f + tileGap * 100 * 7f;
+        if(bigBoard) requerido = tileSize * PIXELS_PER_UNIT * 10f + tileGap* PIXELS_PER_UNIT * 9f;
+        else requerido = tileSize * PIXELS_PER_UNIT * 8f + tileGap * PIXELS_PER_UNIT * 7f;
 
         //Tamaño que tendrán los tiles
         tileScale = availableSpace / requerido;
@@ -144,11 +145,12 @@ public class BoardManager : MonoBehaviour
         //Ponemos el tablero abajo a la izquierda
         transform.position = new Vector3(-tileSize * (float)cols / 2f, -tileSize * (float)rows / 2f);
 
-        //Offset para los tamaños pares
+        //Pequeño offset para centrar el tablero en los tamaños pares
         float rowOff = 0; if (rows % 2 == 0) rowOff = -tileSize /2f;
         float colOff = 0; if (cols % 2 == 0) colOff = tileSize / 2f;
-        transform.Translate(new Vector3(0, rowOff, 0));
+        transform.Translate(new Vector3(-colOff, rowOff, 0));
 
+        //Vamos colocando los tiles
         for (int i = 0; i < rows; i++)
         {
             string rowLayout = layout[i];
@@ -158,9 +160,10 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
-                    o.transform.localPosition = new Vector3(tileSize / 2 + j *tileSize, tileSize / 2 + i*tileSize, -1f);
-                    o.transform.localScale = new Vector3(tileScale, tileScale);
-                    //o.transform.Translate(new Vector3(tileGap, tileGap)); //Dejamos un espacio entre tiles
+                    o.transform.localPosition = new Vector3(tileSize / 2 + j *tileSize, tileSize / 2 + i*tileSize, -1f); //Lo colocamos (respecto al padre)
+                    o.transform.localScale = new Vector3(tileScale, tileScale); //Lo escalamos
+                    o.transform.Translate(new Vector3(tileGap*j, tileGap*i)); //Dejamos un espacio con el anterior
+
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
                     tiles[j, i] = tile;
@@ -290,7 +293,7 @@ public class BoardManager : MonoBehaviour
 
             //Coordenadas locales del click
             Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL) / tileScale;
-            Debug.Log(mousePos);
+            mousePos -= mousePos / 10f;
 
             //3. Si estamos dentro de los límites, vemos si podemos pulsar algo
             if (insideLimits(mousePos.x, mousePos.y))
@@ -324,7 +327,10 @@ public class BoardManager : MonoBehaviour
     private void handlePressDown(Vector3 screenPos)
     {
         //Si pulsamos dentro del tablero, se crea el sprite del círculo y pasamos a poder hacer caminos
-        Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL);
+        //Coordenadas locales del click
+        Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL) / tileScale;
+        localPos -= localPos / 10f;
+
         Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);
         if (insideLimits(localPos.x, localPos.y))
             ratonFondo_ = Instantiate(mousePrefabs[skinNo], new Vector3(worldPos.x, worldPos.y, -2f), Quaternion.identity).gameObject;
