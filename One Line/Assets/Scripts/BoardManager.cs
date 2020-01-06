@@ -125,12 +125,16 @@ public class BoardManager : MonoBehaviour
         RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
         RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
         float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
+        float availableWidth = Screen.width;
+        float availableSpace = Mathf.Min(availableHeight, availableWidth);
 
+        //Tamaño que requeriría el tablero si no lo escaláramos
         float requerido;
-        if(bigBoard) requerido = tileSize * 100f * 12f + tileGap*100*11f;
+        if(bigBoard) requerido = tileSize * 100f * 10f + tileGap*100*9f;
         else requerido = tileSize * 100f * 8f + tileGap * 100 * 7f;
 
-        tileScale = availableHeight / requerido;
+        //Tamaño que tendrán los tiles
+        tileScale = availableSpace / requerido;
         tileSize *= tileScale;
 
         //El color del tile es aleatorio de entre los disponibles
@@ -138,14 +142,13 @@ public class BoardManager : MonoBehaviour
         skinNo = rnd.Next(0, tilePrefabs.Count);
 
         //Ponemos el tablero abajo a la izquierda
-        Vector3 initialPos = new Vector3(- tileSize * (float)cols / 2f, - tileSize * (float)rows / 2f);
-        transform.position = initialPos;
+        transform.position = new Vector3(-tileSize * (float)cols / 2f, -tileSize * (float)rows / 2f);
 
         //Offset para los tamaños pares
         float rowOff = 0; if (rows % 2 == 0) rowOff = -tileSize /2f;
         float colOff = 0; if (cols % 2 == 0) colOff = tileSize / 2f;
+        transform.Translate(new Vector3(0, rowOff, 0));
 
-        transform.Translate(new Vector3(-colOff, rowOff, 0));
         for (int i = 0; i < rows; i++)
         {
             string rowLayout = layout[i];
@@ -156,11 +159,8 @@ public class BoardManager : MonoBehaviour
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
                     o.transform.localPosition = new Vector3(tileSize / 2 + j *tileSize, tileSize / 2 + i*tileSize, -1f);
-                    //o.transform.Translate(new Vector3((tileSize * j / 10.0f, -(tileSize * i / 10.0f)); //Dejamos un espacio entre tiles
                     o.transform.localScale = new Vector3(tileScale, tileScale);
-                    //TODO:escala
-
-
+                    //o.transform.Translate(new Vector3(tileGap, tileGap)); //Dejamos un espacio entre tiles
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
                     tiles[j, i] = tile;
@@ -401,7 +401,6 @@ public class BoardManager : MonoBehaviour
         if (!WinPanel.active)
         {
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-        //TODO: multitouch
         //Pulsación del dedo
         if (Input.touchCount > 0)
         {
