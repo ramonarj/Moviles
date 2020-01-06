@@ -53,7 +53,7 @@ MonoBehaviour:
   - ADVANCED
   - EXPERT
   - MASTER
-  levelsFile: /Levels/Levels.json
+  LEVELS_PER_DIFFICULTY: 100
 --- !u!114 &-6480010999134524623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,8 +79,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8945dc3adad6ddc4a8cec52796d81849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels: 
-  coins: 0
-  premium: 0
-  challenge: 0
-  hash: 

@@ -636,11 +636,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
-        type: 3}
-      propertyPath: challengePanel
-      value: 
-      objectReference: {fileID: 1625378084}
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -695,6 +690,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795790179147614284, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 3}
+      propertyPath: difficulties.Array.data[0]
+      value: BEGINNER
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294c7a75c4f89145af617163a380f1a, type: 3}
@@ -847,12 +847,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1625378084 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6816102236045052758, guid: 0d44c552ab7ed184394ed46a3dcf15df,
-    type: 3}
-  m_PrefabInstance: {fileID: 6639369472085748763}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1625378087 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7292244216897989328, guid: 0d44c552ab7ed184394ed46a3dcf15df,
@@ -872,6 +866,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6639369472088046462, guid: 0d44c552ab7ed184394ed46a3dcf15df,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816102236045052758, guid: 0d44c552ab7ed184394ed46a3dcf15df,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 574288595100589811, guid: 0d44c552ab7ed184394ed46a3dcf15df,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1291,11 +1295,6 @@ PrefabInstance:
       propertyPath: m_MatchWidthOrHeight
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6639369472088046462, guid: 0d44c552ab7ed184394ed46a3dcf15df,
-        type: 3}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
     - target: {fileID: 6639369472155744642, guid: 0d44c552ab7ed184394ed46a3dcf15df,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1691,16 +1690,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -64
-      objectReference: {fileID: 0}
-    - target: {fileID: 6816102236045052758, guid: 0d44c552ab7ed184394ed46a3dcf15df,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7268290045104509108, guid: 0d44c552ab7ed184394ed46a3dcf15df,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7333230836024747254, guid: 0d44c552ab7ed184394ed46a3dcf15df,
         type: 3}

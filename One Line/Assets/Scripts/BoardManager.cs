@@ -27,6 +27,10 @@ public class BoardManager : MonoBehaviour
     public AudioClip winSound;
     [Tooltip("Sonido al reiniciar nivel")]
     public AudioClip restartSound;
+    [Tooltip("Sonido al obtener una pista")]
+    public AudioClip hintSound;
+    [Tooltip("Sonido al no obtener una pista por falta de dinero")]
+    public AudioClip brokeSound;
 
     //PRIVADO
     //Filas y columnas del tablero
@@ -77,8 +81,7 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Leemos los datos del nivel, inicializamos filas y columnas
-        int difficulty = GameManager.instance.getActualDifficulty();
-        int level = GameManager.instance.getActualLevel() + (difficulty - 1) * 100; //Hay que obtener el nivel de 1-500, no de 1-100
+        int level = GameManager.instance.getActualLevel(); 
         LevelData data = GameManager.instance.getLevelData(level);
         levelPath = data.path;
         if (data == null) //Si no se ha conseguido cargar el nivel
@@ -111,6 +114,18 @@ public class BoardManager : MonoBehaviour
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles(List<string> layout)
     {
+        bool bigBoard = GameManager.instance.getActualDifficulty() > 2;//Para reescalar los tiles
+        float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
+
+        //Vemos cuanto espacio hay disponible quitando los 2 canvas
+        RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
+        RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
+        float availableHeight = Screen.currentResolution.height - upRect.rect.height + downRect.rect.height;
+        float tileScale = availableHeight / (tileSize * 100f * 8f);
+        Debug.Log(availableHeight);
+        Debug.Log((tileSize * 100f * 8f));
+        tileSize *= tileScale;
+
         //El color del tile es aleatorio de entre los disponibles
         System.Random rnd = new System.Random();
         skinNo = rnd.Next(0, tilePrefabs.Count);
@@ -130,7 +145,11 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
-                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f); //+colOff, +rowOff
+                    o.transform.position = new Vector3(j - (int)cols / 2 + colOff, -(i - (int)rows / 2) + rowOff, -1f);
+                    //o.transform.Translate(new Vector3((tileSize * j / 10.0f, -(tileSize * i / 10.0f)); //Dejamos un espacio entre tiles
+                    o.transform.localScale = new Vector3(tileScale, tileScale);
+                    //TODO:escala
+
 
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
@@ -341,22 +360,31 @@ public class BoardManager : MonoBehaviour
         GameManager.instance.playSound(restartSound);
     }
 
-    public void showHint()
+    public void showHint(bool allowed)
     {
-        //Primero volvemos a la posicion de salida
-        goBackToTile(startingTile);
-        //Mostramos los 5 siguientes tiles que no hayamos mostrado del camino
-        int i = 0;
-        while(i+1+lastPos < levelPath.Count && i<5)
+        if (allowed)
         {
-            Direction dir = getDirFromHint(levelPath[i+lastPos], levelPath[i + 1+ lastPos]);
-            int x = levelPath[i + lastPos].x;
-            int y = levelPath[i + lastPos].y;
-            //Mostramos el camino de la pista
-            tiles[y, x].setHint(dir);
-            i++;
+            //Primero volvemos a la posicion de salida
+            goBackToTile(startingTile);
+            //Mostramos los 5 siguientes tiles que no hayamos mostrado del camino
+            int i = 0;
+            while (i + 1 + lastPos < levelPath.Count && i < 5)
+            {
+                Direction dir = getDirFromHint(levelPath[i + lastPos], levelPath[i + 1 + lastPos]);
+                int x = levelPath[i + lastPos].x;
+                int y = levelPath[i + lastPos].y;
+                //Mostramos el camino de la pista
+                tiles[y, x].setHint(dir);
+                i++;
+            }
+            lastPos += i;
+
+            //Sonido
+            GameManager.instance.playSound(hintSound);
         }
-        lastPos += i;
+        else
+            //Sonido
+            GameManager.instance.playSound(brokeSound);
     }
 
     void Update()
