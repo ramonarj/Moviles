@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Ruta del archivo donde están los niveles")]
     public string levelsFile;
 
+    public bool wasChallenge;
+
     //Número de monedas
     private int coinNo=0;
 
@@ -40,6 +42,13 @@ public class GameManager : MonoBehaviour
 
     //Conocer si nos encontramos en modo challenge
     private bool challenge;
+    //Conocer si tenemos que esperar 30 mins para volver a jugar al challenge
+    private bool waitingChallenge;
+    //Tiempo entre challenges
+    private float timeChallengeLeft;
+    //Minutos y segundos
+    private float minutos, segundos;
+    private string ultimoRetoJugado;
 
 
     void Awake()
@@ -71,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        Debug.Log(System.DateTime.Now);
         //Intentamos cargar el archivo de progreso, y si lo hemos conseguido, comprobamos el hash
         if (SaveDataManager.instance.load())
             if (compareHashes(SaveDataManager.instance.getGame()))
@@ -79,19 +88,48 @@ public class GameManager : MonoBehaviour
                 levelprogress = SaveDataManager.instance.getGame().levels;
                 coinNo = SaveDataManager.instance.getGame().coins;
                 challengeCount = SaveDataManager.instance.getGame().challenge;
+                ultimoRetoJugado = SaveDataManager.instance.getGame().dateTime;
                 Debug.Log("Juego cargado correctamente");
             }
             else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
 
         //Empezamos con challenge a false
         challenge = false;
+        timeChallengeLeft = 30 * 60; //Segundos
 
+    }
+
+    //Controlar el cronometro del challenge
+    private void Update()
+    {
+        if (waitingChallenge)
+        {
+            timeChallengeLeft -= Time.deltaTime;
+
+            /*Nos aseguramos unicamnte de acutualizar cuando estamos en el menu*/
+            if (SceneManager.GetActiveScene().name == "Menu")
+            {
+                Text waitingText = GameObject.Find("timeWaiting").GetComponent<Text>();
+                minutos = Mathf.Floor(timeChallengeLeft / 60);
+                segundos = timeChallengeLeft % 60;
+                waitingText.text = string.Format("{0:0}:{1:00}", minutos, segundos);
+            }
+
+        }
+        if (timeChallengeLeft <= 0 && waitingChallenge)
+        {
+            waitingChallenge = false;
+            timeChallengeLeft = 30 * 60;
+            Text waitingText = GameObject.Find("timeWaiting").GetComponent<Text>();
+            waitingText.text = "";
+            DesactivateChallengeWait();
+        }
     }
     private bool compareHashes(GameSaving game)
     {
         string levelsConcatenate = SaveDataManager.instance.concatenateLevels(game.levels);
         string String = SaveDataManager.instance.getString(getString(), getNumber());
-        string hash = SaveDataManager.instance.createHash(levelsConcatenate+ game.coins+game.premium+String+game.challenge);
+        string hash = SaveDataManager.instance.createHash(levelsConcatenate+ game.coins+game.premium+String+game.challenge+game.dateTime);
         return (hash == game.hash);
 
     }
@@ -174,7 +212,6 @@ public class GameManager : MonoBehaviour
     {
         actualLevel++;
         GoToScene("Nivel");
-        SaveDataManager.instance.save(levelprogress, coinNo, 0, challengeCount);
     }
 
     public void playChallenge()
@@ -196,11 +233,15 @@ public class GameManager : MonoBehaviour
         GoToScene("Menu");
     }
 
-    //Sale de la aplicación
+        //Sale de la aplicación
     public void QuitApp()
     {
         Debug.Log("Quitting...");
-        Application.Quit();
+        if (!wasChallenge)
+            SaveDataManager.instance.save(levelprogress, coinNo, 0, challengeCount,ultimoRetoJugado);
+        else SaveDataManager.instance.save(levelprogress, coinNo, 0, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+
+       Application.Quit();
     }
 
     public void addChallengeCount()
@@ -218,6 +259,24 @@ public class GameManager : MonoBehaviour
             Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
             conisTetx.text = System.Convert.ToString(coinNo);
         }
+    }
+
+    public void ActivateChallengeWait()
+    {
+        waitingChallenge = true;
+        /*Cambiamos el canvas*/
+        GameObject.Find("TimeWaitingBar").GetComponent<Image>().enabled = true;
+        /*Desactivamos el boton*/
+        GameObject.Find("Challenge").GetComponent<Button>().enabled = false;
+    }
+
+    public void DesactivateChallengeWait()
+    {
+        waitingChallenge = false;
+        /*Cambiamos el canvas*/
+        GameObject.Find("TimeWaitingBar").GetComponent<Image>().enabled = false;
+        /*Desactivamos el boton*/
+        GameObject.Find("Challenge").GetComponent<Button>().enabled = true;
     }
 
     //Instancia un clon del reproductor para que reproduzca el clip en cuestión
@@ -262,6 +321,52 @@ public class GameManager : MonoBehaviour
         GoToScene("Nivel");
     }
 
+    private void ActualizarTiempo(string oldHour, string oldMinute,string newHour,string newMinute,string newSecond, string oldSecond)
+    {
+        /*Miramos cuantos minutos han pasado*/
+        if (int.Parse(oldHour) < int.Parse(newHour))
+        {
+            timeChallengeLeft = (60 * 30)-(60* (60-int.Parse(oldMinute) + int.Parse(newMinute)) + System.Math.Abs(int.Parse(newSecond) - int.Parse(oldSecond)));
+        }
+        else
+        {
+            int minDifference = (int.Parse(newMinute) - int.Parse(oldMinute));
+            int secsDifference = (int.Parse(newSecond) - int.Parse(oldSecond));
+            timeChallengeLeft = (60 * 30) - ((minDifference) * 60) - System.Math.Abs(secsDifference);
+        }
+        /*Actualizamos el temporizador*/
+        ActivateChallengeWait();
+    }
+
+    /*Comprbamos si han pasado 30 mins desde que hemos hecho el ultimo challenge*/
+    public bool morethan30Mins(string oldDate,string thisDate)
+    {
+        Debug.Log(oldDate);
+        Debug.Log(thisDate);
+        string date1 = thisDate.Split(" "[0])[0];
+        string date2 = oldDate.Split(" "[0])[0];
+        if (date1 != date2) return true;
+        else
+        {
+            /*En caso de que las fechas sean iguales , nos fijamos en la hora*/
+            string hour1 = thisDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
+            string hour2 = oldDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
+
+            Debug.Log(hour1);
+
+            string min1 = thisDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
+            string min2 = oldDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
+
+            //Comprobamos que hayan pasado 30 minutos
+            if (int.Parse(min2) + 30 <= int.Parse(min1))
+            {
+                return true;
+            }
+            else if (int.Parse(hour1) > int.Parse(hour2) && ((60 - int.Parse(min2) + int.Parse(min1)) > 30)) return true;
+            else return false;
+        }
+    }
+
     //Corutina para ir a una escena esperando antes que termine cualquier sonido que estuviéramos reproduciendo
     private void GoToScene(string scene)
     {
@@ -300,7 +405,24 @@ public class GameManager : MonoBehaviour
                 if(monedas != null)
                     monedas.GetComponent<Text>().text = coinNo.ToString();
 
-             
+                if(wasChallenge) ActivateChallengeWait();
+
+                string newtime = System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss");
+                if (!morethan30Mins(ultimoRetoJugado, newtime))
+                {
+                    /*En caso de que las fechas sean iguales , nos fijamos en la hora*/
+                    string hour1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
+                    string hour2 = ultimoRetoJugado.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
+
+                    string min1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
+                    string min2 = ultimoRetoJugado.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
+
+                    string sec1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
+                    string sec2 = ultimoRetoJugado.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
+
+                    Debug.Log(hour1 + hour2 +min1 + min2);
+                    ActualizarTiempo(hour2, min2, hour1, min1,sec1,sec2);
+                }
                 break;
                 //Selección de nivel
             case "Seleccion": 

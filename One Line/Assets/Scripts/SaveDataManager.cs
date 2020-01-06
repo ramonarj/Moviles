@@ -14,6 +14,7 @@ public class GameSaving
     [SerializeField] public int premium;
     [SerializeField] public int challenge;
     [SerializeField] public string hash;
+    [SerializeField] public string dateTime;
 
 }
 
@@ -50,16 +51,17 @@ public class SaveDataManager : MonoBehaviour
     }
 
     /*Serializamos la clase*/
-    public void save(List<int> levels_,int coins_,int premium_,int challenge_)
+    public void save(List<int> levels_,int coins_,int premium_,int challenge_, string dateTime)
     {
         Debug.Log(jsonSavePath);
         game.levels = levels_;
         game.coins = coins_;
         game.premium = premium_;
         game.challenge = challenge_;
+        game.dateTime = dateTime;
 
         //Cremos el hash concantenando el contenido de la clase y anadiedo una sal al final
-        game.hash = createHash(System.Convert.ToString(concatenateLevels(levels_) + coins_ + premium_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_));
+        game.hash = createHash(System.Convert.ToString(concatenateLevels(levels_) + coins_ + premium_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_+dateTime));
         //Rellenamos el json y lo guardamos
         string jsonData = JsonUtility.ToJson(game, true);
         File.WriteAllText(jsonSavePath, jsonData);

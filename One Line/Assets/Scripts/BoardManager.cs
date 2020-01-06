@@ -60,6 +60,9 @@ public class BoardManager : MonoBehaviour
     //Tiempo del challenge
     private float timeLeft = 30.0f;
 
+    //Minutos y segundos
+    private float minutos, segundos;
+
     //Para el singleton
     void Awake()
     {
@@ -404,11 +407,13 @@ public class BoardManager : MonoBehaviour
             if (timeLeft <= 0)
             {
                 //Hemos perdido
-                return;
+                GameObject.Find("Canvas").transform.Find("LoseChallenge").gameObject.SetActive(true);
+                timeLeft = 0;
             }
-
-            //Actualizamos el contador
-            GameObject.Find("Canvas").transform.Find("Contador").GetComponent<Text>().text = "00:" + (int)timeLeft;
+            Text waitingText = GameObject.Find("Canvas").transform.Find("Contador").GetComponent<Text>();
+            minutos = Mathf.Floor(timeLeft / 60);
+            segundos = timeLeft % 60;
+            waitingText.text = string.Format("{0:0}:{1:00}", minutos, segundos);
         }
     }
 }

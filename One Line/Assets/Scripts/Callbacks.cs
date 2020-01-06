@@ -25,7 +25,11 @@ public class Callbacks : MonoBehaviour
     public void OnClickedHome()
     {
         GameManager.instance.GoToMenu();
-        GameManager.instance.setChallenge(false);
+        if (GameManager.instance.getChallenge())
+        {
+            GameManager.instance.setChallenge(false);
+            GameManager.instance.wasChallenge = true;
+        }
     }
 
     //Pulsación de un modo de juego (1-5)
@@ -123,7 +127,11 @@ public class Callbacks : MonoBehaviour
     {
         if (!GameManager.instance.getChallenge())
             GameManager.instance.GoToSeleccion();
-        else GameManager.instance.GoToMenu();
-        GameManager.instance.setChallenge(false);
+        else
+        {
+            GameManager.instance.GoToMenu();
+            GameManager.instance.wasChallenge = true;
+            GameManager.instance.setChallenge(false);
+        }
     }
 }
