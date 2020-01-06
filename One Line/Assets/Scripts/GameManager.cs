@@ -50,11 +50,19 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
 
-            //Leemos los niveles
-            string inputJson = File.ReadAllText(Application.dataPath + levelsFile);
+            //Leemos los niveles (usammos WWw)
+            string filePath = Application.streamingAssetsPath + "/" + levelsFile;
+
+            //Funciona en PC y en Android (no hace falta poner macros)
+            UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Get(filePath);
+            www.SendWebRequest();
+            while (!www.isDone) { }
+            string inputJson = www.downloadHandler.text;
+
+            //Una vez tenemos la cadena con el json, leemos
             levelDataList = LevelDataList.CreateFromJSON(inputJson);
 
-            //Para hacer pruebas
+            //Para cubrirnos las espaldas
             actualLevel = 1;
             actualDifficulty = 1;
 
