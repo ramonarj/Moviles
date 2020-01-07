@@ -95,7 +95,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(System.DateTime.Now);
         //Intentamos cargar el archivo de progreso, y si lo hemos conseguido, comprobamos el hash
         if (SaveDataManager.instance.load())
             if (compareHashes(SaveDataManager.instance.getGame()))
@@ -375,8 +374,6 @@ public class GameManager : MonoBehaviour
     {
         if (oldDate != null)
         {
-            Debug.Log(oldDate);
-            Debug.Log(thisDate);
             string date1 = thisDate.Split(" "[0])[0];
             string date2 = oldDate.Split(" "[0])[0];
             if (date1 != date2) return true;
@@ -385,8 +382,6 @@ public class GameManager : MonoBehaviour
                 /*En caso de que las fechas sean iguales , nos fijamos en la hora*/
                 string hour1 = thisDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
                 string hour2 = oldDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
-
-                Debug.Log(hour1);
 
                 string min1 = thisDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
                 string min2 = oldDate.Split(char.Parse(" "))[1].Split(char.Parse(":"))[1];
@@ -459,7 +454,6 @@ public class GameManager : MonoBehaviour
                     string sec1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
                     string sec2 = ultimoRetoJugado.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
 
-                    Debug.Log(hour1 + hour2 +min1 + min2);
                     ActualizarTiempo(hour2, min2, hour1, min1,sec1,sec2);
                 }
                 break;

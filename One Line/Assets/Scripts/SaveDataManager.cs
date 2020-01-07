@@ -70,13 +70,8 @@ public class SaveDataManager : MonoBehaviour
     //Devuelve el objeto creado leyendo el Json especificado
     public bool load()
     {
-        Debug.Log(jsonSavePath);
-        //if (jsonSavePath != null)
-        //{
         game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(Application.persistentDataPath + "/save.json"));
-        Debug.Log(game.hash);
         return true;
-       // }
     }
 
     public string createHash(string str)
