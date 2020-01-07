@@ -128,10 +128,9 @@ public class BoardManager : MonoBehaviour
         RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
         float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
         float availableSpace = Mathf.Min(availableHeight, Screen.width);
-        Debug.Log(availableSpace);
+
         //Tamaño que requeriría el tablero si no lo escaláramos
         float unityAvailable = 10 * availableSpace / Screen.height; //10 porque son las unidades de unity que caben (regla de 3)
-        Debug.Log(unityAvailable);
         float actualTileSize;
         if(bigBoard) actualTileSize = unityAvailable / 8f; //TODO:constantes
         else actualTileSize = unityAvailable / 6f;
