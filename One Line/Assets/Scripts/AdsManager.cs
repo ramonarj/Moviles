@@ -8,12 +8,13 @@ public class AdsManager : MonoBehaviour
 {
     public static AdsManager instance;
     //Id del juego
-    private string gameId = "12345";
+    private string gameId = "3417809";
     //Modo test por defecto
     private bool testMode = true;
     //Numero de veces que ha querido ver un anuncio
     private int rewardCout = 0;
 
+    [Tooltip("Numero de recompensa que daremos cada vez que veamos un anuncio de tipo recompensa")]
     public int coinsRewarded = 20;
 
     //Ids de los tipos de anuncios
@@ -32,21 +33,26 @@ public class AdsManager : MonoBehaviour
 
     void Start()
     {
+        /*Inicializamos Unity ads con el gameId correcto y en modo test*/
         Monetization.Initialize(gameId, testMode);
     }
-    /*Anuncios normales*/
+
+    /*Mostramos anuncios normales*/
     public void ShowAd()
     {
         StartCoroutine(WaitForAd());
     }
 
-    /*Anuncios con recompensa*/
+    /*Mostramos anuncios con recompensa*/
     public void ShowRewardedAd(int coins)
     {
         coinsRewarded = coins;
         StartCoroutine(WaitForAd(true));
     }
 
+    /*Esperamos a que podamos lanzar un anuncio,de cualquier tipo
+    y en caso de que se trate de un anuncio de recompensa,llamamos al adfinished
+    para comprobar si lo ha visto entero y por tanto recibe la recompensa o lo ha saltado*/
     IEnumerator WaitForAd(bool rewarded=false)
     {
         string placementId = rewarded ? placementIdRewardedVideo : placementIdVideo;
@@ -62,7 +68,7 @@ public class AdsManager : MonoBehaviour
         /*En caso de que el anuncio no sea nulo*/
         if (ad != null)
         {
-            /*Si es un anuncio de recompensa, comprobaremos si lo ha terminado de ver*/
+            /*Si es un anuncio es de recompensa, comprobaremos si lo ha terminado de ver*/
             if (rewarded)
                 ad.Show(AdFinished);
             else

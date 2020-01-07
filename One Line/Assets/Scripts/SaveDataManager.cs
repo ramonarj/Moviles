@@ -11,7 +11,7 @@ public class GameSaving
     /*Atributos que serializaremos*/
     [SerializeField] public List<int> levels;
     [SerializeField] public int coins;
-    [SerializeField] public int premium;
+    [SerializeField] public int waiting; //Conocer si estas o no esperando el challenge
     [SerializeField] public int challenge;
     [SerializeField] public string hash;
     [SerializeField] public string dateTime;
@@ -42,47 +42,47 @@ public class SaveDataManager : MonoBehaviour
     /*Configuramos el path segun donde se encuentre la app*/
     void Start()
     {
-        jsonSavePath = Application.persistentDataPath + "/save.json";   
+        jsonSavePath = Application.persistentDataPath + "/save.json";  
     }
 
+    /*Hacemos una instancia de Game donde guardaremos los datos cuando salgamos del juego*/
     private void OnEnable()
     {
         game = new GameSaving();
     }
 
     /*Serializamos la clase*/
-    public void save(List<int> levels_,int coins_,int premium_,int challenge_, string dateTime)
+    public void save(List<int> levels_,int coins_,int waiting_,int challenge_, string dateTime)
     {
-        Debug.Log(jsonSavePath);
         game.levels = levels_;
         game.coins = coins_;
-        game.premium = premium_;
+        game.waiting = waiting_;
         game.challenge = challenge_;
         game.dateTime = dateTime;
-
+        
         //Cremos el hash concantenando el contenido de la clase y anadiedo una sal al final
-        game.hash = createHash(System.Convert.ToString(concatenateLevels(levels_) + coins_ + premium_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_+dateTime));
+        game.hash = createHash((concatenateLevels(levels_) + coins_ + waiting_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_+dateTime).ToString());
         //Rellenamos el json y lo guardamos
-        string jsonData = JsonUtility.ToJson(game, true);
-        File.WriteAllText(jsonSavePath, jsonData);
+        string jsonData = JsonUtility.ToJson(game);
+        File.WriteAllText(Application.persistentDataPath + "/save.json", jsonData);
     }
 
     //Devuelve el objeto creado leyendo el Json especificado
     public bool load()
     {
         Debug.Log(jsonSavePath);
-        if (jsonSavePath != null)
-        {
-            game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(jsonSavePath));
-            Debug.Log(game.hash);
-            return true;
-        }
-        else return false;
+        //if (jsonSavePath != null)
+        //{
+        game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(Application.persistentDataPath + "/save.json"));
+        Debug.Log(game.hash);
+        return true;
+       // }
     }
 
     public string createHash(string str)
     {
         System.Security.Cryptography.SHA256Managed crypt = new System.Security.Cryptography.SHA256Managed();
+       
         System.Text.StringBuilder hash = new System.Text.StringBuilder();
         byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(str), 0, Encoding.UTF8.GetByteCount(str));
         foreach (byte bit in crypto)
@@ -94,11 +94,12 @@ public class SaveDataManager : MonoBehaviour
 
     public string getString(string var1, int var2)
     {
+
         string String = "";
         if (var2 > 0 && var2 < abc.Length)
         {
             for (int i = 0; i < var1.Length; i++)
-            {
+            { 
                 int posCaracter = getPosABC(var1[i]);
                 if (posCaracter != -1) 
                 {
@@ -117,6 +118,7 @@ public class SaveDataManager : MonoBehaviour
 
     string getAnotherString(string var1 , int var2)
     {
+    
         string String = "";
         if (var2 > 0 && var2 < abc.Length)
         {
@@ -158,6 +160,8 @@ public class SaveDataManager : MonoBehaviour
         {
             if (caracter == abc[i]) return i;
         }
+       
         return -1;
+    
     }
 }
