@@ -72,6 +72,11 @@ public class BoardManager : MonoBehaviour
 
     private const int PIXELS_PER_UNIT = 100;
 
+    //Márgenes (expresados como porcentajes)
+    private const float HOR_MARGIN = 0.04f; 
+    private const float VERT_MARGIN = 0.11f;
+    private const float TILE_GAP = 0.1f; //10% del tamaño del tile
+
     //Para el singleton
     void Awake()
     {
@@ -119,39 +124,60 @@ public class BoardManager : MonoBehaviour
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
     private void initTiles(List<string> layout)
     {
-        bool bigBoard = GameManager.instance.getActualDifficulty() > 2;//Para reescalar los tiles
-        float tileSize = tilePrefabs[skinNo].transform.GetChild(1).GetComponent<Renderer>().bounds.size.x;
-        float tileGap = tileSize / 10f;
+        //Filas y columnas máximas que puede tener un nivel de esta dificultad
+        int maxRows;
+        int maxCols = 6;
 
-        //Vemos cuanto espacio de pantalla hay disponible quitando los 2 canvas
-        RectTransform upRect = GameObject.Find("UpLayout").GetComponent<RectTransform>();
-        RectTransform downRect = GameObject.Find("DownLayout").GetComponent<RectTransform>();
-        float availableHeight = Screen.height - upRect.rect.height - downRect.rect.height;
-        float availableSpace = Mathf.Min(availableHeight, Screen.width);
+        //todo esto en px 
+        // 1) TAMAÑO REAL (px) DE LOS PANELES DE ARRIBA Y ABAJO
+        Rect topImage = GameObject.Find("UpLayout").GetComponent<Image>().sprite.rect;
+        Rect botImage = GameObject.Find("DownLayout").GetComponent<Image>().sprite.rect;
 
-        //Tamaño que requeriría el tablero si no lo escaláramos
-        float unityAvailable = 10 * availableSpace / Screen.height; //10 porque son las unidades de unity que caben (regla de 3)
-        float actualTileSize;
-        if(bigBoard) actualTileSize = unityAvailable / 8f; //TODO:constantes
-        else actualTileSize = unityAvailable / 6f;
+        // 2) CON ESO Y EL TAMAÑO DE LA PANTALLA, VEMOS CUÁNTO DE ALTO OCUPAN...
+        float topHeight = Screen.width * topImage.height / topImage.width; //Reglas de 3
+        float botHeight = Screen.width * botImage.height / botImage.width;
 
-        //Tamaño que tendrán los tiles
-        tileScale = actualTileSize / tileSize;
-        tileSize *= tileScale;
+        // 3) ...Y CALCULAMOS EL ANCHO Y ALTO LIBRES
+        float availableHeight = Screen.height - (topHeight + botHeight);
+        availableHeight *= (1 - VERT_MARGIN); //Para poner un poco de margen con los paneles
+        float availableWidth = Screen.width * (1 - HOR_MARGIN); //Para no tapar los circulillos
+        float availableSpace = Mathf.Min(availableHeight, availableWidth);
+
+        // 4) CALCULAMOS EL TAMAÑO DE CADA TILE
+        bool bigBoard = GameManager.instance.getActualDifficulty() > 2;
+        if (bigBoard) maxRows = 8;
+        else maxRows = 6;
+        float tileSize = availableSpace / (float)maxRows; //en px, tenemos en cuenta los huecos
+        tileSize /= (1f + TILE_GAP); //Dejamos espacios para los huecos
+
+        //todo esto en unidades de Unity (u~~~)
+        float unitySize = availableHeight < availableWidth ? 10 : (float)Screen.width * 10f / (float)Screen.height; //Nº unidades de unity a lo ancho/alto (el más pequeño)
+        float screenSize = availableHeight < availableWidth ? Screen.height : Screen.width; // Tamaño más pequeño en px
+        float uTileSize = tileSize * unitySize / screenSize; //Regla de 3
+        float uTileGap = uTileSize * TILE_GAP; //Espacio entre tiles
+
+        // 5) COLOCAMOS LOS TILES EN LA ZONA DE JUEGO TENIENDO EN CUENTA MÁRGENES TODO: colocarlos
+        //Centro del tablero
+        float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f); //punto medio del tablero en px
+        boardMiddleY = boardMiddleY * 10f / Screen.height;
+
+        //Coordenada de abajo a la izquierda del tablero (en uds de Unity)
+        float uBoardX, uBoardY;
+        uBoardX = (-uTileSize * (float)cols) / 2f;
+        uBoardY = boardMiddleY + (-uTileSize * (float)rows) / 2f;
+
+        //Tenemos en cuenta los huecos (hay x-1 huecos siendo x las filas/columnas)
+        uBoardX -= (uTileGap * (float)(cols - 1)) / 2f;
+        uBoardY += (uTileGap * (float)(rows - 1)) / 2f;
+
+        //Lo colocamos
+        transform.position = new Vector3(uBoardX, uBoardY); 
 
         //El color del tile es aleatorio de entre los disponibles
         System.Random rnd = new System.Random();
         skinNo = rnd.Next(0, tilePrefabs.Count);
 
-        //Ponemos el tablero abajo a la izquierda
-        transform.position = new Vector3(-tileSize * (float)cols / 2f, -tileSize * (float)rows / 2f);
-
-        //Pequeño offset para centrar el tablero en los tamaños pares
-        float rowOff = 0; if (rows % 2 == 0) rowOff = -tileSize /2f;
-        float colOff = 0; if (cols % 2 == 0) colOff = tileSize / 2f;
-        transform.Translate(new Vector3(-colOff, rowOff, 0));
-
-        //Vamos colocando los tiles
+        // 6) COLOCAMOS TODOS LOS TILES EMPEZANDO DESDE ABAJO A LA IZQUIERDA
         for (int i = 0; i < rows; i++)
         {
             string rowLayout = layout[i];
@@ -161,9 +187,9 @@ public class BoardManager : MonoBehaviour
                 {
                     //Creamos el objeto
                     GameObject o = Instantiate(tilePrefabs[skinNo], transform);
-                    o.transform.localPosition = new Vector3(tileSize / 2 + j *tileSize, tileSize / 2 + i*tileSize, -1f); //Lo colocamos (respecto al padre)
-                    o.transform.localScale = new Vector3(tileScale, tileScale); //Lo escalamos
-                    o.transform.Translate(new Vector3(tileGap*j, tileGap*i)); //Dejamos un espacio con el anterior
+                    o.transform.localPosition = new Vector3(uTileSize / 2 + j * uTileSize, uTileSize / 2 + i* uTileSize, -1f); //Lo colocamos (respecto al padre)
+                    o.transform.localScale = new Vector3(uTileSize, uTileSize); //Lo escalamos
+                    o.transform.Translate(new Vector3(uTileGap*j, uTileGap*i)); //Dejamos un espacio con el anterior
 
                     //Nos guardamos el tile en la matriz y lo ponemos gris
                     Tile tile = o.GetComponent<Tile>();
