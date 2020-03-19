@@ -21,6 +21,13 @@ public class AdsManager : MonoBehaviour
     string placementIdVideo = "video";
     string placementIdRewardedVideo = "rewardedVideo";
 
+    public static AdsManager Instance()
+    {
+        if (instance == null)
+            instance = new GameObject("AdsManager").AddComponent<AdsManager>();
+        return instance;
+    }
+
     void Awake()
     {
         // Singleton
@@ -81,7 +88,7 @@ public class AdsManager : MonoBehaviour
         /*Si ha terminado de ver el anuncio , le recompensamos dandole monedas*/
         if (result == ShowResult.Finished)
         {
-            GameManager.instance.addCoins(coinsRewarded);
+            GameManager.Instance().addCoins(coinsRewarded);
         }
     }
 }

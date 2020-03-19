@@ -26,8 +26,8 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         //Número de nivel hasta el que queremos bloquear
-        int difficulty = GameManager.instance.getActualDifficulty();
-        int maxLevel = GameManager.instance.getLevelProgress(difficulty);
+        int difficulty = GameManager.Instance().getActualDifficulty();
+        int maxLevel = GameManager.Instance().getLevelProgress(difficulty);
 
         int rows = NUM_LEVELS / NUM_COLS;
         int count = 0;
@@ -59,8 +59,8 @@ public class LevelManager : MonoBehaviour
                     //Número que le corresponde
                     o.transform.GetChild(1).GetComponent<UnityEngine.UI.Text>().text = c.ToString("000"); 
                     //Callbacks
-                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.GoToLevel(c)); 
-                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.instance.playSound(clickSound));
+                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.Instance().GoToLevel(c)); 
+                    o.GetComponent<Button>().onClick.AddListener(() => GameManager.Instance().playSound(clickSound));
                 }
                 else
                     o.transform.GetChild(2).gameObject.SetActive(true); //Activamos el candado

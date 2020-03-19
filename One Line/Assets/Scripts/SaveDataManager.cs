@@ -61,7 +61,7 @@ public class SaveDataManager : MonoBehaviour
         game.dateTime = dateTime;
         
         //Cremos el hash concantenando el contenido de la clase y anadiedo una sal al final
-        game.hash = createHash((concatenateLevels(levels_) + coins_ + waiting_ +getString(GameManager.instance.getString(),GameManager.instance.getNumber())+challenge_+dateTime).ToString());
+        game.hash = createHash((concatenateLevels(levels_) + coins_ + waiting_ +getString(GameManager.Instance().getString(),GameManager.Instance().getNumber())+challenge_+dateTime).ToString());
         //Rellenamos el json y lo guardamos
         string jsonData = JsonUtility.ToJson(game);
         File.WriteAllText(Application.persistentDataPath + "/save.json", jsonData);

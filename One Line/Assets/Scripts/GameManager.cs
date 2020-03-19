@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    private static GameManager instance;
 
     //Prefab del GO con el componente con AudioSource
     public GameObject reproductor;
@@ -50,6 +50,12 @@ public class GameManager : MonoBehaviour
     private float minutos, segundos;
     private string ultimoRetoJugado;
     private int waiting; //Saber si tenemos que esperar
+        
+    public static GameManager Instance() { 
+        if(instance==null)
+            instance = new GameObject("GameManager").AddComponent<GameManager>();
+        return instance;
+    }
 
     void Awake()
     {
@@ -228,6 +234,12 @@ public class GameManager : MonoBehaviour
     {
         actualLevel++;
         GoToScene("Nivel");
+        int number;
+        if (wasChallenge) number = 1;
+        else number = 0;
+        if (!wasChallenge && ultimoRetoJugado != null)
+            SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+        else SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
     }
 
     public void playChallenge()
@@ -280,6 +292,13 @@ public class GameManager : MonoBehaviour
             Text conisTetx = GameObject.Find("Numero").GetComponent<Text>();
             conisTetx.text = System.Convert.ToString(coinNo);
         }
+
+        int number;
+        if (wasChallenge) number = 1;
+        else number = 0;
+        if (!wasChallenge && ultimoRetoJugado != null)
+            SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+        else SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
     }
 
     /*Activamos un flag para saber que no podemos volver a jugar un reto hasta dentro

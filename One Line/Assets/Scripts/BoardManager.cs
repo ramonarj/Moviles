@@ -91,13 +91,13 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Leemos los datos del nivel, inicializamos filas y columnas
-        int level = GameManager.instance.getActualLevel(); 
-        LevelData data = GameManager.instance.getLevelData(level);
+        int level = GameManager.Instance().getActualLevel(); 
+        LevelData data = GameManager.Instance().getLevelData(level);
         levelPath = data.path;
         if (data == null) //Si no se ha conseguido cargar el nivel
         {
             Debug.Log("No se pudo cargar el nivel");
-            GameManager.instance.GoToMenu();
+            GameManager.Instance().GoToMenu();
             return;
         }
          
@@ -144,7 +144,7 @@ public class BoardManager : MonoBehaviour
         float availableSpace = Mathf.Min(availableHeight, availableWidth);
 
         // 4) CALCULAMOS EL TAMAÑO DE CADA TILE
-        bool bigBoard = GameManager.instance.getActualDifficulty() > 2;
+        bool bigBoard = GameManager.Instance().getActualDifficulty() > 2;
         if (bigBoard) maxRows = 8;
         else maxRows = 6;
         float tileSize = availableSpace / (float)maxRows; //en px, tenemos en cuenta los huecos
@@ -155,7 +155,7 @@ public class BoardManager : MonoBehaviour
         float screenSize = availableHeight < availableWidth ? Screen.height : Screen.width; // Tamaño más pequeño en px
         float uTileSize = tileSize * unitySize / screenSize; //Regla de 3
         float uTileGap = uTileSize * TILE_GAP; //Espacio entre tiles
-
+        tileScale = uTileSize;
         // 5) COLOCAMOS LOS TILES EN LA ZONA DE JUEGO TENIENDO EN CUENTA MÁRGENES TODO: colocarlos
         //Centro del tablero
         float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f); //punto medio del tablero en px
@@ -345,7 +345,7 @@ public class BoardManager : MonoBehaviour
                         return;
 
                     //Sonido
-                    GameManager.instance.playSound(connectSound);
+                    GameManager.Instance().playSound(connectSound);
                 }
             }
         }
@@ -375,21 +375,21 @@ public class BoardManager : MonoBehaviour
         //Comprobamos si hemos ganado
         if (tilePath.Count == tileNo)
         {
-            if (!GameManager.instance.getChallenge())
+            if (!GameManager.Instance().getChallenge())
             {
                 //Avisamos al GM
-                GameManager.instance.levelCompleted();
-                GameManager.instance.playSound(winSound);
+                GameManager.Instance().levelCompleted();
+                GameManager.Instance().playSound(winSound);
 
                 //Activamos el panel
-                WinPanel.transform.GetChild(0).GetComponent<Text>().text = GameManager.instance.getActualDifficultyName();
-                WinPanel.transform.GetChild(1).GetComponent<Text>().text = GameManager.instance.getActualLevel().ToString();
+                WinPanel.transform.GetChild(0).GetComponent<Text>().text = GameManager.Instance().getActualDifficultyName();
+                WinPanel.transform.GetChild(1).GetComponent<Text>().text = GameManager.Instance().getActualLevel().ToString();
                 WinPanel.SetActive(true);
             }
             else
             {
                 GameObject.Find("Canvas").transform.Find("WinChallenge").gameObject.SetActive(true);
-                GameManager.instance.addChallengeCount();
+                GameManager.Instance().addChallengeCount();
             }
         }     
     }
@@ -398,7 +398,7 @@ public class BoardManager : MonoBehaviour
     public void restartLevel()
     {
         goBackToTile(startingTile);
-        GameManager.instance.playSound(restartSound);
+        GameManager.Instance().playSound(restartSound);
     }
 
     public void showHint(bool allowed)
@@ -421,11 +421,11 @@ public class BoardManager : MonoBehaviour
             lastPos += i;
 
             //Sonido
-            GameManager.instance.playSound(hintSound);
+            GameManager.Instance().playSound(hintSound);
         }
         else
             //Sonido
-            GameManager.instance.playSound(brokeSound);
+            GameManager.Instance().playSound(brokeSound);
     }
 
     void Update()
@@ -467,7 +467,7 @@ public class BoardManager : MonoBehaviour
         }
 
         //Para el contador del challenge
-        if (GameManager.instance.getChallenge())
+        if (GameManager.Instance().getChallenge())
         {
             timeLeft -= Time.deltaTime;
 

@@ -11,37 +11,37 @@ public class Callbacks : MonoBehaviour
     //Pulsación en el cuadradito del nivel
     public void OnClickedLevel(int level)
     {
-        GameManager.instance.GoToLevel(level);
+        GameManager.Instance().GoToLevel(level);
     }
 
     //Pulsación en el play (en el pop-up al completar un nivel)
     public void OnClickedNextLevel()
     {
-        GameManager.instance.NextLevel();
-        AdsManager.instance.ShowAd();
+        GameManager.Instance().NextLevel();
+        AdsManager.Instance().ShowAd();
     }
 
     //Pulsación en home (en el pop-up al completar un nivel)
     public void OnClickedHome()
     {
-        GameManager.instance.GoToMenu();
-        if (GameManager.instance.getChallenge())
+        GameManager.Instance().GoToMenu();
+        if (GameManager.Instance().getChallenge())
         {
-            GameManager.instance.setChallenge(false);
-            GameManager.instance.wasChallenge = true;
+            GameManager.Instance().setChallenge(false);
+            GameManager.Instance().wasChallenge = true;
         }
     }
 
     //Pulsación de un modo de juego (1-5)
     public void OnClickedGamemode(int gamemode)
     {
-        GameManager.instance.GoToSeleccion(gamemode);
+        GameManager.Instance().GoToSeleccion(gamemode);
     }
 
     //Pulsación en home (para salir del juego en el menú)
     public void OnClickedExit()
     {
-        GameManager.instance.QuitApp();
+        GameManager.Instance().QuitApp();
     }
 
     //Pulsación en el botón de los anuncios
@@ -53,10 +53,10 @@ public class Callbacks : MonoBehaviour
     //Pulsación en la pista (dentro del nivel)
     public void OnClickedViewHint(int coins)
     {
-        if (GameManager.instance.getCoins() >= coins)
+        if (GameManager.Instance().getCoins() >= coins)
         {
             BoardManager.instance.showHint(true);
-            GameManager.instance.addCoins(-coins);
+            GameManager.Instance().addCoins(-coins);
         }
         else
             BoardManager.instance.showHint(false);
@@ -71,69 +71,69 @@ public class Callbacks : MonoBehaviour
     //Pulsacion en el boton de challenge
     public void OnClickChallenge()
     {
-        GameManager.instance.ShowChallengePanel();
+        GameManager.Instance().ShowChallengePanel();
     }
 
     //Pulsacion sobre el regalo
     public void onClickGift()
     {
-        GameManager.instance.ShowGiftPanel();
+        GameManager.Instance().ShowGiftPanel();
     }
 
 
     //Pulsacion sobre el regalo
     public void onClickSmallGift()
     {
-        GameManager.instance.ShowGift();
+        GameManager.Instance().ShowGift();
     }
 
     //Pulsacion de comprar el modo challenge 
     public void OnClickpayChallenge()
     {
-        if (GameManager.instance.getCoins() >= 25)
+        if (GameManager.Instance().getCoins() >= 25)
         {
-            GameManager.instance.playChallenge();
+            GameManager.Instance().playChallenge();
         }
     }
 
     //Pulsacion de ir al modo challenge con anuncio
     public void OnClicknoPayChallenge()
     {
-        GameManager.instance.playChallenge();
+        GameManager.Instance().playChallenge();
     }
 
     //Anade una cantidad determinada de monedas
     public void addCoinsChallenge(int coins)
     {
-        if (GameManager.instance.getChallenge())
+        if (GameManager.Instance().getChallenge())
         {
-            GameManager.instance.addCoins(coins);
+            GameManager.Instance().addCoins(coins);
         }
     }
 
     //Anade una cantidad determinada de monedas
     public void addCoins(int coins)
     {
-        GameManager.instance.addCoins(coins);
+        GameManager.Instance().addCoins(coins);
     }
 
 
     //Reproducción de un clip al pulsar
     public void OnSoundPlayed(AudioClip clip)
     {
-        GameManager.instance.playSound(clip);
+        GameManager.Instance().playSound(clip);
     }
 
     //Pulsación en el botón de volver (dentro del nivel)
     public void OnClickedBack()
     {
-        if (!GameManager.instance.getChallenge())
-            GameManager.instance.GoToSeleccion();
+        if (!GameManager.Instance().getChallenge())
+            GameManager.Instance().GoToSeleccion();
         else
         {
-            GameManager.instance.GoToMenu();
-            GameManager.instance.wasChallenge = true;
-            GameManager.instance.setChallenge(false);
+            GameManager.Instance().GoToMenu();
+            GameManager.Instance().wasChallenge = true;
+            GameManager.Instance().setChallenge(false);
         }
     }
 }
