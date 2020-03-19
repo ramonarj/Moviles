@@ -68,7 +68,7 @@ public class BoardManager : MonoBehaviour
     private float minutos, segundos;
 
     //Se usa para las pulsaciones
-    private float tileScale;
+    private float uTileSize;
 
     private const int PIXELS_PER_UNIT = 100;
 
@@ -135,7 +135,7 @@ public class BoardManager : MonoBehaviour
 
         // 2) CON ESO Y EL TAMAÑO DE LA PANTALLA, VEMOS CUÁNTO DE ALTO OCUPAN...
         float topHeight = Screen.width * topImage.height / topImage.width; //Reglas de 3
-        float botHeight = Screen.width * botImage.height / botImage.width;
+        float botHeight = Screen.width * botImage.height / botImage.width; //en px
 
         // 3) ...Y CALCULAMOS EL ANCHO Y ALTO LIBRES
         float availableHeight = Screen.height - (topHeight + botHeight);
@@ -153,9 +153,8 @@ public class BoardManager : MonoBehaviour
         //todo esto en unidades de Unity (u~~~)
         float unitySize = availableHeight < availableWidth ? 10 : (float)Screen.width * 10f / (float)Screen.height; //Nº unidades de unity a lo ancho/alto (el más pequeño)
         float screenSize = availableHeight < availableWidth ? Screen.height : Screen.width; // Tamaño más pequeño en px
-        float uTileSize = tileSize * unitySize / screenSize; //Regla de 3
+        uTileSize = tileSize * unitySize / screenSize; //Regla de 3
         float uTileGap = uTileSize * TILE_GAP; //Espacio entre tiles
-        tileScale = uTileSize;
         // 5) COLOCAMOS LOS TILES EN LA ZONA DE JUEGO TENIENDO EN CUENTA MÁRGENES TODO: colocarlos
         //Centro del tablero
         float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f); //punto medio del tablero en px
@@ -319,7 +318,7 @@ public class BoardManager : MonoBehaviour
             ratonFondo_.transform.position = new Vector3(worldPos.x, worldPos.y, -2f);
 
             //Coordenadas locales del click
-            Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL) / tileScale;
+            Vector3 mousePos = getPosition(screenPos, REF_SYSTEM.LOCAL) / uTileSize;
             mousePos -= mousePos / 10f;
 
             //3. Si estamos dentro de los límites, vemos si podemos pulsar algo
@@ -355,7 +354,7 @@ public class BoardManager : MonoBehaviour
     {
         //Si pulsamos dentro del tablero, se crea el sprite del círculo y pasamos a poder hacer caminos
         //Coordenadas locales del click
-        Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL) / tileScale;
+        Vector3 localPos = getPosition(screenPos, REF_SYSTEM.LOCAL) / uTileSize;
         localPos -= localPos / 10f;
 
         Vector3 worldPos = getPosition(screenPos, REF_SYSTEM.GLOBAL);

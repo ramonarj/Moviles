@@ -184,7 +184,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &735300367
 PrefabInstance:
@@ -236,7 +236,7 @@ PrefabInstance:
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
@@ -291,7 +291,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -338,7 +338,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &9115699559951051072
+--- !u!1001 &3441719763072817976
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -348,7 +348,7 @@ PrefabInstance:
     - target: {fileID: 2485789251979006382, guid: 8a4c351e66ac761439cc944e5c0c36f7,
         type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: SeleccionCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 2485789251979006370, guid: 8a4c351e66ac761439cc944e5c0c36f7,
         type: 3}
@@ -388,7 +388,7 @@ PrefabInstance:
     - target: {fileID: 2485789251979006370, guid: 8a4c351e66ac761439cc944e5c0c36f7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2485789251979006370, guid: 8a4c351e66ac761439cc944e5c0c36f7,
         type: 3}
@@ -455,55 +455,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
+    - target: {fileID: 9115699558866912790, guid: 8a4c351e66ac761439cc944e5c0c36f7,
         type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 710
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485789253149463431, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 2655
-      objectReference: {fileID: 0}
-    - target: {fileID: 9115699558277894979, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 261
-      objectReference: {fileID: 0}
-    - target: {fileID: 9115699558277894979, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -130.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9115699559211259839, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 153
-      objectReference: {fileID: 0}
-    - target: {fileID: 9115699559211259839, guid: 8a4c351e66ac761439cc944e5c0c36f7,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 76.5
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a4c351e66ac761439cc944e5c0c36f7, type: 3}

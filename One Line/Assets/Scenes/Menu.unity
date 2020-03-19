@@ -170,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5795790179147614285, guid: d294c7a75c4f89145af617163a380f1a,
         type: 3}
@@ -230,7 +230,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -341,9 +341,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8495537700294251757
+--- !u!1001 &1531170427
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 8495537700288676744, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: MenuCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 8495537700288676740, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
@@ -393,7 +393,7 @@ PrefabInstance:
     - target: {fileID: 8495537700288676740, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8495537700288676740, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
@@ -460,10 +460,5 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8495537700288676741, guid: 043a3914e45aa0d4596ac47184fbeea2,
-        type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 1176763899}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 043a3914e45aa0d4596ac47184fbeea2, type: 3}
