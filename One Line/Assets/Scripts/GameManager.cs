@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     //Tiempo entre challenges
     private float timeChallengeLeft;
     //Minutos y segundos
-    private float minutos, segundos;
+    private int minutos, segundos;
     private string ultimoRetoJugado;
     private int waiting; //Saber si tenemos que esperar
         
@@ -124,16 +124,23 @@ public class GameManager : MonoBehaviour
     {
         if (waitingChallenge)
         {
-            timeChallengeLeft -= Time.deltaTime;
+            float cosa = Time.deltaTime;
+            int coco = 0;
+            timeChallengeLeft -= cosa;
 
+            Debug.Log(cosa);
+        
             /*Nos aseguramos unicamnte de acutualizar cuando estamos en el menu*/
             if (SceneManager.GetActiveScene().name == "Menu")
             {
                 Text waitingText = GameObject.Find("timeWaiting").GetComponent<Text>();
-                minutos = Mathf.Floor(timeChallengeLeft / 60);
-                segundos = timeChallengeLeft % 60;
+                minutos = (int)(timeChallengeLeft / 60);
+                segundos = (int)(timeChallengeLeft % 60);
                 waitingText.text = string.Format("{0:0}:{1:00}", minutos, segundos);
             }
+
+            Debug.Log(minutos);
+            Debug.Log(segundos);
 
         }
         if (timeChallengeLeft <= 0 && waitingChallenge)
@@ -235,7 +242,7 @@ public class GameManager : MonoBehaviour
         actualLevel++;
         GoToScene("Nivel");
         int number;
-        if (wasChallenge) number = 1;
+        if (wasChallenge || waiting == 1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado != null)
             SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
@@ -253,7 +260,6 @@ public class GameManager : MonoBehaviour
         //Vamos a la escena del nivel , cuyo canvas cambiaremos 
         //depenediendo del booleano challenge
         GoToScene("Nivel");
-
     }
 
     //Nos lleva a la pantalla de  menú
@@ -266,7 +272,7 @@ public class GameManager : MonoBehaviour
     public void QuitApp()
     {
         int number;
-        if (wasChallenge) number = 1;
+        if (wasChallenge || waiting==1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado!=null)
             SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
@@ -294,7 +300,7 @@ public class GameManager : MonoBehaviour
         }
 
         int number;
-        if (wasChallenge) number = 1;
+        if (wasChallenge || waiting == 1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado != null)
             SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
@@ -461,7 +467,7 @@ public class GameManager : MonoBehaviour
                 /*En caso de que no se haya completando los 30 mins desde
                 la ultima vez que jugamos el reto*/
                 string newtime = System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss");
-                if ((!morethan30Mins(ultimoRetoJugado, newtime) && wasChallenge) || waiting==1)
+                if ((!morethan30Mins(ultimoRetoJugado, newtime) && wasChallenge) || waiting == 1)
                 {
                     /*En caso de que las fechas sean iguales , nos fijamos en la hora*/
                     string hour1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[0];
@@ -473,8 +479,9 @@ public class GameManager : MonoBehaviour
                     string sec1 = newtime.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
                     string sec2 = ultimoRetoJugado.Split(char.Parse(" "))[1].Split(char.Parse(":"))[2];
 
-                    ActualizarTiempo(hour2, min2, hour1, min1,sec1,sec2);
+                    ActualizarTiempo(hour2, min2, hour1, min1, sec1, sec2);
                 }
+                else ultimoRetoJugado = newtime;
                 break;
                 //Selección de nivel
             case "Seleccion": 
