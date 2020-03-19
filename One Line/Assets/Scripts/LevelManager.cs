@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
             {
                 //Creamos el objeto
                 GameObject o = Instantiate(levelPrefab, transform);
-                o.transform.localScale = new Vector3(DEFAULT_RES / actualRes, DEFAULT_RES / actualRes);
+                //o.transform.localScale = new Vector3(DEFAULT_RES / actualRes, DEFAULT_RES / actualRes);
 
                 //Nombre y posición
                 int c = count + 1; //NECESARIO PORQUE SI LE PASAS COUNT AL CALLBACK SE QUEDA CON EL VALOR DEL FINAL (100), 
