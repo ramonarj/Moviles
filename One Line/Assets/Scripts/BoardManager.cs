@@ -139,8 +139,19 @@ public class BoardManager : MonoBehaviour
 
         // 3) ...Y CALCULAMOS EL ANCHO Y ALTO LIBRES
         float availableHeight = Screen.height - (topHeight + botHeight);
+        float availableWidth = Screen.width;
+
+        //Ponemos el fondo en su sitio
+        GameObject fondo = GameObject.Find("Fondo");
+        float aspectRatio = (float)Screen.width / (float)Screen.height;
+        float width = fondo.GetComponent<SpriteRenderer>().sprite.rect.width; //Cuánto ocupa de ancho (720)
+        float scaleProp = aspectRatio / (width / 1000f); //Proporción para escalarlo
+        //scaleProp *= 0.79f;
+        fondo.transform.localScale = new Vector3(scaleProp, scaleProp); //Lo aplicamos sin deformarlo
+
+        //Márgenes que dejaremos para el tablero
         availableHeight *= (1 - VERT_MARGIN); //Para poner un poco de margen con los paneles
-        float availableWidth = Screen.width * (1 - HOR_MARGIN); //Para no tapar los circulillos
+        availableWidth *= (1 - HOR_MARGIN); //Para no tapar los circulillos
         float availableSpace = Mathf.Min(availableHeight, availableWidth);
 
         // 4) CALCULAMOS EL TAMAÑO DE CADA TILE
@@ -155,6 +166,7 @@ public class BoardManager : MonoBehaviour
         float screenSize = availableHeight < availableWidth ? Screen.height : Screen.width; // Tamaño más pequeño en px
         uTileSize = tileSize * unitySize / screenSize; //Regla de 3
         float uTileGap = uTileSize * TILE_GAP; //Espacio entre tiles
+
         // 5) COLOCAMOS LOS TILES EN LA ZONA DE JUEGO TENIENDO EN CUENTA MÁRGENES TODO: colocarlos
         //Centro del tablero
         float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f); //punto medio del tablero en px
