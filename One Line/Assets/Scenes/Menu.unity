@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 8495537700288676744, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
       propertyPath: m_Name
-      value: MenuCanvas
+      value: Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 8495537700288676740, guid: 043a3914e45aa0d4596ac47184fbeea2,
         type: 3}
