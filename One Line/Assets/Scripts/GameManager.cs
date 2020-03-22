@@ -127,8 +127,6 @@ public class GameManager : MonoBehaviour
             float cosa = Time.deltaTime;
             int coco = 0;
             timeChallengeLeft -= cosa;
-
-            Debug.Log(cosa);
         
             /*Nos aseguramos unicamnte de acutualizar cuando estamos en el menu*/
             if (SceneManager.GetActiveScene().name == "Menu")
@@ -138,9 +136,6 @@ public class GameManager : MonoBehaviour
                 segundos = (int)(timeChallengeLeft % 60);
                 waitingText.text = string.Format("{0:0}:{1:00}", minutos, segundos);
             }
-
-            Debug.Log(minutos);
-            Debug.Log(segundos);
 
         }
         if (timeChallengeLeft <= 0 && waitingChallenge)

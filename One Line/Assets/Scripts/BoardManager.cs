@@ -73,8 +73,8 @@ public class BoardManager : MonoBehaviour
     private const int PIXELS_PER_UNIT = 100;
 
     //Márgenes (expresados como porcentajes)
-    private const float HOR_MARGIN = 0.04f; 
-    private const float VERT_MARGIN = 0.11f;
+    private const int CIRCLE_MARGIN = 40; //40 px en la imagen de los recursos
+    private const int TOOTH_MARGIN = 20; //20px en la imagen de los recursos
     private const float TILE_GAP = 0.1f; //10% del tamaño del tile
 
     //Para el singleton
@@ -121,65 +121,69 @@ public class BoardManager : MonoBehaviour
 
     
     }
-    /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza*/
+
+    /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza
+     Hace todos los cálculos de escalado mencionados en el enunciado de la práctica*/
     private void initTiles(List<string> layout)
     {
-        //Filas y columnas máximas que puede tener un nivel de esta dificultad
-        int maxRows;
-        int maxCols = 6;
-
-        //todo esto en px 
+        //- - - - - - todo esto en px - - - - - - - //
         // 1) TAMAÑO REAL (px) DE LOS PANELES DE ARRIBA Y ABAJO
         Rect topImage = GameObject.Find("UpLayout").GetComponent<Image>().sprite.rect;
         Rect botImage = GameObject.Find("DownLayout").GetComponent<Image>().sprite.rect;
 
-        // 2) CON ESO Y EL TAMAÑO DE LA PANTALLA, VEMOS CUÁNTO DE ALTO OCUPAN...
+        //Vemos cuántos píxeles ocupan
         float topHeight = Screen.width * topImage.height / topImage.width; //Reglas de 3
         float botHeight = Screen.width * botImage.height / botImage.width; //en px
 
-        // 3) ...Y CALCULAMOS EL ANCHO Y ALTO LIBRES
+        // 2) CALCULAMOS EL ANCHO Y ALTO LIBRES
         float availableHeight = Screen.height - (topHeight + botHeight);
         float availableWidth = Screen.width;
 
-        //Ponemos el fondo en su sitio
+        //Este será el centro del tablero
+        float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f);
+
+        // 3) COLOCAMOS EL FONDO EN SU SITIO
         GameObject fondo = GameObject.Find("Fondo");
         float aspectRatio = (float)Screen.width / (float)Screen.height;
         float width = fondo.GetComponent<SpriteRenderer>().sprite.rect.width; //Cuánto ocupa de ancho (720)
         float scaleProp = aspectRatio / (width / 1000f); //Proporción para escalarlo
-        //scaleProp *= 0.79f;
         fondo.transform.localScale = new Vector3(scaleProp, scaleProp); //Lo aplicamos sin deformarlo
 
-        //Márgenes que dejaremos para el tablero
-        availableHeight *= (1 - VERT_MARGIN); //Para poner un poco de margen con los paneles
-        availableWidth *= (1 - HOR_MARGIN); //Para no tapar los circulillos
-        float availableSpace = Mathf.Min(availableHeight, availableWidth);
+        // 4) MÁRGENES PARA EL TABLERO
+        //¿Cuánto ocupan los circulillos y los dientes? -> reglas de 3
+        float circleMargin = (float)CIRCLE_MARGIN * (float)Screen.width / 720f;
+        float toothMargin = (float)TOOTH_MARGIN * (float)Screen.height / 1280f;
+        availableHeight -= (toothMargin * 2); //Quitamos espacio de juego
+        availableWidth -= (circleMargin * 2); 
 
-        // 4) CALCULAMOS EL TAMAÑO DE CADA TILE
+        // 5) CALCULAMOS EL TAMAÑO DE CADA TILE
+        //Filas y columnas máximas que puede tener un nivel de esta dificultad
         bool bigBoard = GameManager.Instance().getActualDifficulty() > 2;
-        if (bigBoard) maxRows = 8;
-        else maxRows = 6;
-        float tileSize = availableSpace / (float)maxRows; //en px, tenemos en cuenta los huecos
-        tileSize /= (1f + TILE_GAP); //Dejamos espacios para los huecos
+        int maxRows = bigBoard ? 8 : 6;
+        int maxCols = 6;
 
-        //todo esto en unidades de Unity (u~~~)
+        //Tamaño de los tiles (depende del aspect ratio)
+        float tileSize = Mathf.Min(availableWidth / (float)maxCols, availableHeight / (float)maxRows); //El más pequeño
+        tileSize *= (1f - TILE_GAP); //Dejamos espacios para los huecos
+
+        //- - - - - - todo esto en unidades de Unity - - - - - - - //
+        //Calculamos todo esto en unidades de Unity para usarlo luego (u~~~)
         float unitySize = availableHeight < availableWidth ? 10 : (float)Screen.width * 10f / (float)Screen.height; //Nº unidades de unity a lo ancho/alto (el más pequeño)
         float screenSize = availableHeight < availableWidth ? Screen.height : Screen.width; // Tamaño más pequeño en px
         uTileSize = tileSize * unitySize / screenSize; //Regla de 3
         float uTileGap = uTileSize * TILE_GAP; //Espacio entre tiles
 
-        // 5) COLOCAMOS LOS TILES EN LA ZONA DE JUEGO TENIENDO EN CUENTA MÁRGENES TODO: colocarlos
-        //Centro del tablero
-        float boardMiddleY = (-Screen.height / 2f) + botHeight + (availableHeight / 2f); //punto medio del tablero en px
-        boardMiddleY = boardMiddleY * 10f / Screen.height;
+        // 5) COLOCAMOS EL TABLERO ABAJO A LA IZQUIERDA
+        boardMiddleY = boardMiddleY * 10f / Screen.height; //pasamos el centro a uds. de Unity
 
-        //Coordenada de abajo a la izquierda del tablero (en uds de Unity)
+        //Coordenada de abajo a la izquierda del tablero
         float uBoardX, uBoardY;
         uBoardX = (-uTileSize * (float)cols) / 2f;
         uBoardY = boardMiddleY + (-uTileSize * (float)rows) / 2f;
 
         //Tenemos en cuenta los huecos (hay x-1 huecos siendo x las filas/columnas)
         uBoardX -= (uTileGap * (float)(cols - 1)) / 2f;
-        uBoardY += (uTileGap * (float)(rows - 1)) / 2f;
+        uBoardY -= (uTileGap * (float)(rows - 1)) / 2f;
 
         //Lo colocamos
         transform.position = new Vector3(uBoardX, uBoardY); 
@@ -188,7 +192,7 @@ public class BoardManager : MonoBehaviour
         System.Random rnd = new System.Random();
         skinNo = rnd.Next(0, tilePrefabs.Count);
 
-        // 6) COLOCAMOS TODOS LOS TILES EMPEZANDO DESDE ABAJO A LA IZQUIERDA
+        // 6) CREAMOS Y COLOCAMOS TODOS LOS TILES
         for (int i = 0; i < rows; i++)
         {
             string rowLayout = layout[i];
