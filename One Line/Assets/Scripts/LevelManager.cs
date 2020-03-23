@@ -5,14 +5,8 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    //Número de niveles de cada dificultad
-    [Tooltip("El número de niveles seleccionables")]
-    public int NUM_LEVELS;
     [Tooltip("El número de columnas a mostrar")]
     public int NUM_COLS;
-
-    //Resolución por defecto del juego
-    const float DEFAULT_RES = 16f / 9f;
 
     //Margenes
     int MARGIN;
@@ -25,27 +19,26 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        //Número de nivel hasta el que queremos bloquear
+        //Dificultad en la que nos encontramos
         int difficulty = GameManager.Instance().getActualDifficulty();
-        int maxLevel = GameManager.Instance().getLevelProgress(difficulty);
 
-        int rows = NUM_LEVELS / NUM_COLS;
-        int count = 0;
-    
-        float actualRes = (float)Screen.height / (float)Screen.width;
+        //Número de nivel hasta el que queremos bloquear
+        int maxLevel = GameManager.Instance().getLevelProgress(difficulty);
+        int numLevels = GameManager.Instance().getNumberOfLevels(difficulty);
 
         //Márgenes
         MARGIN = Screen.width / 5;
         GAP = Screen.width / (NUM_COLS + 1);
 
         //Creamos los sprites de los niveles
+        int rows = numLevels / NUM_COLS;
+        int count = 0;
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < NUM_COLS; j++)
             {
                 //Creamos el objeto
                 GameObject o = Instantiate(levelPrefab, transform);
-                //o.transform.localScale = new Vector3(DEFAULT_RES / actualRes, DEFAULT_RES / actualRes);
 
                 //Nombre y posición
                 int c = count + 1; //NECESARIO PORQUE SI LE PASAS COUNT AL CALLBACK SE QUEDA CON EL VALOR DEL FINAL (100), 

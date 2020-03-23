@@ -7,7 +7,7 @@ using Utils;
 public class BoardManager : MonoBehaviour
 {
     //Instancia del singleton
-    public static BoardManager instance;
+    private static BoardManager instance;
 
     //EDITOR
     //Prefabs para las pieles
@@ -76,6 +76,12 @@ public class BoardManager : MonoBehaviour
     private const int CIRCLE_MARGIN = 40; //40 px en la imagen de los recursos
     private const int TOOTH_MARGIN = 20; //20px en la imagen de los recursos
     private const float TILE_GAP = 0.1f; //10% del tamaño del tile
+
+    //Singleton
+    public static BoardManager Instance()
+    {
+        return instance;
+    }
 
     //Para el singleton
     void Awake()

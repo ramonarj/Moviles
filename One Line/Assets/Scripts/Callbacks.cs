@@ -47,7 +47,7 @@ public class Callbacks : MonoBehaviour
     //Pulsación en el botón de los anuncios
     public void OnClickedViewAd(int coins)
     {
-        AdsManager.instance.ShowRewardedAd(coins);
+        AdsManager.Instance().ShowRewardedAd(coins);
     }
 
     //Pulsación en la pista (dentro del nivel)
@@ -55,17 +55,17 @@ public class Callbacks : MonoBehaviour
     {
         if (GameManager.Instance().getCoins() >= coins)
         {
-            BoardManager.instance.showHint(true);
+            BoardManager.Instance().showHint(true);
             GameManager.Instance().addCoins(-coins);
         }
         else
-            BoardManager.instance.showHint(false);
+            BoardManager.Instance().showHint(false);
     }
 
     //Pulsación en el botón de reiniciar nivel
     public void OnClickedRestart()
     {
-        BoardManager.instance.restartLevel();
+        BoardManager.Instance().restartLevel();
     }
 
     //Pulsacion en el boton de challenge

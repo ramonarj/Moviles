@@ -15,9 +15,6 @@ public class GameManager : MonoBehaviour
     //Nombres de las dificultades
     public List<string> difficulties;
 
-    [Tooltip("NÚMERO DE NIVELES POR DIFICULTAD")]
-    public int LEVELS_PER_DIFFICULTY;
-
     public bool wasChallenge;
 
     //Número de monedas
@@ -83,6 +80,8 @@ public class GameManager : MonoBehaviour
                 levelDataLists.Add(LevelDataList.CreateFromJSON(inputJson));
             }
 
+            
+
             //Para cubrirnos las espaldas
             actualLevel = 1;
             actualDifficulty = 1;
@@ -102,14 +101,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //Intentamos cargar el archivo de progreso, y si lo hemos conseguido, comprobamos el hash
-        if (SaveDataManager.instance.load())
-            if (compareHashes(SaveDataManager.instance.getGame()))
+        if (SaveDataManager.Instance().load())
+            if (compareHashes(SaveDataManager.Instance().getGame()))
             {
-                levelprogress = SaveDataManager.instance.getGame().levels;
-                coinNo = SaveDataManager.instance.getGame().coins;
-                challengeCount = SaveDataManager.instance.getGame().challenge;
-                ultimoRetoJugado = SaveDataManager.instance.getGame().dateTime;
-                waiting = SaveDataManager.instance.getGame().waiting;
+                levelprogress = SaveDataManager.Instance().getGame().levels;
+                coinNo = SaveDataManager.Instance().getGame().coins;
+                challengeCount = SaveDataManager.Instance().getGame().challenge;
+                ultimoRetoJugado = SaveDataManager.Instance().getGame().dateTime;
+                waiting = SaveDataManager.Instance().getGame().waiting;
                 Debug.Log("Juego cargado correctamente");
             }
             else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
@@ -149,9 +148,9 @@ public class GameManager : MonoBehaviour
     }
     private bool compareHashes(GameSaving game)
     {
-        string levelsConcatenate = SaveDataManager.instance.concatenateLevels(game.levels);
-        string String = SaveDataManager.instance.getString(getString(), getNumber());
-        string hash = SaveDataManager.instance.createHash(levelsConcatenate+ game.coins+game.waiting+String+game.challenge+game.dateTime);
+        string levelsConcatenate = SaveDataManager.Instance().concatenateLevels(game.levels);
+        string String = SaveDataManager.Instance().getString(getString(), getNumber());
+        string hash = SaveDataManager.Instance().createHash(levelsConcatenate+ game.coins+game.waiting+String+game.challenge+game.dateTime);
         return (hash == game.hash);
 
     }
@@ -193,6 +192,12 @@ public class GameManager : MonoBehaviour
     public int getLevelProgress(int difficulty)
     {
         return levelprogress[difficulty - 1];
+    }
+
+    //Número de niveles que tiene esa dificultad (para la pantalla de selección)
+    public int getNumberOfLevels(int difficulty)
+    {
+        return levelDataLists[difficulty].levels.Count;
     }
 
     public void setChallenge(bool challenge_) { challenge = challenge_; }
@@ -240,8 +245,8 @@ public class GameManager : MonoBehaviour
         if (wasChallenge || waiting == 1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado != null)
-            SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
-        else SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+            SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+        else SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
     }
 
     public void playChallenge()
@@ -249,7 +254,7 @@ public class GameManager : MonoBehaviour
         //Escogemos una dificultad aleatoria
         actualDifficulty = Random.Range(3, difficulties.Count);
         //Escogemos un nivel aleatorio
-        actualLevel = Random.Range(1, LEVELS_PER_DIFFICULTY);
+        actualLevel = Random.Range(1, levelDataLists[actualDifficulty].levels.Count);
         //Ponemos el modo challenge a true
         challenge = !challenge;
         //Vamos a la escena del nivel , cuyo canvas cambiaremos 
@@ -270,8 +275,8 @@ public class GameManager : MonoBehaviour
         if (wasChallenge || waiting==1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado!=null)
-            SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
-        else SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+            SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+        else SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
 
         Application.Quit();
     }
@@ -298,8 +303,8 @@ public class GameManager : MonoBehaviour
         if (wasChallenge || waiting == 1) number = 1;
         else number = 0;
         if (!wasChallenge && ultimoRetoJugado != null)
-            SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
-        else SaveDataManager.instance.save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+            SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+        else SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
     }
 
     /*Activamos un flag para saber que no podemos volver a jugar un reto hasta dentro

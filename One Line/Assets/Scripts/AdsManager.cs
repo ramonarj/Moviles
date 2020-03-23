@@ -6,7 +6,7 @@ using UnityEngine.Monetization;
 
 public class AdsManager : MonoBehaviour
 {
-    public static AdsManager instance;
+    private static AdsManager instance;
     //Id del juego
     private string gameId = "3417809";
     //Modo test por defecto

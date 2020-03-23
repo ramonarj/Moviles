@@ -21,13 +21,19 @@ public class GameSaving
 [System.Serializable]
 public class SaveDataManager : MonoBehaviour
 {
-    public static SaveDataManager instance;
+    private static SaveDataManager instance;
     private string jsonSavePath;
     private const string abc= "abcdefghijklmñnopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ1234567890_ - +,#$%&/()=¿?¡!|,.;:{}[]";
 
     GameSaving game;
 
     public GameSaving getGame() { return game; }
+
+
+    public static SaveDataManager Instance()
+    {
+        return instance;
+    }
 
     void Awake()
     {
