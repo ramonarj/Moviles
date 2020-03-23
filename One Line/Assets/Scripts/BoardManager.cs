@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 
 public class BoardManager : MonoBehaviour
 {
-    //Instancia del singleton
-    private static BoardManager instance;
-
     //EDITOR
     //Prefabs para las pieles
     [Tooltip("El prefab del Tile")]
@@ -77,22 +73,6 @@ public class BoardManager : MonoBehaviour
     private const int TOOTH_MARGIN = 20; //20px en la imagen de los recursos
     private const float TILE_GAP = 0.1f; //10% del tamaño del tile
 
-    //Singleton
-    public static BoardManager Instance()
-    {
-        return instance;
-    }
-
-    //Para el singleton
-    void Awake()
-    {
-        // Singleton
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this.gameObject);
-    }
-
     /*Inicializamos los atributos necesarios*/
     void Start()
     {
@@ -124,8 +104,6 @@ public class BoardManager : MonoBehaviour
 
         /*Ultima pista puesta*/
         lastPos = 0;
-
-    
     }
 
     /*Anade al array todos los tiles de la matriz , ademas de encender el tile por donde se comienza
@@ -201,7 +179,7 @@ public class BoardManager : MonoBehaviour
         // 6) CREAMOS Y COLOCAMOS TODOS LOS TILES
         for (int i = 0; i < rows; i++)
         {
-            string rowLayout = layout[i];
+            string rowLayout = layout[rows - i - 1]; //Están invertidos si no
             for (int j = 0; j < cols; j++)
             {
                 if(rowLayout[j] != '0')
@@ -415,14 +393,27 @@ public class BoardManager : MonoBehaviour
         }     
     }
 
-    //Reinicia el nivel
-    public void restartLevel()
+    //Callback para el botón de la pista
+    public void ShowHint(int coins)
+    {
+        if (GameManager.Instance().getCoins() >= coins)
+        {
+            ShowHintPriv(true);
+            GameManager.Instance().addCoins(-coins);
+        }
+        else
+            ShowHintPriv(false);
+    }
+
+    //Callback para el botón de reiniciar nivel
+    public void RestartLevel()
     {
         goBackToTile(startingTile);
         GameManager.Instance().playSound(restartSound);
     }
 
-    public void showHint(bool allowed)
+    //Enseña la pista
+    private void ShowHintPriv(bool allowed)
     {
         if (allowed)
         {

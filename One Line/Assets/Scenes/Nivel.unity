@@ -274,9 +274,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8277094833096644968, guid: 6a4c9d1e03b5c4c428ca7ecb512b2a49,
-          type: 3}
-        m_MethodName: OnClickedRestart
+      - m_Target: {fileID: 4143655163518936864}
+        m_MethodName: RestartLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3423,9 +3422,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8277094833096644968, guid: 6a4c9d1e03b5c4c428ca7ecb512b2a49,
-          type: 3}
-        m_MethodName: OnClickedViewHint
+      - m_Target: {fileID: 4143655163518936864}
+        m_MethodName: ShowHint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5118,6 +5116,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b6348ba2cd694d4eb87b545a6b02dbb, type: 3}
+--- !u!114 &4143655163518936864 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4143655162841945982, guid: 8b6348ba2cd694d4eb87b545a6b02dbb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4143655163518936863}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4622feb84b3f7740bd67db18c4259ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4287673786881075153
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -50,24 +50,6 @@ public class Callbacks : MonoBehaviour
         AdsManager.Instance().ShowRewardedAd(coins);
     }
 
-    //Pulsación en la pista (dentro del nivel)
-    public void OnClickedViewHint(int coins)
-    {
-        if (GameManager.Instance().getCoins() >= coins)
-        {
-            BoardManager.Instance().showHint(true);
-            GameManager.Instance().addCoins(-coins);
-        }
-        else
-            BoardManager.Instance().showHint(false);
-    }
-
-    //Pulsación en el botón de reiniciar nivel
-    public void OnClickedRestart()
-    {
-        BoardManager.Instance().restartLevel();
-    }
-
     //Pulsacion en el boton de challenge
     public void OnClickChallenge()
     {
@@ -79,7 +61,6 @@ public class Callbacks : MonoBehaviour
     {
         GameManager.Instance().ShowGiftPanel();
     }
-
 
     //Pulsacion sobre el regalo
     public void onClickSmallGift()
