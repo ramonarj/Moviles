@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
     //Número de niveles que tiene esa dificultad (para la pantalla de selección)
     public int getNumberOfLevels(int difficulty)
     {
-        return levelDataLists[difficulty].levels.Count;
+        return levelDataLists[difficulty - 1].levels.Count;
     }
 
     public void setChallenge(bool challenge_) { challenge = challenge_; }

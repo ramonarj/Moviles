@@ -179,7 +179,7 @@ public class BoardManager : MonoBehaviour
         // 6) CREAMOS Y COLOCAMOS TODOS LOS TILES
         for (int i = 0; i < rows; i++)
         {
-            string rowLayout = layout[rows - i - 1]; //Están invertidos si no
+            string rowLayout = layout[i]; // rows - i - 1 Están invertidos si no
             for (int j = 0; j < cols; j++)
             {
                 if(rowLayout[j] != '0')
