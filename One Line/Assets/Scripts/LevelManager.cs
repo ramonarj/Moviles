@@ -9,8 +9,8 @@ public class LevelManager : MonoBehaviour
     public int NUM_COLS;
 
     //Margenes
-    int MARGIN;
-    int GAP;
+    float MARGIN;
+    float GAP;
 
     [Tooltip("El prefab del Nivel")]
     public GameObject levelPrefab;
@@ -26,9 +26,12 @@ public class LevelManager : MonoBehaviour
         int maxLevel = GameManager.Instance().getLevelProgress(difficulty);
         int numLevels = GameManager.Instance().getNumberOfLevels(difficulty);
 
+        float horUnits = 10f * (float)Screen.width /(float) Screen.height;
+
         //Márgenes
-        MARGIN = Screen.width / 5;
-        GAP = Screen.width / (NUM_COLS + 1);
+        float levelPixels = (float)Screen.width / horUnits;
+        GAP = (float)Screen.width / (float)(NUM_COLS + 1);
+        MARGIN = (float)Screen.width / 6f;
 
         //Creamos los sprites de los niveles
         int rows = numLevels / NUM_COLS;

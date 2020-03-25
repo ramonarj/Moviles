@@ -240,13 +240,20 @@ public class GameManager : MonoBehaviour
     public void NextLevel()
     {
         actualLevel++;
-        GoToScene("Nivel");
-        int number;
-        if (wasChallenge || waiting == 1) number = 1;
-        else number = 0;
-        if (!wasChallenge && ultimoRetoJugado != null)
-            SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
-        else SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+
+        //Comprobamos que no nos hemos pasado el último nivel de la dificultad
+        if(actualLevel <= levelDataLists[actualDifficulty - 1].levels.Count)
+        {
+            GoToScene("Nivel");
+            int number = (wasChallenge || waiting == 1) ? 1 : 0;
+            if (!wasChallenge && ultimoRetoJugado != null)
+                SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, ultimoRetoJugado);
+            else SaveDataManager.Instance().save(levelprogress, coinNo, number, challengeCount, System.DateTime.Now.ToString("MM/dd/yyyy H:mm:ss"));
+        }
+
+        //Si lo hemo hecho, volvemos a la selección
+        else
+            GoToScene("Seleccion");
     }
 
     public void playChallenge()
