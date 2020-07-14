@@ -120,6 +120,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4248910079629898, guid: d294c7a75c4f89145af617163a380f1a, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -151,6 +156,31 @@ Prefab:
     - target: {fileID: 4248910079629898, guid: d294c7a75c4f89145af617163a380f1a, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.data[0]
+      value: BEGINNER
+      objectReference: {fileID: 0}
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.data[1]
+      value: REGULAR
+      objectReference: {fileID: 0}
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.data[2]
+      value: ADVANCED
+      objectReference: {fileID: 0}
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.data[3]
+      value: EXPERT
+      objectReference: {fileID: 0}
+    - target: {fileID: 114574780736140004, guid: d294c7a75c4f89145af617163a380f1a,
+        type: 2}
+      propertyPath: difficulties.Array.data[4]
+      value: MASTER
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294c7a75c4f89145af617163a380f1a, type: 2}

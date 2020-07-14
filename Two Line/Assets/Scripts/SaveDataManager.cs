@@ -76,7 +76,8 @@ public class SaveDataManager : MonoBehaviour
     //Devuelve el objeto creado leyendo el Json especificado
     public bool load()
     {
-        game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(Application.persistentDataPath + "/save.json"));
+        if(File.Exists(Application.persistentDataPath + "/save.json"))
+            game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(Application.persistentDataPath + "/save.json"));
         return true;
     }
 
