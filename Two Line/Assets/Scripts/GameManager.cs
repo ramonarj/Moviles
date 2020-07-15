@@ -109,9 +109,8 @@ public class GameManager : MonoBehaviour
                 challengeCount = SaveDataManager.Instance().getGame().challenge;
                 ultimoRetoJugado = SaveDataManager.Instance().getGame().dateTime;
                 waiting = SaveDataManager.Instance().getGame().waiting;
-                Debug.Log("Juego cargado correctamente");
             }
-            else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
+            //else Debug.Log("Juego reiniciado debido a una modificacion del archivo de carga");
 
         //Empezamos con challenge a false
         challenge = false;
@@ -124,7 +123,6 @@ public class GameManager : MonoBehaviour
         if (waitingChallenge)
         {
             float cosa = Time.deltaTime;
-            int coco = 0;
             timeChallengeLeft -= cosa;
         
             /*Nos aseguramos unicamnte de acutualizar cuando estamos en el menu*/
@@ -253,7 +251,10 @@ public class GameManager : MonoBehaviour
 
         //Si lo hemo hecho, volvemos a la selección
         else
+        {
             GoToScene("Seleccion");
+        }
+            
     }
 
     public void playChallenge()

@@ -70,13 +70,13 @@ public class SaveDataManager : MonoBehaviour
         game.hash = createHash((concatenateLevels(levels_) + coins_ + waiting_ +getString(GameManager.Instance().getString(),GameManager.Instance().getNumber())+challenge_+dateTime).ToString());
         //Rellenamos el json y lo guardamos
         string jsonData = JsonUtility.ToJson(game);
-        File.WriteAllText(Application.persistentDataPath + "/save.json", jsonData);
+        File.WriteAllText(jsonSavePath, jsonData);
     }
 
     //Devuelve el objeto creado leyendo el Json especificado
     public bool load()
     {
-        game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(Application.persistentDataPath + "/save.json"));
+        game = JsonUtility.FromJson<GameSaving>(File.ReadAllText(jsonSavePath));
         return true;
     }
 
