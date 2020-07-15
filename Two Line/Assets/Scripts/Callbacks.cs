@@ -83,6 +83,12 @@ public class Callbacks : MonoBehaviour
         GameManager.Instance().playChallenge();
     }
 
+    //Pulsacion de cerrar popup
+    public void OnClickClosePopup()
+    {
+        GameManager.Instance().HidePopUps();
+    }
+
     //Anade una cantidad determinada de monedas
     public void addCoinsChallenge(int coins)
     {

@@ -372,6 +372,12 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("PopUpPanel").transform.Find("BigGift").gameObject.SetActive(true);
     }
 
+    /*Quitamos los popups del menu*/
+    public void HidePopUps()
+    {
+        GameObject.Find("Canvas").transform.Find("PopUpPanel").gameObject.SetActive(false);
+    }
+
     /*Escogemos un nivel aleatorio de una dificultad aleatoria y nos vamos a la escena nivel para jugarlo*/
     public void challengeMode()
     {
