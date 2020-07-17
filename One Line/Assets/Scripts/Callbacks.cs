@@ -68,6 +68,12 @@ public class Callbacks : MonoBehaviour
         GameManager.Instance().ShowGift();
     }
 
+    //Cierra popups
+    public void OnClosePopup()
+    {
+        GameManager.Instance().ClosePopUps();
+    }
+
     //Pulsacion de comprar el modo challenge 
     public void OnClickpayChallenge()
     {
